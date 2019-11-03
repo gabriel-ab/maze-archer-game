@@ -8,7 +8,8 @@ Rectangle tela = {larguraTela/3, alturaTela/3, larguraTela, alturaTela};
 int Is_Fullscreen = 0; 
 
 //*********FUNÇÔES DE TELA***********
-//chama a função toggleFulscreen() guardando a tela anterior
+
+//chama a função toggleFulscreen() guardando o tamanho da tela anterior
 void telaCheia(void)
 {
     if(!Is_Fullscreen){
@@ -24,4 +25,9 @@ void telaCheia(void)
     }
     Is_Fullscreen = !Is_Fullscreen; 
     
+}
+void atualizaCamera(Camera2D *camera){
+    tela.width = GetScreenWidth();
+    tela.height = GetScreenHeight();
+    camera->offset = (Vector2){tela.width/2,tela.height/2};
 }
