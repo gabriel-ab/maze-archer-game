@@ -25,7 +25,3 @@ void telaCheia(void)
     Is_Fullscreen = !Is_Fullscreen; 
     
 }
-void inserirImagem()
-{
-    
-}
