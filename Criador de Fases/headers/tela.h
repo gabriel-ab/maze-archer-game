@@ -3,6 +3,7 @@
 #define alturaTela 500
 
 Rectangle tela = {larguraTela/3, alturaTela/3, larguraTela, alturaTela};
+Rectangle telaAnterior = {larguraTela/3, alturaTela/3, larguraTela, alturaTela};
 
 // Para saber o estado atual
 int Is_Fullscreen = 0; 
@@ -13,15 +14,15 @@ int Is_Fullscreen = 0;
 void telaCheia(void)
 {
     if(!Is_Fullscreen){
-        tela.width = GetScreenWidth();
-        tela.height = GetScreenHeight();
+        telaAnterior.width = GetScreenWidth();
+        telaAnterior.height = GetScreenHeight();
         SetWindowSize(GetMonitorWidth(0), GetMonitorHeight(0));
     }
     ToggleFullscreen();
 
     if(Is_Fullscreen){
-        SetWindowSize(tela.width, tela.height);
-        SetWindowPosition(tela.x, tela.y);
+        SetWindowSize(telaAnterior.width, telaAnterior.height);
+        SetWindowPosition(telaAnterior.x, telaAnterior.y);
     }
     Is_Fullscreen = !Is_Fullscreen; 
     
@@ -29,5 +30,5 @@ void telaCheia(void)
 void atualizaCamera(Camera2D *camera){
     tela.width = GetScreenWidth();
     tela.height = GetScreenHeight();
-    camera->offset = (Vector2){tela.width/2,tela.height/2};
+    camera->offset = (Vector2){camera->target.x + tela.width/2,camera->target.y + tela.height/2};
 }
