@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 #**************************************************************************************************
 #
 #   raylib makefile for Desktop platforms, Raspberry Pi, Android and HTML5
@@ -20,10 +22,12 @@
 #     3. This notice may not be removed or altered from any source distribution.
 #
 #**************************************************************************************************
+>>>>>>> 981a26083dd6bc7dd367d99f474584886af1fc8a
 
 .PHONY: all clean
 
 # Define required raylib variables
+<<<<<<< HEAD
 PROJECT_NAME       ?= PROJETO_PI
 RAYLIB_VERSION     ?= 2.5.0
 RAYLIB_API_VERSION ?= 2
@@ -31,6 +35,17 @@ RAYLIB_PATH        ?= /home/gabriel/git/raylib
 
 # Define default options
 
+=======
+PROJECT_NAME       ?= Game
+RAYLIB_VERSION     ?= 2.5.0
+RAYLIB_API_VERSION ?= 251
+RAYLIB_PATH        ?= ..\..
+
+# Define compiler path on Windows
+COMPILER_PATH      ?= C:/raylib/mingw/bin
+
+# Define default options
+>>>>>>> 981a26083dd6bc7dd367d99f474584886af1fc8a
 # One of PLATFORM_DESKTOP, PLATFORM_RPI, PLATFORM_ANDROID, PLATFORM_WEB
 PLATFORM           ?= PLATFORM_DESKTOP
 
@@ -68,7 +83,10 @@ ifeq ($(PLATFORM),PLATFORM_DESKTOP)
     # ifeq ($(UNAME),Msys) -> Windows
     ifeq ($(OS),Windows_NT)
         PLATFORM_OS=WINDOWS
+<<<<<<< HEAD
+=======
         export PATH := $(COMPILER_PATH):$(PATH)
+>>>>>>> 981a26083dd6bc7dd367d99f474584886af1fc8a
     else
         UNAMEOS=$(shell uname)
         ifeq ($(UNAMEOS),Linux)
@@ -116,7 +134,11 @@ endif
 
 ifeq ($(PLATFORM),PLATFORM_WEB)
     # Emscripten required variables
+<<<<<<< HEAD
     EMSDK_PATH          ?= D:/emsdk
+=======
+    EMSDK_PATH          ?= C:/emsdk
+>>>>>>> 981a26083dd6bc7dd367d99f474584886af1fc8a
     EMSCRIPTEN_VERSION  ?= 1.38.31
     CLANG_VERSION       = e$(EMSCRIPTEN_VERSION)_64bit
     PYTHON_VERSION      = 2.7.13.1_64bit\python-2.7.13.amd64
@@ -231,7 +253,11 @@ ifeq ($(PLATFORM),PLATFORM_WEB)
     # --profiling                # include information for code profiling
     # --memory-init-file 0       # to avoid an external memory initialization code file (.mem)
     # --preload-file resources   # specify a resources folder for data compilation
+<<<<<<< HEAD
     CFLAGS += -Os -s USE_GLFW=3
+=======
+    CFLAGS += -Os -s USE_GLFW=3 -s TOTAL_MEMORY=16777216 --preload-file resources
+>>>>>>> 981a26083dd6bc7dd367d99f474584886af1fc8a
     ifeq ($(BUILD_MODE), DEBUG)
         CFLAGS += -s ASSERTIONS=1 --profiling
     endif
@@ -291,7 +317,11 @@ ifeq ($(PLATFORM),PLATFORM_DESKTOP)
         # NOTE: WinMM library required to set high-res timer resolution
         LDLIBS = -lraylib -lopengl32 -lgdi32 -lwinmm
         # Required for physac examples
+<<<<<<< HEAD
         LDLIBS += -static -lpthread
+=======
+        #LDLIBS += -static -lpthread
+>>>>>>> 981a26083dd6bc7dd367d99f474584886af1fc8a
     endif
     ifeq ($(PLATFORM_OS),LINUX)
         # Libraries for Debian GNU/Linux desktop compiling
@@ -340,9 +370,7 @@ ifeq ($(PLATFORM),PLATFORM_WEB)
     LDLIBS = $(RAYLIB_RELEASE_PATH)/libraylib.bc
 endif
 
-# Define a recursive wildcard function
-rwildcard=$(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
-
+<<<<<<< HEAD
 # Define all source files required
 SAMPLES = \
     main \
@@ -357,6 +385,28 @@ ifeq ($(PLATFORM),PLATFORM_ANDROID)
 	$(MAKE) -f Makefile.Android PROJECT_NAME=$@ PROJECT_SOURCE_FILES=$<
 else
 	$(CC) -o $@$(EXT) $< $(CFLAGS) $(INCLUDE_PATHS) $(LDFLAGS) $(LDLIBS) -D$(PLATFORM)
+endif
+
+=======
+# Define a recursive wildcard function
+rwildcard=$(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
+
+# Define all source files required
+SRC_DIR = src
+OBJ_DIR = obj
+
+# Define all object files from source files
+SRC = $(call rwildcard, *.c, *.h)
+#OBJS = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+OBJS = main.c
+
+# For Android platform we call a custom Makefile.Android
+ifeq ($(PLATFORM),PLATFORM_ANDROID)
+    MAKEFILE_PARAMS = -f Makefile.Android 
+    export PROJECT_NAME
+    export SRC_DIR
+else
+    MAKEFILE_PARAMS = $(PROJECT_NAME)
 endif
 
 # Default target entry
@@ -374,6 +424,7 @@ $(PROJECT_NAME): $(OBJS)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) -c $< -o $@ $(CFLAGS) $(INCLUDE_PATHS) -D$(PLATFORM)
 
+>>>>>>> 981a26083dd6bc7dd367d99f474584886af1fc8a
 # Clean everything
 clean:
 ifeq ($(PLATFORM),PLATFORM_DESKTOP)
@@ -396,4 +447,7 @@ ifeq ($(PLATFORM),PLATFORM_WEB)
 	del *.o *.html *.js
 endif
 	@echo Cleaning done
+<<<<<<< HEAD
 
+=======
+>>>>>>> 981a26083dd6bc7dd367d99f474584886af1fc8a

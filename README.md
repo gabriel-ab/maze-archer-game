@@ -1,2 +1,2 @@
 # projeto_ip
-Um projeto feito para passar na disciplina de Introdução a Programação
+Um projeto feito em C para Avalização na disciplina de Introdução a Programação, Utilizando a biblioteca gráfica Raylib.

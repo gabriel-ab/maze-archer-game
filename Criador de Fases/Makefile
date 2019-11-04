@@ -24,13 +24,15 @@
 .PHONY: all clean
 
 # Define required raylib variables
-PROJECT_NAME       ?= PROJETO_PI
+PROJECT_NAME       ?= Construtor_de_Fases
 RAYLIB_VERSION     ?= 2.5.0
-RAYLIB_API_VERSION ?= 2
-RAYLIB_PATH        ?= /home/gabriel/git/raylib
+RAYLIB_API_VERSION ?= 251
+RAYLIB_PATH        ?= ..\..
+
+# Define compiler path on Windows
+COMPILER_PATH      ?= C:/raylib/mingw/bin
 
 # Define default options
-
 # One of PLATFORM_DESKTOP, PLATFORM_RPI, PLATFORM_ANDROID, PLATFORM_WEB
 PLATFORM           ?= PLATFORM_DESKTOP
 
@@ -116,7 +118,7 @@ endif
 
 ifeq ($(PLATFORM),PLATFORM_WEB)
     # Emscripten required variables
-    EMSDK_PATH          ?= D:/emsdk
+    EMSDK_PATH          ?= C:/emsdk
     EMSCRIPTEN_VERSION  ?= 1.38.31
     CLANG_VERSION       = e$(EMSCRIPTEN_VERSION)_64bit
     PYTHON_VERSION      = 2.7.13.1_64bit\python-2.7.13.amd64
@@ -231,7 +233,7 @@ ifeq ($(PLATFORM),PLATFORM_WEB)
     # --profiling                # include information for code profiling
     # --memory-init-file 0       # to avoid an external memory initialization code file (.mem)
     # --preload-file resources   # specify a resources folder for data compilation
-    CFLAGS += -Os -s USE_GLFW=3
+    CFLAGS += -Os -s USE_GLFW=3 -s TOTAL_MEMORY=16777216 --preload-file resources
     ifeq ($(BUILD_MODE), DEBUG)
         CFLAGS += -s ASSERTIONS=1 --profiling
     endif
@@ -291,7 +293,7 @@ ifeq ($(PLATFORM),PLATFORM_DESKTOP)
         # NOTE: WinMM library required to set high-res timer resolution
         LDLIBS = -lraylib -lopengl32 -lgdi32 -lwinmm
         # Required for physac examples
-        LDLIBS += -static -lpthread
+        #LDLIBS += -static -lpthread
     endif
     ifeq ($(PLATFORM_OS),LINUX)
         # Libraries for Debian GNU/Linux desktop compiling
@@ -344,19 +346,21 @@ endif
 rwildcard=$(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
 
 # Define all source files required
-SAMPLES = \
-    main \
-    test \
-# typing 'make' will invoke the default target entry
-all: $(SAMPLES)
+SRC_DIR = src
+OBJ_DIR = obj
 
-# Generic compilation pattern
-# NOTE: Examples must be ready for Android compilation!
-%: %.c
+# Define all object files from source files
+SRC = $(call rwildcard, *.c, *.h)
+#OBJS = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+OBJS = main.c
+
+# For Android platform we call a custom Makefile.Android
 ifeq ($(PLATFORM),PLATFORM_ANDROID)
-	$(MAKE) -f Makefile.Android PROJECT_NAME=$@ PROJECT_SOURCE_FILES=$<
+    MAKEFILE_PARAMS = -f Makefile.Android 
+    export PROJECT_NAME
+    export SRC_DIR
 else
-	$(CC) -o $@$(EXT) $< $(CFLAGS) $(INCLUDE_PATHS) $(LDFLAGS) $(LDLIBS) -D$(PLATFORM)
+    MAKEFILE_PARAMS = $(PROJECT_NAME)
 endif
 
 # Default target entry
@@ -396,4 +400,3 @@ ifeq ($(PLATFORM),PLATFORM_WEB)
 	del *.o *.html *.js
 endif
 	@echo Cleaning done
-
