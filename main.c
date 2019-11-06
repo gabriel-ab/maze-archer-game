@@ -1,8 +1,7 @@
 #include <string.h>
 #include <raylib.h>
 #include "lib/constants.h"
-#include "headers/tela.h"
-#include "util.h"
+#include "lib/tela.h"
 
 bool *jogo_rodando = true;
 
@@ -11,10 +10,12 @@ VARIÁVEL QUE DETERMINA A TELA ATUAL
 0 - MENU
 1 - JOGO
 2 - SETTINGS
+3 - TELA DE RESOLUÇÃO
 */
 int currentScreen = 0;
 
-char *resolucao = {"1280x720"};
+Image backgroundImage;
+Texture2D backgroundTexture;
 
 int main(){
 
@@ -24,9 +25,9 @@ int main(){
     telaCheia();
 
     //BACKGROUND
-    Image backgroundImage = LoadImage("resources/wallpaper.png");
+    backgroundImage = LoadImage("resources/wallpaper.png");
     ImageResize(&backgroundImage, tela.width, tela.height);  
-    Texture2D texture = LoadTextureFromImage(backgroundImage);
+    backgroundTexture = LoadTextureFromImage(backgroundImage);
     UnloadImage(backgroundImage);
 
     //BOTÕES DA TELA DE MENU
@@ -38,9 +39,9 @@ int main(){
         "QUIT"
     };
 
-    Rectangle botoesMenu[getLengthOf(textButtonsMenu)];
+    Rectangle botoesMenu[4];
 
-    for (int i = 0; i < getLengthOf(textButtonsMenu); i++)
+    for (int i = 0; i < 4; i++)
     {
         botoesMenu[i] = (Rectangle) {tela.width/2 - 100, tela.height/8*i + tela.height/2, 200, 50};
     }
@@ -54,9 +55,9 @@ int main(){
         "BACK",
     };
 
-    Rectangle botoesConfiguracao[getLengthOf(textButtonsConfiguracao)];
+    Rectangle botoesConfiguracao[3];
 
-    for (int i = 0; i < getLengthOf(textButtonsConfiguracao); i++)
+    for (int i = 0; i < 3; i++)
     {
         botoesConfiguracao[i] = (Rectangle) {tela.width/2 - 100, tela.height/8*i + tela.height/2, 200, 50};
     }
@@ -64,18 +65,21 @@ int main(){
     //BOTÕES DE RESOLUÇÃO DE TELA
 
     char *textButtonsResolucao[] = {
+        "1920x1080",
         "1280x720",
         "800x600",
         "640x480",
+        "VOLTAR"
     };
 
-    Rectangle botoesResolucao[getLengthOf(textButtonsConfiguracao)];
+    Rectangle botoesResolucao[5];
 
-    for (int i = 0; i < getLengthOf(textButtonsConfiguracao); i++)
+    for (int i = 0; i < 4; i++)
     {
-        botoesResolucao[i] = (Rectangle) {tela.width/2 - 100, tela.height/8*i + tela.height/2, 200, 50};
+        botoesResolucao[i] = (Rectangle) {tela.width/2 - 100, 50*i + tela.height/2, 200, 50};
     }
-    
+
+    botoesResolucao[4] = (Rectangle) {tela.width/2 - 100, tela.height/8*3 + tela.height/2, 200, 50};
 
     SetTargetFPS(60);
 
@@ -88,16 +92,21 @@ int main(){
         else if (currentScreen == 2)
         {
             logicaBotoesConfiguracao(botoesConfiguracao);
-            telaConfiguracao(texture, botoesConfiguracao, textButtonsConfiguracao);
-        }
-        else
+            telaConfiguracao(backgroundTexture, botoesConfiguracao, textButtonsConfiguracao);
+
+        } else if(currentScreen == 3) 
+        {
+            logicaBotoesResolucao(botoesResolucao);
+            telaResolucao(backgroundTexture, botoesResolucao, textButtonsResolucao);
+
+        } else
         {
             logicaBotoesMenu(botoesMenu);
-            menuScreen(texture, botoesMenu, textButtonsMenu);
+            menuScreen(backgroundTexture, botoesMenu, textButtonsMenu);
         }
     }
     
-    UnloadTexture(texture);
+    UnloadTexture(backgroundTexture);
     CloseWindow(); 
     return 0;
 }
@@ -144,6 +153,16 @@ void menuScreen(Texture2D background, Rectangle botoesMenu[], char *textButtonsM
 
 //TELA DE CONFIGURAÇÃO
 void logicaBotoesConfiguracao(Rectangle botoesConfiguracao[]) {
+
+    // IR PARA TELA DE RESOLUÇÃO
+    if(CheckCollisionPointRec(GetMousePosition(), botoesConfiguracao[0])) 
+    {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+        {
+            currentScreen = 3;
+        }
+    }
+
     //VOLTAR PARA O MENU
     if (CheckCollisionPointRec(GetMousePosition(), botoesConfiguracao[2]))
     {
@@ -165,6 +184,99 @@ void telaConfiguracao(Texture2D background, Rectangle botoesConfiguracao[], char
             DrawRectangleRec(botoesConfiguracao[i], CheckCollisionPointRec(GetMousePosition(), botoesConfiguracao[i]) ? (Color){128,0,0, 255} : (Color){164,0,0, 255});
             DrawRectangleLines((int)botoesConfiguracao[i].x-5, (int) botoesConfiguracao[i].y-5, (int) botoesConfiguracao[i].width+10, (int) botoesConfiguracao[i].height+10, CheckCollisionPointRec(GetMousePosition(), botoesConfiguracao[i]) ? (Color){164,0,0, 255} : (Color){128,0,0, 255});
             DrawText( textButtonsConfiguracao[i], (int)( botoesConfiguracao[i].x + botoesConfiguracao[i].width/2 - MeasureText(textButtonsConfiguracao[i], 20)/2), (int) botoesConfiguracao[i].y + 16, 20, WHITE);
+        }
+
+    EndDrawing();
+}
+
+void logicaBotoesResolucao(Rectangle botoesResolucao[]) {
+
+    if(CheckCollisionPointRec(GetMousePosition(), botoesResolucao[0])) 
+    {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+        {
+            tela.width = 1920;
+            tela.height = 1080;
+            SetWindowSize(tela.width, tela.height);
+            SetWindowPosition(tela.x, tela.y);
+            for (int i = 0; i < 4; i++)
+            {
+                botoesResolucao[i] = (Rectangle) {tela.width/2 - 100, 50*i + tela.height/2, 200, 50};
+            }
+            botoesResolucao[4] = (Rectangle) {tela.width/2 - 100, tela.height/8*3 + tela.height/2, 200, 50};
+        }
+    }
+      
+
+    if(CheckCollisionPointRec(GetMousePosition(), botoesResolucao[1])) 
+    {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+        {
+            tela.width = 1280;
+            tela.height = 720;
+            SetWindowSize(tela.width, tela.height);
+            SetWindowPosition(tela.x, tela.y);
+            for (int i = 0; i < 4; i++)
+            {
+                botoesResolucao[i] = (Rectangle) {tela.width/2 - 100, 50*i + tela.height/2, 200, 50};
+            }
+            botoesResolucao[4] = (Rectangle) {tela.width/2 - 100, tela.height/8*3 + tela.height/2, 200, 50};
+        }
+    }
+
+    if(CheckCollisionPointRec(GetMousePosition(), botoesResolucao[2])) 
+    {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+        {
+            tela.width = 800;
+            tela.height = 600;
+            SetWindowSize(tela.width, tela.height);
+            SetWindowPosition(tela.x, tela.y);
+            for (int i = 0; i < 4; i++)
+            {
+                botoesResolucao[i] = (Rectangle) {tela.width/2 - 100, 50*i + tela.height/2, 200, 50};
+            }
+            botoesResolucao[4] = (Rectangle) {tela.width/2 - 100, tela.height/8*3 + tela.height/2, 200, 50};
+        }
+    }
+
+    if(CheckCollisionPointRec(GetMousePosition(), botoesResolucao[3])) 
+    {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+        {
+            tela.width = 640;
+            tela.height = 480;
+            SetWindowSize(tela.width, tela.height);
+            SetWindowPosition(tela.x, tela.y);
+            for (int i = 0; i < 4; i++)
+            {
+                botoesResolucao[i] = (Rectangle) {tela.width/2 - 100, 50*i + tela.height/4, 200, 50};
+            }
+            botoesResolucao[4] = (Rectangle) {tela.width/2 - 100, tela.height/8*3 + tela.height/2, 200, 50};
+        }
+    }
+
+    //VOLTAR PARA O CONFIGURAÇÕES
+    if (CheckCollisionPointRec(GetMousePosition(), botoesResolucao[4]))
+    {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+        {
+            currentScreen = 2;
+        }
+    } 
+}
+void telaResolucao(Texture2D background, Rectangle botoesResolucao[], char *textButtonsResolucao[]) {
+    BeginDrawing();
+            
+        ClearBackground(RAYWHITE);
+
+        DrawTexture(background, 0, 0, WHITE);
+
+        for (int i = 0; i < 5; i++)
+        {
+            DrawRectangleRec(botoesResolucao[i], CheckCollisionPointRec(GetMousePosition(), botoesResolucao[i]) ? (Color){128,0,0, 255} : (Color){164,0,0, 255});
+            DrawRectangleLines((int)botoesResolucao[i].x-5, (int) botoesResolucao[i].y-5, (int) botoesResolucao[i].width+10, (int) botoesResolucao[i].height+10, CheckCollisionPointRec(GetMousePosition(), botoesResolucao[i]) ? (Color){164,0,0, 255} : (Color){128,0,0, 255});
+            DrawText( textButtonsResolucao[i], (int)( botoesResolucao[i].x + botoesResolucao[i].width/2 - MeasureText(textButtonsResolucao[i], 20)/2), (int) botoesResolucao[i].y + 16, 20, WHITE);
         }
 
     EndDrawing();

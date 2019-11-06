@@ -2,7 +2,7 @@
 #define LARGURA_TELA 1280
 #define ALTURA_TELA 720
 
-Rectangle tela = {LARGURA_TELA/3, ALTURA_TELA/3, LARGURA_TELA, ALTURA_TELA};
+Rectangle tela = {LARGURA_TELA, ALTURA_TELA, LARGURA_TELA, ALTURA_TELA};
 
 // Para saber o estado atual
 bool is_fullscreen = true; 
