@@ -1,25 +1,35 @@
 #include <string.h>
 #include <raylib.h>
 #include "lib/constants.h"
+#include "headers/tela.h"
+#include "util.h"
+
+bool *jogo_rodando = true;
+
+/*
+VARIÁVEL QUE DETERMINA A TELA ATUAL
+0 - MENU
+1 - JOGO
+2 - SETTINGS
+*/
+int currentScreen = 0;
+
+char *resolucao = {"1280x720"};
 
 int main(){
 
-    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "TESTE");
-    ToggleFullscreen();
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+
+    InitWindow(tela.width, tela.height, "TESTE");
+    telaCheia();
 
     //BACKGROUND
-    Image wallpaper = LoadImage("resources/wallpaper.png");
-    ImageResize(&wallpaper, SCREEN_WIDTH, SCREEN_HEIGHT);  
-    Texture2D texture = LoadTextureFromImage(wallpaper);
-    UnloadImage(wallpaper);
+    Image backgroundImage = LoadImage("resources/wallpaper.png");
+    ImageResize(&backgroundImage, tela.width, tela.height);  
+    Texture2D texture = LoadTextureFromImage(backgroundImage);
+    UnloadImage(backgroundImage);
 
-
-    //BOTÕES DA TELA DE MENU 
-    Rectangle botoesMenu[4];
-    for (int i = 0; i < 4; i++)
-    {
-        botoesMenu[i] = (Rectangle) {SCREEN_WIDTH/2 - 100, SCREEN_HEIGHT/8*i + SCREEN_HEIGHT/2, 200, 50};
-    }
+    //BOTÕES DA TELA DE MENU
     
     const char *textButtonsMenu[] = {
         "START",
@@ -28,38 +38,46 @@ int main(){
         "QUIT"
     };
 
-    //BOTÕES DA TELA DE MENU 
-    Rectangle botoesSettings[3];
-    for (int i = 0; i < 3; i++)
+    Rectangle botoesMenu[getLengthOf(textButtonsMenu)];
+
+    for (int i = 0; i < getLengthOf(textButtonsMenu); i++)
     {
-        botoesSettings[i] = (Rectangle) {SCREEN_WIDTH/2 - 100, SCREEN_HEIGHT/8*i + SCREEN_HEIGHT/2, 200, 50};
+        botoesMenu[i] = (Rectangle) {tela.width/2 - 100, tela.height/8*i + tela.height/2, 200, 50};
     }
-    
-    const char *textButtonsSettings[] = {
-        "FULLSCREEN: ON",
+
+
+    //BOTÕES DA TELA DE CONFIGURAÇÃO
+
+    char *textButtonsConfiguracao[] = {
+        "RESOLUÇÃO",
         "MUTE: OFF",
         "BACK",
     };
 
-    
+    Rectangle botoesConfiguracao[getLengthOf(textButtonsConfiguracao)];
 
-    /*
-    VARIÁVEL QUE DETERMINA A TELA ATUAL
-    0 - MENU
-    1 - JOGO
-    2 - SETTINGS
-    */
-    int currentScreen = 0;
+    for (int i = 0; i < getLengthOf(textButtonsConfiguracao); i++)
+    {
+        botoesConfiguracao[i] = (Rectangle) {tela.width/2 - 100, tela.height/8*i + tela.height/2, 200, 50};
+    }
 
-    const char *screens[] = {
-        "GAME",
-        "MENU",
-        "SETTINGS",
+    //BOTÕES DE RESOLUÇÃO DE TELA
+
+    char *textButtonsResolucao[] = {
+        "1280x720",
+        "800x600",
+        "640x480",
     };
 
-    SetTargetFPS(60);
+    Rectangle botoesResolucao[getLengthOf(textButtonsConfiguracao)];
 
-    bool *jogo_rodando = true;
+    for (int i = 0; i < getLengthOf(textButtonsConfiguracao); i++)
+    {
+        botoesResolucao[i] = (Rectangle) {tela.width/2 - 100, tela.height/8*i + tela.height/2, 200, 50};
+    }
+    
+
+    SetTargetFPS(60);
 
     while (jogo_rodando  && !WindowShouldClose()) 
     {
@@ -69,67 +87,41 @@ int main(){
         }
         else if (currentScreen == 2)
         {
-            //ALTERNAR FULLSCREEN/WINDOW
-            if (CheckCollisionPointRec(GetMousePosition(), botoesSettings[0]))
-            {
-                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
-                {
-                    ToggleFullscreen();
-                    strcpy(*textButtonsSettings[0], "FULLSCREEN: OFF");
-                }
-            }
-
-            //ALTERNAR MUTE ON/OFF
-            if (CheckCollisionPointRec(GetMousePosition(), botoesSettings[1]))
-            {
-                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
-                {
-                    currentScreen = 0;
-                }
-            }
-
-            //VOLTAR PARA O MENU
-            if (CheckCollisionPointRec(GetMousePosition(), botoesSettings[2]))
-            {
-                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
-                {
-                    currentScreen = 0;
-                }
-            }
-
-            settingsScreen(texture, botoesSettings, textButtonsSettings);
+            logicaBotoesConfiguracao(botoesConfiguracao);
+            telaConfiguracao(texture, botoesConfiguracao, textButtonsConfiguracao);
         }
         else
         {
-            //IR PARA TELA DE CONFIGURAÇÕES
-            if (CheckCollisionPointRec(GetMousePosition(), botoesMenu[2]))
-            {
-                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
-                {
-                    currentScreen = 2;
-                    
-                }
-            }
-
-            //SAIR DO JOGO
-            if (CheckCollisionPointRec(GetMousePosition(), botoesMenu[3]))
-            {
-                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
-                {
-                    jogo_rodando = false;
-                }
-            }
-
+            logicaBotoesMenu(botoesMenu);
             menuScreen(texture, botoesMenu, textButtonsMenu);
         }
     }
-
-   
+    
     UnloadTexture(texture);
     CloseWindow(); 
     return 0;
 }
 
+//TELA DE MENU
+void logicaBotoesMenu(Rectangle botoesMenu[]) {
+    //IR PARA TELA DE CONFIGURAÇÕES
+    if (CheckCollisionPointRec(GetMousePosition(), botoesMenu[2]))
+    {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+        {
+            currentScreen = 2;
+        }
+    }
+
+    //SAIR DO JOGO
+    if (CheckCollisionPointRec(GetMousePosition(), botoesMenu[3]))
+    {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+        {
+            jogo_rodando = false;
+        }
+    }
+}
 void menuScreen(Texture2D background, Rectangle botoesMenu[], char *textButtonsMenu[]) {
 
     BeginDrawing();
@@ -150,7 +142,18 @@ void menuScreen(Texture2D background, Rectangle botoesMenu[], char *textButtonsM
     EndDrawing();
 }
 
-void settingsScreen(Texture2D background, Rectangle botoesSettings[], char *textButtonsSettings[]) {
+//TELA DE CONFIGURAÇÃO
+void logicaBotoesConfiguracao(Rectangle botoesConfiguracao[]) {
+    //VOLTAR PARA O MENU
+    if (CheckCollisionPointRec(GetMousePosition(), botoesConfiguracao[2]))
+    {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+        {
+            currentScreen = 0;
+        }
+    }
+}
+void telaConfiguracao(Texture2D background, Rectangle botoesConfiguracao[], char *textButtonsConfiguracao[]) {
     BeginDrawing();
             
         ClearBackground(RAYWHITE);
@@ -159,12 +162,13 @@ void settingsScreen(Texture2D background, Rectangle botoesSettings[], char *text
 
         for (int i = 0; i < 3; i++)
         {
-            DrawRectangleRec(botoesSettings[i], CheckCollisionPointRec(GetMousePosition(), botoesSettings[i]) ? (Color){128,0,0, 255} : (Color){164,0,0, 255});
-            DrawRectangleLines((int)botoesSettings[i].x-5, (int) botoesSettings[i].y-5, (int) botoesSettings[i].width+10, (int) botoesSettings[i].height+10, CheckCollisionPointRec(GetMousePosition(), botoesSettings[i]) ? (Color){164,0,0, 255} : (Color){128,0,0, 255});
-            DrawText( textButtonsSettings[i], (int)( botoesSettings[i].x + botoesSettings[i].width/2 - MeasureText(textButtonsSettings[i], 20)/2), (int) botoesSettings[i].y + 16, 20, WHITE);
+            DrawRectangleRec(botoesConfiguracao[i], CheckCollisionPointRec(GetMousePosition(), botoesConfiguracao[i]) ? (Color){128,0,0, 255} : (Color){164,0,0, 255});
+            DrawRectangleLines((int)botoesConfiguracao[i].x-5, (int) botoesConfiguracao[i].y-5, (int) botoesConfiguracao[i].width+10, (int) botoesConfiguracao[i].height+10, CheckCollisionPointRec(GetMousePosition(), botoesConfiguracao[i]) ? (Color){164,0,0, 255} : (Color){128,0,0, 255});
+            DrawText( textButtonsConfiguracao[i], (int)( botoesConfiguracao[i].x + botoesConfiguracao[i].width/2 - MeasureText(textButtonsConfiguracao[i], 20)/2), (int) botoesConfiguracao[i].y + 16, 20, WHITE);
         }
 
     EndDrawing();
 }
 
 void gameScreen() {}
+
