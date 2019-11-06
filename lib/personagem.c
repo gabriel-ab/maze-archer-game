@@ -5,7 +5,7 @@
 Personagem personagemConstructor() {
     Personagem knight;
     //TODO Definir sprite para personagem principal
-    //knight.sprite = LoadTexture("resources/DF_Actor.png");
+    knight.sprite = LoadTexture("resources/sprite.png");
     knight.positionX = SCREEN_WIDTH/2;
     knight.positionY = SCREEN_HEIGHT/2;
     knight.altura = knight.sprite.height/8;

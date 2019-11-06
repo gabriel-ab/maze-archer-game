@@ -1,15 +1,26 @@
 #include <string.h>
 #include <raylib.h>
 #include "lib/constants.h"
+#include "lib/personagem.h"
+#include "headers/tela.h"
+#include "headers/movimenta.h"
+#include "lib/personagem.c"
+
+//Declaração de funcões
+void gameScreen();
+void menuScreen(Texture2D background, Rectangle botoesMenu[], char *textButtonsMenu[]);
+void settingsScreen(Texture2D background, Rectangle botoesSettings[], char *textButtonsSettings[]);
 
 int main(){
 
-    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "TESTE");
-    ToggleFullscreen();
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+    InitWindow(tela.width, tela.height, "TESTE");
+    telaCheia();
+    SetWindowMinSize(800,600);
 
     //BACKGROUND
     Image wallpaper = LoadImage("resources/wallpaper.png");
-    ImageResize(&wallpaper, SCREEN_WIDTH, SCREEN_HEIGHT);  
+    //ImageResize(&wallpaper, tela.width, tela.height);  
     Texture2D texture = LoadTextureFromImage(wallpaper);
     UnloadImage(wallpaper);
 
@@ -18,7 +29,7 @@ int main(){
     Rectangle botoesMenu[4];
     for (int i = 0; i < 4; i++)
     {
-        botoesMenu[i] = (Rectangle) {SCREEN_WIDTH/2 - 100, SCREEN_HEIGHT/8*i + SCREEN_HEIGHT/2, 200, 50};
+        botoesMenu[i] = (Rectangle) {tela.width/2 - 100, tela.height/8*i + tela.height/2, 200, 50};
     }
     
     const char *textButtonsMenu[] = {
@@ -32,7 +43,7 @@ int main(){
     Rectangle botoesSettings[3];
     for (int i = 0; i < 3; i++)
     {
-        botoesSettings[i] = (Rectangle) {SCREEN_WIDTH/2 - 100, SCREEN_HEIGHT/8*i + SCREEN_HEIGHT/2, 200, 50};
+        botoesSettings[i] = (Rectangle) {tela.width/2 - 100, tela.height/8*i + tela.height/2, 200, 50};
     }
     
     const char *textButtonsSettings[] = {
@@ -63,6 +74,15 @@ int main(){
 
     while (jogo_rodando  && !WindowShouldClose()) 
     {
+        if(IsWindowResized() || Is_Fullscreen){
+            updateSizeTela();
+            for (int i = 0; i < 4; i++)
+            {
+                botoesMenu[i] = (Rectangle) {tela.width/2 - 100, tela.height/8*i + tela.height/2, 200, 50};
+                if(i < 3) botoesSettings[i] = (Rectangle) {tela.width/2 - 100, tela.height/8*i + tela.height/2, 200, 50};
+            }
+        }
+
         if (currentScreen == 1) 
         {
             gameScreen();
@@ -74,8 +94,7 @@ int main(){
             {
                 if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
                 {
-                    ToggleFullscreen();
-                    strcpy(*textButtonsSettings[0], "FULLSCREEN: OFF");
+                    telaCheia();
                 }
             }
 
@@ -101,6 +120,15 @@ int main(){
         }
         else
         {
+            //INICIAR
+            if (CheckCollisionPointRec(GetMousePosition(), botoesMenu[0]))
+            {
+                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+                {
+                    currentScreen = 1;
+                    
+                }
+            }
             //IR PARA TELA DE CONFIGURAÇÕES
             if (CheckCollisionPointRec(GetMousePosition(), botoesMenu[2]))
             {
@@ -136,7 +164,7 @@ void menuScreen(Texture2D background, Rectangle botoesMenu[], char *textButtonsM
             
         ClearBackground(RAYWHITE);
 
-        DrawTexture(background, 0, 0, WHITE);
+        DrawTextureEx(background, (Vector2){0,0}, 0, tela.width/background.width,WHITE);
 
         
         for (int i = 0; i < 4; i++)
@@ -151,11 +179,12 @@ void menuScreen(Texture2D background, Rectangle botoesMenu[], char *textButtonsM
 }
 
 void settingsScreen(Texture2D background, Rectangle botoesSettings[], char *textButtonsSettings[]) {
+
     BeginDrawing();
             
         ClearBackground(RAYWHITE);
 
-        DrawTexture(background, 0, 0, WHITE);
+        DrawTextureEx(background, (Vector2){0,0}, 0, tela.width/background.width,WHITE);
 
         for (int i = 0; i < 3; i++)
         {
@@ -167,4 +196,59 @@ void settingsScreen(Texture2D background, Rectangle botoesSettings[], char *text
     EndDrawing();
 }
 
-void gameScreen() {}
+void gameScreen() {
+    Rectangle mapa[6] = {
+        -67, -54, 1390, 1310,
+        71, -22, 194, 61,
+        165, -185, 99, 164,
+        263, -183, 315, 77,
+        373, -110, 54, 178,
+        251, 66, 177, 57,
+    };
+    Personagem xala = personagemConstructor();
+    Vector2 posicao;
+    Camera2D cam;
+    cam.zoom = 4;
+    cam.rotation = 0;
+    xala.positionX = 0;
+    xala.positionY = 0;
+
+    while(!WindowShouldClose()){
+        move(&posicao);
+
+        cam.target = (Vector2){xala.positionX, xala.positionY};
+        cam.offset = (Vector2){tela.width/2, tela.height/2};
+        for( int i= 0; i < 6; i++){
+            if(CheckCollisionRecs(xala.linhaColisaoCima,mapa[i])){
+                if(IsKeyDown(KEY_W)) xala.positionY--;
+            }
+            if(CheckCollisionRecs(xala.linhaColisaoBaixo,mapa[i])){
+                if(IsKeyDown(KEY_S)) xala.positionY++;
+            }
+            if(CheckCollisionRecs(xala.linhaColisaoEsquerda,mapa[i])){
+                if(IsKeyDown(KEY_A)) xala.positionX--;
+            }
+            if(CheckCollisionRecs(xala.linhaColisaoDireita,mapa[i])){
+                if(IsKeyDown(KEY_D)) xala.positionX += 10;
+            }
+        }
+        if(IsKeyDown(KEY_DOWN))cam.zoom -= 0.1;
+        BeginDrawing();
+            ClearBackground(GRAY);
+            BeginMode2D(cam);
+                for( int i = 0; i < 6; i++){
+                    DrawRectanglePro(mapa[i],(Vector2){0,0},0,BLACK);
+                }
+                DrawRectangleRec(xala.linhaColisaoCima,YELLOW);
+                DrawRectangleRec(xala.linhaColisaoEsquerda,YELLOW);
+                DrawRectangleRec(xala.linhaColisaoDireita,YELLOW);
+                DrawRectangleRec(xala.linhaColisaoBaixo,YELLOW);
+
+                DrawTextureEx(xala.sprite, (Vector2){xala.positionX, xala.positionY}, 0, 0.03,WHITE);
+            EndMode2D();
+        EndDrawing();
+    }
+    
+    
+
+}

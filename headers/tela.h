@@ -2,32 +2,37 @@
 #define larguraTela 800
 #define alturaTela 500
 
+//status da tela
 Rectangle tela = {larguraTela/3, alturaTela/3, larguraTela, alturaTela};
+
+//tela anterior a troca de telacheia
+Rectangle telaAnterior = {larguraTela/3, alturaTela/3, larguraTela, alturaTela};
 
 // Para saber o estado atual
 int Is_Fullscreen = 0; 
 
 //*********FUNÇÔES DE TELA***********
 
-//chama a função toggleFulscreen() guardando o tamanho da tela anterior
+//Chama a função toggleFulscreen() guardando o tamanho da tela anterior e retornando o estado atual
 void telaCheia(void)
 {
     if(!Is_Fullscreen){
+        telaAnterior.width = GetScreenWidth();
+        telaAnterior.height = GetScreenHeight();
+        SetWindowSize(GetMonitorWidth(0), GetMonitorHeight(0));
         tela.width = GetScreenWidth();
         tela.height = GetScreenHeight();
-        SetWindowSize(GetMonitorWidth(0), GetMonitorHeight(0));
     }
     ToggleFullscreen();
 
     if(Is_Fullscreen){
-        SetWindowSize(tela.width, tela.height);
+        SetWindowSize(telaAnterior.width, telaAnterior.height);
         SetWindowPosition(tela.x, tela.y);
     }
     Is_Fullscreen = !Is_Fullscreen; 
-    
 }
-void atualizaCamera(Camera2D *camera){
+//Atualiza o as variaveis do tamanho da tela
+void updateSizeTela(){
     tela.width = GetScreenWidth();
     tela.height = GetScreenHeight();
-    camera->offset = (Vector2){tela.width/2,tela.height/2};
 }
