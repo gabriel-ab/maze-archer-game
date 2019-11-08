@@ -96,7 +96,7 @@ int main(){
 
         } else if(currentScreen == 3) 
         {
-            logicaBotoesResolucao(botoesResolucao);
+            logicaBotoesResolucao(botoesResolucao, botoesConfiguracao, botoesMenu);
             telaResolucao(backgroundTexture, botoesResolucao, textButtonsResolucao);
 
         } else
@@ -189,7 +189,8 @@ void telaConfiguracao(Texture2D background, Rectangle botoesConfiguracao[], char
     EndDrawing();
 }
 
-void logicaBotoesResolucao(Rectangle botoesResolucao[]) {
+//TELA DE RESOLUÇÃO
+void logicaBotoesResolucao(Rectangle botoesResolucao[], Rectangle botoesConfiguracao[], Rectangle botoesMenu[]) {
 
     if(CheckCollisionPointRec(GetMousePosition(), botoesResolucao[0])) 
     {
@@ -199,11 +200,8 @@ void logicaBotoesResolucao(Rectangle botoesResolucao[]) {
             tela.height = 1080;
             SetWindowSize(tela.width, tela.height);
             SetWindowPosition(tela.x, tela.y);
-            for (int i = 0; i < 4; i++)
-            {
-                botoesResolucao[i] = (Rectangle) {tela.width/2 - 100, 50*i + tela.height/2, 200, 50};
-            }
-            botoesResolucao[4] = (Rectangle) {tela.width/2 - 100, tela.height/8*3 + tela.height/2, 200, 50};
+            setBackground();
+            atualizarPosicaoBotoes(botoesResolucao, botoesConfiguracao, botoesMenu);
         }
     }
       
@@ -216,11 +214,8 @@ void logicaBotoesResolucao(Rectangle botoesResolucao[]) {
             tela.height = 720;
             SetWindowSize(tela.width, tela.height);
             SetWindowPosition(tela.x, tela.y);
-            for (int i = 0; i < 4; i++)
-            {
-                botoesResolucao[i] = (Rectangle) {tela.width/2 - 100, 50*i + tela.height/2, 200, 50};
-            }
-            botoesResolucao[4] = (Rectangle) {tela.width/2 - 100, tela.height/8*3 + tela.height/2, 200, 50};
+            setBackground();
+            atualizarPosicaoBotoes(botoesResolucao, botoesConfiguracao, botoesMenu);
         }
     }
 
@@ -232,11 +227,8 @@ void logicaBotoesResolucao(Rectangle botoesResolucao[]) {
             tela.height = 600;
             SetWindowSize(tela.width, tela.height);
             SetWindowPosition(tela.x, tela.y);
-            for (int i = 0; i < 4; i++)
-            {
-                botoesResolucao[i] = (Rectangle) {tela.width/2 - 100, 50*i + tela.height/2, 200, 50};
-            }
-            botoesResolucao[4] = (Rectangle) {tela.width/2 - 100, tela.height/8*3 + tela.height/2, 200, 50};
+            setBackground();
+            atualizarPosicaoBotoes(botoesResolucao, botoesConfiguracao, botoesMenu);
         }
     }
 
@@ -248,6 +240,7 @@ void logicaBotoesResolucao(Rectangle botoesResolucao[]) {
             tela.height = 480;
             SetWindowSize(tela.width, tela.height);
             SetWindowPosition(tela.x, tela.y);
+            setBackground();
             for (int i = 0; i < 4; i++)
             {
                 botoesResolucao[i] = (Rectangle) {tela.width/2 - 100, 50*i + tela.height/4, 200, 50};
@@ -264,6 +257,23 @@ void logicaBotoesResolucao(Rectangle botoesResolucao[]) {
             currentScreen = 2;
         }
     } 
+}
+void atualizarPosicaoBotoes(Rectangle botoesResolucao[], Rectangle botoesConfiguracao[], Rectangle botoesMenu[]) {
+    for (int i = 0; i < 4; i++)
+    {
+        botoesResolucao[i] = (Rectangle) {tela.width/2 - 100, 50*i + tela.height/2, 200, 50};
+    }
+    botoesResolucao[4] = (Rectangle) {tela.width/2 - 100, tela.height/8*3 + tela.height/2, 200, 50};
+
+    for (int i = 0; i < 3; i++)
+    {
+        botoesConfiguracao[i] = (Rectangle) {tela.width/2 - 100, tela.height/8*i + tela.height/2, 200, 50};
+    }
+
+    for (int i = 0; i < 4; i++)
+    {
+        botoesMenu[i] = (Rectangle) {tela.width/2 - 100, tela.height/8*i + tela.height/2, 200, 50};
+    }
 }
 void telaResolucao(Texture2D background, Rectangle botoesResolucao[], char *textButtonsResolucao[]) {
     BeginDrawing();
@@ -284,3 +294,9 @@ void telaResolucao(Texture2D background, Rectangle botoesResolucao[], char *text
 
 void gameScreen() {}
 
+void setBackground() {
+    backgroundImage = LoadImage("resources/wallpaper.png");
+    ImageResize(&backgroundImage, tela.width, tela.height);  
+    backgroundTexture = LoadTextureFromImage(backgroundImage);
+    UnloadImage(backgroundImage);
+};
