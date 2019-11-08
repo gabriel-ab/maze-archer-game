@@ -1,34 +1,39 @@
 //********CONFIGURAÇÔES DE TELA*********
-#define larguraTela 800
-#define alturaTela 500
+#define LARGURA_TELA 800
+#define ALTURA_TELA 600
 
-Rectangle tela = {larguraTela/3, alturaTela/3, larguraTela, alturaTela};
-Rectangle telaAnterior = {larguraTela/3, alturaTela/3, larguraTela, alturaTela};
+Rectangle tela = {LARGURA_TELA/3, ALTURA_TELA/3, LARGURA_TELA, ALTURA_TELA};
+Rectangle telaAnterior = {LARGURA_TELA/3, ALTURA_TELA/3, LARGURA_TELA, ALTURA_TELA};
 
 // Para saber o estado atual
-int Is_Fullscreen = 0; 
+bool is_fullscreen = false; 
 
 //*********FUNÇÔES DE TELA***********
 
 //chama a função toggleFulscreen() guardando o tamanho da tela anterior
-void telaCheia(void)
+bool telaCheia(void)
 {
-    if(!Is_Fullscreen){
+    if(!is_fullscreen){
         telaAnterior.width = GetScreenWidth();
         telaAnterior.height = GetScreenHeight();
         SetWindowSize(GetMonitorWidth(0), GetMonitorHeight(0));
     }
     ToggleFullscreen();
 
-    if(Is_Fullscreen){
+    if(is_fullscreen){
         SetWindowSize(telaAnterior.width, telaAnterior.height);
-        SetWindowPosition(telaAnterior.x, telaAnterior.y);
+        SetWindowPosition(tela.x, tela.y);
     }
-    Is_Fullscreen = !Is_Fullscreen; 
+    is_fullscreen = !is_fullscreen; 
     
+    tela.width = GetScreenWidth();
+    tela.height = GetScreenHeight();
+
+    return is_fullscreen;
 }
+
 void atualizaCamera(Camera2D *camera){
     tela.width = GetScreenWidth();
     tela.height = GetScreenHeight();
-    camera->offset = (Vector2){camera->target.x + tela.width/2,camera->target.y + tela.height/2};
+    camera->offset = (Vector2){tela.width/2,tela.height/2};
 }

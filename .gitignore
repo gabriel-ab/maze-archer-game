@@ -1,2 +1,4 @@
-Makefile
-.vscode/*
+*.vscode/
+*Makefile
+*.code-workspace
+*.exe
