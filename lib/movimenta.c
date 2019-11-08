@@ -8,16 +8,27 @@ void movimentarV(Vector2 *coisa){
 }
 void movimentar(Personagem *fulano){
     
-    if(IsKeyDown(KEY_W)) fulano->inercia.y = -VELOCIDADE;
-    if(IsKeyDown(KEY_S)) fulano->inercia.y = VELOCIDADE;
-    if(IsKeyDown(KEY_A)) fulano->inercia.x = -VELOCIDADE;
-    if(IsKeyDown(KEY_D)) fulano->inercia.x = VELOCIDADE;
+    if(fulano->inercia.y > -VELOCIDADE_MAX){
+        if(IsKeyDown(KEY_W)) fulano->inercia.y += -ACELERACAO;
+    }
+
+    if(fulano->inercia.y < VELOCIDADE_MAX){
+        if(IsKeyDown(KEY_S)) fulano->inercia.y += ACELERACAO;
+    }
+
+    if(fulano->inercia.x > -VELOCIDADE_MAX){
+        if(IsKeyDown(KEY_A)) fulano->inercia.x += -ACELERACAO;
+    }
+
+    if(fulano->inercia.x < VELOCIDADE_MAX){
+        if(IsKeyDown(KEY_D)) fulano->inercia.x += ACELERACAO;
+    }
     
     updateHitBoxes(fulano);
     
     aplicaInercia(fulano);
     
-    aplicaAtrito(fulano,0.01);
+    aplicaAtrito(fulano,TAXA_ATRITO);
 
 }
 //atualiza caixas de colisao
@@ -32,7 +43,7 @@ void updateHitBoxes(Personagem *fulano){
     fulano->linhaColisaoBaixo =                         //  ---------
         (Rectangle){                                    //  |       |
             fulano->position.x - fulano->largura/2,     //  |   .   |
-            fulano->position.y + fulano->altura,        //  |       |
+            fulano->position.y + fulano->altura/2,      //  |       |
             fulano->largura, 1                          //  X========
         };
 
@@ -50,7 +61,63 @@ void updateHitBoxes(Personagem *fulano){
             1, fulano->altura                           //  H--------
         };
 }
+//verifica se o personagem colidiu em alguma parede
+void checkHitBoxes(Personagem *fulano,Rectangle **MAPA){
 
+    int bytesMapa = sizeof(**MAPA);
+    int bytesRectamgle = sizeof(Rectangle);
+    int tamMapa = bytesMapa/bytesRectamgle;
+    
+    //VERIFICAÇÃO DE COLISAO SUPERIOR
+    for(int i = 0; i < tamMapa; i++)
+    {
+        if ( CheckCollisionRecs(fulano->linhaColisaoCima, *MAPA[i]) )
+        {
+            if(fulano->inercia.y < 0)
+            {
+                fulano->inercia.y = 0;
+                break;
+            }
+        }
+    }
+    //VERIFICAÇÃO DE COLISAO INFERIOR
+    for(int i = 0; i < tamMapa; i++)
+    {
+        if ( CheckCollisionRecs(fulano->linhaColisaoBaixo, *MAPA[i]) )
+        {
+            if(fulano->inercia.y > 0)
+            {
+                fulano->inercia.y = 0;
+                break;
+            }
+        }
+    }
+    //VERIFICAÇÃO DE COLISAO ESQUERDA
+    for(int i = 0; i < tamMapa; i++)
+    {
+        if ( CheckCollisionRecs(fulano->linhaColisaoEsquerda, *MAPA[i]) )
+        {
+            if(fulano->inercia.x < 0)
+            {
+                fulano->inercia.x = 0;
+                break;
+            }
+        }
+    }
+    //VERIFICAÇÃO DE COLISAO DIREITA
+    for(int i = 0; i < tamMapa; i++)
+    {
+        if ( CheckCollisionRecs(fulano->linhaColisaoDireita, *MAPA[i]) )
+        {
+            if(fulano->inercia.x > 0)
+            {
+                fulano->inercia.x = 0;
+                break;
+            }
+        }
+    }
+    
+}
 //aplica a inercia a posicao do personagem
 void aplicaInercia(Personagem *fulano){
     fulano->position.x += fulano->inercia.x;

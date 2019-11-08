@@ -42,6 +42,8 @@ void fase1()
     };
     Personagem xala;
     xala = personagemConstructor();
+    xala.altura = 20;
+    xala.largura = 20;
 
     Camera2D cam;
     cam.zoom = 3;
@@ -51,6 +53,8 @@ void fase1()
     while(!WindowShouldClose()){
 
         movimentar(&xala);
+        checkHitBoxes(&xala, &MAPA);
+
         if(IsKeyPressed(KEY_F)) telaCheia();
         
         cam.target = xala.position;
