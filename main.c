@@ -29,7 +29,17 @@ int main(){
     ImageResize(&backgroundImage, tela.width, tela.height);  
     backgroundTexture = LoadTextureFromImage(backgroundImage);
     UnloadImage(backgroundImage);
-
+    
+    
+    //AUDIO
+    InitAudioDevice();
+    
+    bool btnaction = false;
+    
+    Sound botaofx = LoadSound("test.wav");
+    
+    
+    
     //BOTÕES DA TELA DE MENU
     
     const char *textButtonsMenu[] = {
@@ -91,34 +101,45 @@ int main(){
         }
         else if (currentScreen == 2)
         {
+            
+            
+            
             logicaBotoesConfiguracao(botoesConfiguracao);
             telaConfiguracao(backgroundTexture, botoesConfiguracao, textButtonsConfiguracao);
+            
 
         } else if(currentScreen == 3) 
         {
+            
             logicaBotoesResolucao(botoesResolucao);
             telaResolucao(backgroundTexture, botoesResolucao, textButtonsResolucao);
 
         } else
         {
-            logicaBotoesMenu(botoesMenu);
+            logicaBotoesMenu(botoesMenu, botaofx);
             menuScreen(backgroundTexture, botoesMenu, textButtonsMenu);
         }
     }
     
+    
     UnloadTexture(backgroundTexture);
+    UnloadSound(botaofx);
+    
+    CloseAudioDevice();
     CloseWindow(); 
     return 0;
 }
 
 //TELA DE MENU
-void logicaBotoesMenu(Rectangle botoesMenu[]) {
+void logicaBotoesMenu(Rectangle botoesMenu[], Sound botaofx) {
     //IR PARA TELA DE CONFIGURAÇÕES
     if (CheckCollisionPointRec(GetMousePosition(), botoesMenu[2]))
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
-            currentScreen = 2;
+                PlaySound(botaofx);
+                currentScreen = 2;
+            
         }
     }
 
@@ -130,6 +151,7 @@ void logicaBotoesMenu(Rectangle botoesMenu[]) {
             jogo_rodando = false;
         }
     }
+   
 }
 void menuScreen(Texture2D background, Rectangle botoesMenu[], char *textButtonsMenu[]) {
 
