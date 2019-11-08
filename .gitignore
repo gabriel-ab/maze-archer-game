@@ -2,3 +2,4 @@ Makefile
 Makefile.*
 .vscode/
 main
+main.code-workspace
