@@ -1,40 +1,39 @@
 #include "personagem.h"
-#include "constants.h"
 
 Personagem personagemConstructor() {
     Personagem knight;
     //TODO Definir sprite para personagem principal
     //knight.sprite = LoadTexture("resources/DF_Actor.png");
-    knight.inercia = (Vector2){0,0};
-    knight.position = (Vector2){tela.width/2, tela.height/2};
+    knight.velocidade = (Vector2){0,0};
+    knight.position = (Vector2){0,0};
     knight.altura = knight.sprite.height/8;
     knight.largura = knight.sprite.width/12;
     knight.linhaColisaoCima = 
         (Rectangle){
-            knight.position.x - knight.largura/2, 
+            knight.position.x - knight.largura/2 +2, 
             knight.position.y - knight.altura/2 -1, 
-            knight.largura, 1
+            knight.largura -2, 1
         };
 
     knight.linhaColisaoBaixo = 
         (Rectangle){
-            knight.position.x - knight.largura/2,
+            knight.position.x - knight.largura/2 +2,
             knight.position.y + knight.altura, 
-            knight.largura, 1
+            knight.largura -2, 1
         };
 
     knight.linhaColisaoEsquerda  = 
         (Rectangle){
             knight.position.x -knight.largura/2 -1, 
-            knight.position.y -knight.altura/2,
-            1, knight.altura
+            knight.position.y -knight.altura/2 +2,
+            1, knight.altura -2
         };
 
     knight.linhaColisaoDireita = 
         (Rectangle){ 
             knight.position.x + knight.largura/2, 
-            knight.position.y - knight.altura/2, 
-            1, knight.altura
+            knight.position.y - knight.altura/2 +2, 
+            1, knight.altura -2
         };
 
     return knight;

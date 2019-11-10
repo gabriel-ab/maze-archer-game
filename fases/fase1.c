@@ -1,7 +1,15 @@
+#define TAM_MAPA 4
+
 #include <raylib.h>
+Color colideCima = GREEN;
+Color colideBaixo = GREEN;
+Color colideEsq = GREEN;
+Color colideDir = GREEN;
+
 #include "../lib/tela.h"
 #include "../lib/personagem.c"
 #include "../lib/movimenta.c"
+
 
 int main(){
     fase1();
@@ -11,35 +19,12 @@ void fase1()
 {
     InitWindow(800,600,"JOGO"); //temporario
     Rectangle MAPA[] = {
-        -103, -74, 269, 241,
-        -16, 164, 98, 189,
-        80, 232, 446, 122,
-        521, -181, 96, 956,
-        615, -178, 430, 52,
-        697, -117, 170, 91,
-        878, -116, 171, 88,
-        622, -118, 68, 90,
-        622, -19, 99, 183,
-        623, 169, 98, 156,
-        615, 53, 8, 42,
-        616, 223, 9, 43,
-        614, -95, 11, 36,
-        708, -129, 42, 13,
-        891, -129, 46, 13,
-        616, 537, 124, 43,
-        589, 772, 78, 72,
-        665, 809, 179, 61,
-        733, 486, 206, 82,
-        902, 557, 210, 112,
-        841, 812, 509, 41,
-        1076, 667, 38, 146,
-        1010, -32, 32, 141,
-        875, 104, 318, 122,
-        1009, 224, 40, 182,
-        1048, 363, 229, 42,
-        1237, 402, 40, 225,
-        1110, 588, 126, 38,
+        -278, -166, 18, 332,
+        -264, -164, 481, 13,
+        -261, 146, 466, 14,
+        204, -156, 19, 256
     };
+
     Personagem xala;
     xala = personagemConstructor();
     xala.altura = 20;
@@ -47,14 +32,14 @@ void fase1()
 
     Camera2D cam;
     cam.zoom = 3;
+    cam.rotation = 0;
     cam.target = xala.position;
     cam.offset = (Vector2){GetScreenWidth()/2 , GetScreenHeight()/2};
     
     while(!WindowShouldClose()){
 
-        movimentar(&xala);
-        checkHitBoxes(&xala, &MAPA);
-
+        movimentar(&xala, MAPA);
+        
         if(IsKeyPressed(KEY_F)) telaCheia();
         
         cam.target = xala.position;
@@ -67,20 +52,22 @@ void fase1()
 
             BeginMode2D(cam);
 
-                for(int i = 0; i < 28; i++){
+                for(int i = 0; i < TAM_MAPA; i++){
                     DrawRectangleRec(MAPA[i],BLACK);
                 }
                 DrawCircleV(xala.position,10,BLUE);
-                DrawRectangleRec(xala.linhaColisaoBaixo,BLACK);
-                DrawRectangleRec(xala.linhaColisaoCima,BLACK);
-                DrawRectangleRec(xala.linhaColisaoDireita,BLACK);
-                DrawRectangleRec(xala.linhaColisaoEsquerda,BLACK);
+                DrawRectangleRec(xala.linhaColisaoCima,colideCima);
+                DrawRectangleRec(xala.linhaColisaoBaixo,colideBaixo);
+                DrawRectangleRec(xala.linhaColisaoEsquerda,colideEsq);
+                DrawRectangleRec(xala.linhaColisaoDireita,colideDir);
+                
                 
             EndMode2D();
 
             DrawText(FormatText("%.2f %.2f",cam.target.x, cam.target.y),10,10,20,YELLOW);
-            DrawText(FormatText("%.2f %.2f",xala.inercia.x, xala.inercia.y),10,40,20,YELLOW);
-            
+            DrawText(FormatText("%.2f %.2f",xala.velocidade.x, xala.velocidade.y),10,40,20,YELLOW);
+            DrawText(FormatText("%lu",sizeof(MAPA)),10,70,20,YELLOW);
+
         EndDrawing();
     }
     CloseWindow(); //temporario
