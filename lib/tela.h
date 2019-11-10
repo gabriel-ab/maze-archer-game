@@ -1,11 +1,12 @@
 //********CONFIGURAÇÔES DE TELA*********
-#define LARGURA_TELA 1280
-#define ALTURA_TELA 720
+#define LARGURA_TELA 800
+#define ALTURA_TELA 600
 
-Rectangle tela = {LARGURA_TELA, ALTURA_TELA, LARGURA_TELA, ALTURA_TELA};
+Rectangle tela = {LARGURA_TELA/3, ALTURA_TELA/3, LARGURA_TELA, ALTURA_TELA};
+Rectangle telaAnterior = {LARGURA_TELA/3, ALTURA_TELA/3, LARGURA_TELA, ALTURA_TELA};
 
 // Para saber o estado atual
-bool is_fullscreen = true; 
+bool is_fullscreen = false; 
 
 //*********FUNÇÔES DE TELA***********
 
@@ -13,18 +14,21 @@ bool is_fullscreen = true;
 bool telaCheia(void)
 {
     if(!is_fullscreen){
-        tela.width = GetScreenWidth();
-        tela.height = GetScreenHeight();
+        telaAnterior.width = GetScreenWidth();
+        telaAnterior.height = GetScreenHeight();
         SetWindowSize(GetMonitorWidth(0), GetMonitorHeight(0));
     }
     ToggleFullscreen();
 
     if(is_fullscreen){
-        SetWindowSize(tela.width, tela.height);
+        SetWindowSize(telaAnterior.width, telaAnterior.height);
         SetWindowPosition(tela.x, tela.y);
     }
     is_fullscreen = !is_fullscreen; 
     
+    tela.width = GetScreenWidth();
+    tela.height = GetScreenHeight();
+
     return is_fullscreen;
 }
 

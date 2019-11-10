@@ -1,6 +1,5 @@
 #include <string.h>
 #include <raylib.h>
-#include "lib/constants.h"
 #include "lib/tela.h"
 
 bool *jogo_rodando = true;

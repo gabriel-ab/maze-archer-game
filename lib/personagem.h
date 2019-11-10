@@ -5,10 +5,11 @@
 #define PERSONAGEM_H_INCLUDED
 
 
-typedef struct
+typedef struct Personagem
 {
     Texture2D sprite;
     Vector2 position;
+    Vector2 inercia;
     int largura;
     int altura;
     Rectangle linhaColisaoCima;
