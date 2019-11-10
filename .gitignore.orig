@@ -1,0 +1,8 @@
+.vscode/*
+
+*.exe
+Makefile
+Makefile.*
+.vscode/
+main
+main.code-workspace

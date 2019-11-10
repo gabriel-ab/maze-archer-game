@@ -1,6 +1,5 @@
 #include <string.h>
 #include <raylib.h>
-#include "lib/constants.h"
 #include "lib/tela.h"
 
 bool *jogo_rodando = true;
@@ -110,8 +109,12 @@ int main(){
 
         } else if(currentScreen == 3) 
         {
-            
+<<<<<<< HEAD
             logicaBotoesResolucao(botoesResolucao, botoesConfiguracao, botoesMenu);
+=======
+            
+            logicaBotoesResolucao(botoesResolucao);
+>>>>>>> 7365cd40e7ef347b18119550c37ce95ef747083c
             telaResolucao(backgroundTexture, botoesResolucao, textButtonsResolucao);
 
         } else
@@ -314,13 +317,11 @@ void telaResolucao(Texture2D background, Rectangle botoesResolucao[], char *text
     EndDrawing();
 }
 
+void gameScreen() {}
 
 void setBackground() {
     backgroundImage = LoadImage("resources/wallpaper.png");
     ImageResize(&backgroundImage, tela.width, tela.height);  
     backgroundTexture = LoadTextureFromImage(backgroundImage);
     UnloadImage(backgroundImage);
-}
-
-void gameScreen() {}
-
+};
