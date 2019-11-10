@@ -1,7 +1,7 @@
 #include <raylib.h>
-#include "../lib/tela.h"
-#include "../lib/personagem.c"
-#include "../lib/movimenta.c"
+#include "../../lib/tela.h"
+#include "../../lib/personagem.c"
+#include "../../lib/movimenta.c"
 
 int main(){
     fase1();

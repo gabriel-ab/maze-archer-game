@@ -1,6 +1,3 @@
-#include <stdlib.h>
-#include <raylib.h>
-
 #ifndef PERSONAGEM_H_INCLUDED
 #define PERSONAGEM_H_INCLUDED
 

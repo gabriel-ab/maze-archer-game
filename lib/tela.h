@@ -1,9 +1,14 @@
-//********CONFIGURAÇÔES DE TELA*********
-#define LARGURA_TELA 800
-#define ALTURA_TELA 600
+#ifndef TELA_H_INCLUDED
+#define TELA_H_INCLUDED
 
-Rectangle tela = {LARGURA_TELA/3, ALTURA_TELA/3, LARGURA_TELA, ALTURA_TELA};
-Rectangle telaAnterior = {LARGURA_TELA/3, ALTURA_TELA/3, LARGURA_TELA, ALTURA_TELA};
+#include <raylib.h>
+
+//********CONFIGURAÇÔES DE TELA*********
+#define LARGURA_TELA 1280
+#define ALTURA_TELA 720
+
+Rectangle tela = {LARGURA_TELA, ALTURA_TELA, LARGURA_TELA, ALTURA_TELA};
+Rectangle telaAnterior = {LARGURA_TELA, ALTURA_TELA, LARGURA_TELA, ALTURA_TELA};
 
 // Para saber o estado atual
 bool is_fullscreen = false; 
@@ -37,3 +42,5 @@ void atualizaCamera(Camera2D *camera){
     tela.height = GetScreenHeight();
     camera->offset = (Vector2){tela.width/2,tela.height/2};
 }
+
+#endif

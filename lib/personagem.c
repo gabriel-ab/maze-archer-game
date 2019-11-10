@@ -1,6 +1,5 @@
 
 #include "personagem.h"
-#include "constants.h"
 
 Personagem personagemConstructor() {
     Personagem knight;
