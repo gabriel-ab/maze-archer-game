@@ -14,6 +14,7 @@ VARIÁVEL QUE DETERMINA A TELA ATUAL
 */
 int currentScreen = 0;
 
+
 Image backgroundImage;
 Texture2D backgroundTexture;
 
@@ -23,6 +24,7 @@ int main(){
 
     InitWindow(tela.width, tela.height, "TESTE");
     telaCheia();
+    
 
     //BACKGROUND
     backgroundImage = LoadImage("resources/wallpaper.png");
@@ -30,15 +32,16 @@ int main(){
     backgroundTexture = LoadTextureFromImage(backgroundImage);
     UnloadImage(backgroundImage);
     
-    
+   
     //AUDIO
     InitAudioDevice();
     
-    bool btnaction = false;
+    Music menuIntro = LoadMusicStream("resources/soundtrack/epic.ogg");
     
-    Sound botaofx = LoadSound("test.wav");
+    Sound setting_btnfx = LoadSound("resources/fx/setting click.wav");
+    //Sound play_btnfx = LoadSound("resources/fx/start click.wav");
     
-    
+    PlayMusicStream(menuIntro);
     
     //BOTÕES DA TELA DE MENU
     
@@ -92,9 +95,12 @@ int main(){
     botoesResolucao[4] = (Rectangle) {tela.width/2 - 100, tela.height/8*3 + tela.height/2, 200, 50};
 
     SetTargetFPS(60);
-
+    
+    
     while (jogo_rodando  && !WindowShouldClose()) 
     {
+        UpdateMusicStream(menuIntro);
+        
         if (currentScreen == 1) 
         {
             gameScreen();
@@ -102,28 +108,38 @@ int main(){
         else if (currentScreen == 2)
         {
             
-            
-            
-            logicaBotoesConfiguracao(botoesConfiguracao);
+            logicaBotoesConfiguracao(botoesConfiguracao, setting_btnfx);
             telaConfiguracao(backgroundTexture, botoesConfiguracao, textButtonsConfiguracao);
             
 
         } else if(currentScreen == 3) 
         {
             
-            logicaBotoesResolucao(botoesResolucao);
+            logicaBotoesResolucao(botoesResolucao, setting_btnfx);
             telaResolucao(backgroundTexture, botoesResolucao, textButtonsResolucao);
 
+        }else if(currentScreen == -1)
+        {
+            if(!IsSoundPlaying(setting_btnfx)){
+                jogo_rodando = false;
+            }
+            
+            
         } else
         {
-            logicaBotoesMenu(botoesMenu, botaofx);
+            
+            logicaBotoesMenu(botoesMenu, setting_btnfx);
             menuScreen(backgroundTexture, botoesMenu, textButtonsMenu);
         }
     }
     
     
     UnloadTexture(backgroundTexture);
-    UnloadSound(botaofx);
+    
+    UnloadSound(setting_btnfx);
+    UnloadMusicStream(menuIntro);
+    //UnloadSound(play_btnfx);
+    
     
     CloseAudioDevice();
     CloseWindow(); 
@@ -131,14 +147,14 @@ int main(){
 }
 
 //TELA DE MENU
-void logicaBotoesMenu(Rectangle botoesMenu[], Sound botaofx) {
+void logicaBotoesMenu(Rectangle botoesMenu[], Sound setting_btnfx) {
     //IR PARA TELA DE CONFIGURAÇÕES
     if (CheckCollisionPointRec(GetMousePosition(), botoesMenu[2]))
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
-                PlaySound(botaofx);
-                currentScreen = 2;
+            PlaySound(setting_btnfx);
+            currentScreen = 2;
             
         }
     }
@@ -148,13 +164,15 @@ void logicaBotoesMenu(Rectangle botoesMenu[], Sound botaofx) {
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
-            jogo_rodando = false;
+            PlaySound(setting_btnfx);
+            currentScreen = -1;
+            
         }
     }
    
 }
 void menuScreen(Texture2D background, Rectangle botoesMenu[], char *textButtonsMenu[]) {
-
+    
     BeginDrawing();
             
         ClearBackground(RAYWHITE);
@@ -174,13 +192,14 @@ void menuScreen(Texture2D background, Rectangle botoesMenu[], char *textButtonsM
 }
 
 //TELA DE CONFIGURAÇÃO
-void logicaBotoesConfiguracao(Rectangle botoesConfiguracao[]) {
+void logicaBotoesConfiguracao(Rectangle botoesConfiguracao[], Sound setting_btnfx) {
 
     // IR PARA TELA DE RESOLUÇÃO
     if(CheckCollisionPointRec(GetMousePosition(), botoesConfiguracao[0])) 
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
+            PlaySound(setting_btnfx);
             currentScreen = 3;
         }
     }
@@ -190,6 +209,7 @@ void logicaBotoesConfiguracao(Rectangle botoesConfiguracao[]) {
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
+            PlaySound(setting_btnfx);
             currentScreen = 0;
         }
     }
@@ -211,12 +231,13 @@ void telaConfiguracao(Texture2D background, Rectangle botoesConfiguracao[], char
     EndDrawing();
 }
 
-void logicaBotoesResolucao(Rectangle botoesResolucao[]) {
+void logicaBotoesResolucao(Rectangle botoesResolucao[], Sound setting_btnfx) {
 
     if(CheckCollisionPointRec(GetMousePosition(), botoesResolucao[0])) 
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
+            PlaySound(setting_btnfx);
             tela.width = 1920;
             tela.height = 1080;
             SetWindowSize(tela.width, tela.height);
@@ -234,6 +255,7 @@ void logicaBotoesResolucao(Rectangle botoesResolucao[]) {
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
+            PlaySound(setting_btnfx);
             tela.width = 1280;
             tela.height = 720;
             SetWindowSize(tela.width, tela.height);
@@ -250,6 +272,7 @@ void logicaBotoesResolucao(Rectangle botoesResolucao[]) {
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
+            PlaySound(setting_btnfx);
             tela.width = 800;
             tela.height = 600;
             SetWindowSize(tela.width, tela.height);
@@ -266,6 +289,7 @@ void logicaBotoesResolucao(Rectangle botoesResolucao[]) {
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
+            PlaySound(setting_btnfx);
             tela.width = 640;
             tela.height = 480;
             SetWindowSize(tela.width, tela.height);
@@ -283,6 +307,7 @@ void logicaBotoesResolucao(Rectangle botoesResolucao[]) {
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
+            PlaySound(setting_btnfx);
             currentScreen = 2;
         }
     } 
@@ -303,6 +328,17 @@ void telaResolucao(Texture2D background, Rectangle botoesResolucao[], char *text
 
     EndDrawing();
 }
+
+/*void temporizador(int tempo){
+   static int timer = 0;
+   
+   if(timer == tempo){
+
+   }else{
+       timer += 1;
+   }
+
+}*/
 
 void gameScreen() {}
 
