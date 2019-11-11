@@ -10,10 +10,7 @@
 			"math.h": "c",
 			"blocks.h": "c",
 			"stdio.h": "c",
-			"*.m": "c",
-			"easings.h": "c",
-			"tela.h": "c",
-			"movimenta.h": "c"
+			"*.m": "c"
 		}
 	}
 }
