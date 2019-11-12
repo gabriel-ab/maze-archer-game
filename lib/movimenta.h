@@ -1,6 +1,6 @@
-#define VELOCIDADE_MAX 1
-#define ACELERACAO 0.5
-#define TAXA_ATRITO 0.05
+#define VELOCIDADE_MAX 2
+#define ACELERACAO 0.15
+#define TAXA_ATRITO 0.1
 
 int colisaoCima(Personagem *fulano, Rectangle *MAPA);
 int colisaoBaixo(Personagem *fulano, Rectangle *MAPA);
