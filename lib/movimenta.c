@@ -7,7 +7,7 @@ void movimentarV(Vector2 *coisa){
     if(IsKeyDown(KEY_D)) coisa->x += 2;
 }
 
-void movimentar(Personagem *fulano, Rectangle *MAPA, float *angle){
+void movimentar(Personagem *fulano, Rectangle *MAPA){
 
     aplicarInercia(fulano);
     atualizarColisao(fulano);
@@ -19,52 +19,24 @@ void movimentar(Personagem *fulano, Rectangle *MAPA, float *angle){
     
     if(fulano->velocidade.y > -VELOCIDADE_MAX && naoColisaoCima)
     {
-        if(IsKeyDown(KEY_W)) {
-            fulano->velocidade.y += -ACELERACAO;
-            *angle = 0;
-        }
+        if(IsKeyDown(KEY_W)) fulano->velocidade.y += -ACELERACAO;
     }
 
     if(fulano->velocidade.y < VELOCIDADE_MAX && naoColisaoBaixo)
     {
-        if(IsKeyDown(KEY_S)) {
-            fulano->velocidade.y += ACELERACAO;
-            *angle = 180;
-        }
+        if(IsKeyDown(KEY_S)) fulano->velocidade.y += ACELERACAO;
     }
 
     if(fulano->velocidade.x > -VELOCIDADE_MAX && naoColisaoEsquerda)
     {
-        if(IsKeyDown(KEY_A)) {
-            fulano->velocidade.x += -ACELERACAO;
-            *angle = 270;
-        }
+        if(IsKeyDown(KEY_A)) fulano->velocidade.x += -ACELERACAO;
     }
 
     if(fulano->velocidade.x < VELOCIDADE_MAX && naoColisaoDireita)
     {
-        if(IsKeyDown(KEY_D)) {
-            fulano->velocidade.x += ACELERACAO;
-            *angle = 90;
-        }
+        if(IsKeyDown(KEY_D)) fulano->velocidade.x += ACELERACAO;
     }
 
-
-    if(IsKeyDown(KEY_W) && IsKeyDown(KEY_D)) {
-        *angle = 45;
-    }
-
-    if(IsKeyDown(KEY_W) && IsKeyDown(KEY_A)) {
-        *angle = 315;
-    }
-
-    if(IsKeyDown(KEY_S) && IsKeyDown(KEY_D)) {
-        *angle = 135;
-    }
-
-    if(IsKeyDown(KEY_S) && IsKeyDown(KEY_A)) {
-        *angle = 225;
-    }
 
     aplicarAtrito(fulano,TAXA_ATRITO);
 

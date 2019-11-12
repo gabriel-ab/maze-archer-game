@@ -1,8 +1,8 @@
-#include <raylib.h>
-#include "personagem.h"
-
 #ifndef MOVIMENTA_H_INCLUDED
 #define MOVIMENTA_H_INCLUDED
+
+#include <raylib.h>
+#include "personagem.h"
 
 #define VELOCIDADE_MAX 0.05
 #define ACELERACAO 0.5
@@ -25,7 +25,7 @@ void atualizarColisao(Personagem *fulano);
 void aplicarInercia(Personagem *fulano);
 void aplicarAtrito(Personagem *fulano, float taxa);
 
-void movimentar(Personagem *fulano, Rectangle *MAPA, float *angle);
+void movimentar(Personagem *fulano, Rectangle *MAPA);
 void movimentarV(Vector2 *coisa);
 
 #endif

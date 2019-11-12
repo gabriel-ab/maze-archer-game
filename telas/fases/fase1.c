@@ -1,26 +1,24 @@
-#include <raylib.h>
 #include <math.h>
+#include <raylib.h>
 
 #include "../../lib/tela.h"
 #include "../../lib/personagem.h"
 #include "../../lib/movimenta.h"
-#include "../../lib/shoot.h"
+#include "../../lib/acao.h"
 
 void fase1();
 
-void main () {
-    fase1();
-}
-
 void fase1()
 {
-    InitWindow(1280,720,"JOGO"); //temporario
+    InitWindow(800,600,"JOGO"); //temporario
+    
     Rectangle MAPA[] = {
-        -20,-20,1300, 10,
-        0,720,1280, 10,
-        -20,-20,10, 720,
-        1280,0,10, 720,
+        -278, -166, 18, 332,
+        -264, -164, 481, 13,
+        -261, 146, 466, 14,
+        204, -156, 19, 256
     };
+    Tiro bala;
 
     Personagem xala;
     xala = personagemConstructor();
@@ -28,97 +26,47 @@ void fase1()
     xala.largura = 20;
 
     Camera2D cam;
-    cam.zoom = 3;
+    cam.zoom = 1;
     cam.rotation = 0;
     cam.target = xala.position;
-    cam.offset = (Vector2){GetScreenWidth()/2 , GetScreenHeight()/2};
+    cam.offset = (Vector2){0,0};
+    cam.offset = (Vector2){tela.width/2 , tela.height/2};
 
-
-    // *************** SHOOT******************
-    Shoot shoot[PLAYER_MAX_SHOOTS] = { 0 };
-
-    for (int i = 0; i < PLAYER_MAX_SHOOTS; i++)
-    {
-        shoot[i].position = (Vector2){0, 0};
-        shoot[i].speed = (Vector2){0, 0};
-        shoot[i].radius = 2;
-        shoot[i].active = false;
-        shoot[i].lifeSpawn = 0;
-        shoot[i].color = WHITE;
-    }
-
-    float angle = 0;
-
-    // *************** SHOOT******************
+    SetTargetFPS(60);
     
     while(!WindowShouldClose()){
 
-        movimentar(&xala, MAPA, &angle);
+        movimentar(&xala, MAPA);
+        
+        if(IsMouseButtonDown(MOUSE_LEFT_BUTTON))
+        {
+            bala.ativa = 1;
+            mira(xala,&bala,cam);
+            atira(&bala);
+        }
+        
+        atualizaTiro(&bala);
+
+        if(bala.origem.x == 20*xala.position.x || bala.origem.y == 20*xala.position.y )
+        {
+            bala.origem = xala.position;
+            bala.velocidade = (Vector2){0,0};
+            bala.ativa = 0;
+        }
+        
+        if(IsKeyPressed(KEY_F))
+        {
+            telaCheia();
+            atualizaCamera(&cam);
+        }
+        if(IsKeyDown(KEY_PAGE_UP)) cam.zoom += 0.01;
+        if(IsKeyDown(KEY_PAGE_DOWN)) cam.zoom -= 0.01;
+        
         cam.target = xala.position;
 
-        if (IsKeyPressed(KEY_SPACE))
-        {
-            for (int i = 0; i < PLAYER_MAX_SHOOTS; i++)
-            {
-                if (!shoot[i].active)
-                {
-                    shoot[i].position = (Vector2){ xala.position.x, xala.position.y};
-                    shoot[i].active = true;
-                    shoot[i].speed.x = sin(angle * DEG2RAD);
-                    shoot[i].speed.y = cos(angle * DEG2RAD);
-                    shoot[i].rotation = angle;
-                    break;
-                }
-            }
-        }
-
-        // Shoot life timer
-        for (int i = 0; i < PLAYER_MAX_SHOOTS; i++)
-        {
-            if (shoot[i].active) shoot[i].lifeSpawn++;
-        }
-
-        // Shot logic
-        for (int i = 0; i < PLAYER_MAX_SHOOTS; i++)
-        {
-            if (shoot[i].active)
-            {
-                // Movement
-                shoot[i].position.x += shoot[i].speed.x;
-                shoot[i].position.y -= shoot[i].speed.y;
-
-                // Collision logic: shoot vs walls
-                if  (shoot[i].position.x > tela.width + shoot[i].radius)
-                {
-                    shoot[i].active = false;
-                    shoot[i].lifeSpawn = 0;
-                }
-                else if (shoot[i].position.x < 0 - shoot[i].radius)
-                {
-                    shoot[i].active = false;
-                    shoot[i].lifeSpawn = 0;
-                }
-                if (shoot[i].position.y > tela.height + shoot[i].radius)
-                {
-                    shoot[i].active = false;
-                    shoot[i].lifeSpawn = 0;
-                }
-                else if (shoot[i].position.y < 0 - shoot[i].radius)
-                {
-                    shoot[i].active = false;
-                    shoot[i].lifeSpawn = 0;
-                }
-
-                // Life of shoot
-                if (shoot[i].lifeSpawn >= 360)
-                {
-                    shoot[i].position = (Vector2){0, 0};
-                    shoot[i].speed = (Vector2){0, 0};
-                    shoot[i].lifeSpawn = 0;
-                    shoot[i].active = false;
-                }
-            }
-        }
+        cam.offset.x = tela.width/2  -xala.position.x;
+        cam.offset.y = tela.height/2 -xala.position.y;
+        
 
         BeginDrawing();
             ClearBackground(GRAY);
@@ -128,24 +76,23 @@ void fase1()
                 for(int i = 0; i < TAM_MAPA; i++){
                     DrawRectangleRec(MAPA[i],BLACK);
                 }
+                DrawCircleV(cam.target,10,RED);
                 DrawCircleV(xala.position,10,BLUE);
+                DrawCircleV(bala.origem,5,GREEN);
+                DrawCircleV(cam.offset,5,PURPLE);
                 DrawRectangleRec(xala.linhaColisaoCima,colideCima);
                 DrawRectangleRec(xala.linhaColisaoBaixo,colideBaixo);
                 DrawRectangleRec(xala.linhaColisaoEsquerda,colideEsq);
                 DrawRectangleRec(xala.linhaColisaoDireita,colideDir);
-
-                // Draw shoot
-                for (int i = 0; i < PLAYER_MAX_SHOOTS; i++)
-                {
-                    if (shoot[i].active) DrawCircleV(shoot[i].position, shoot[i].radius, BLACK);
-                }
-               
-
+                
+                
             EndMode2D();
 
-            DrawText(FormatText("%.2f %.2f",cam.target.x, cam.target.y),10,10,20,YELLOW);
-            DrawText(FormatText("%.2f %.2f",xala.velocidade.x, xala.velocidade.y),10,40,20,YELLOW);
-            DrawText(FormatText("%lu",sizeof(MAPA)),10,70,20,YELLOW);
+            DrawText(FormatText("target %.2f %.2f",cam.target.x, cam.target.y),10,10,20,YELLOW);
+            DrawText(FormatText("vel %.2f %.2f",xala.velocidade.x, xala.velocidade.y),10,40,20,YELLOW);
+            DrawText(FormatText("angulo %.2f",bala.angulo),10,70,20,YELLOW);
+            DrawText(FormatText("zoom %.2f",cam.zoom),10,100,20,YELLOW);
+            DrawText(FormatText("tiro %i",bala.ativa),10,130,20,YELLOW);
 
         EndDrawing();
     }

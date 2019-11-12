@@ -1,7 +1,8 @@
-#include <raylib.h>
-
 #ifndef PERSONAGEM_H_INCLUDED
 #define PERSONAGEM_H_INCLUDED
+
+#include <raylib.h>
+
 
 typedef struct Personagem
 {
