@@ -4,6 +4,7 @@
 Makefile
 Makefile.*
 .vscode/
+build/*
 main
 main.code-workspace
 executar

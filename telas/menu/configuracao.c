@@ -1,5 +1,9 @@
 #include <raylib.h>
 
+
+void telaConfiguracao(Texture2D *background, Rectangle botoes[], char *textButtons[]);
+void logicaBotoesConfiguracao(Rectangle botoes[], int *telaAtual);
+
 //TELA DE CONFIGURAÇÃO
 void telaConfiguracao(Texture2D *background, Rectangle botoes[], char *textButtons[]) {
     BeginDrawing();
@@ -17,7 +21,6 @@ void telaConfiguracao(Texture2D *background, Rectangle botoes[], char *textButto
 
     EndDrawing();
 }
-
 
 void logicaBotoesConfiguracao(Rectangle botoes[], int *telaAtual) {
 

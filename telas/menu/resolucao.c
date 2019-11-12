@@ -1,6 +1,11 @@
 #include <raylib.h>
 #include "../../lib/tela.h"
 
+void telaResolucao(Texture2D *background, Rectangle botoes[], char *textButtons[]);
+void logicaBotoesResolucao(Rectangle botoesResolucao[], Rectangle botoesConfiguracao[], Rectangle botoesMenu[], int *telaAtual, Texture2D *background);
+void setBackground(Texture2D *background);
+void atualizarPosicaoBotoes(Rectangle botoesResolucao[], Rectangle botoesConfiguracao[], Rectangle botoesMenu[]);
+
 //TELA DE RESOLUÇÃO
 void telaResolucao(Texture2D *background, Rectangle botoes[], char *textButtons[]) {
     BeginDrawing();
@@ -18,7 +23,6 @@ void telaResolucao(Texture2D *background, Rectangle botoes[], char *textButtons[
 
     EndDrawing();
 }
-
 
 void logicaBotoesResolucao(Rectangle botoesResolucao[], Rectangle botoesConfiguracao[], Rectangle botoesMenu[], int *telaAtual, Texture2D *background) {
 

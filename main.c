@@ -1,11 +1,13 @@
 #include <string.h>
 #include <raylib.h>
+#include "lib/personagem.h"
 #include "lib/tela.h"
 #include "telas/menu/menu.c"
 #include "telas/menu/configuracao.c"
 #include "telas/menu/resolucao.c"
+#include "telas/fases/fase1.c"
 
-bool *jogo_rodando = true;
+bool jogo_rodando = true;
 
 /*
 VARIÁVEL QUE DETERMINA A TELA ATUAL
@@ -20,6 +22,8 @@ int main(){
 
     InitWindow(tela.width, tela.height, "TESTE");
     telaCheia();
+
+    personagemConstructor();
     
     //BACKGROUND
     Image backgroundImage = LoadImage("resources/images/wallpaper.png");
@@ -93,7 +97,7 @@ int main(){
         }
 
         while(telaAtual == 1 && jogo_rodando) {
-            
+            fase1();
         }
 
         while(telaAtual == 2 && jogo_rodando) {

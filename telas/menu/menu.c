@@ -1,8 +1,10 @@
 
 #include <raylib.h>
 
-//TELA DE MENU
+void menuScreen(Texture2D *background, Rectangle botoes[], char *textButtons[]);
+void logicaBotoesMenu(Rectangle botoes[], int *telaAtual, Sound somBotao, bool *jogo_rodando);
 
+//TELA DE MENU
 void menuScreen(Texture2D *background, Rectangle botoes[], char *textButtons[]) {
 
     BeginDrawing();
@@ -23,7 +25,19 @@ void menuScreen(Texture2D *background, Rectangle botoes[], char *textButtons[]) 
     EndDrawing();
 }
 
-void logicaBotoesMenu(Rectangle botoes[], int *telaAtual, Sound somBotao, int *jogo_rodando) {
+void logicaBotoesMenu(Rectangle botoes[], int *telaAtual, Sound somBotao, bool *jogo_rodando) {
+    
+    //IR PARA TELA DE CONFIGURAÇÕES
+    if (CheckCollisionPointRec(GetMousePosition(), botoes[0]))
+    {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+        {
+                PlaySound(somBotao);
+                *(telaAtual) = 1;
+            
+        }
+    }
+    
     //IR PARA TELA DE CONFIGURAÇÕES
     if (CheckCollisionPointRec(GetMousePosition(), botoes[2]))
     {

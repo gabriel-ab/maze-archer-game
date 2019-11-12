@@ -1,12 +1,13 @@
+#include <raylib.h>
+
 #ifndef PERSONAGEM_H_INCLUDED
 #define PERSONAGEM_H_INCLUDED
-
 
 typedef struct Personagem
 {
     Texture2D sprite;
     Vector2 position;
-    Vector2 inercia;
+    Vector2 velocidade;
     int largura;
     int altura;
     Rectangle linhaColisaoCima;

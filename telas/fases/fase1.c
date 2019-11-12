@@ -1,45 +1,27 @@
 #include <raylib.h>
-#include "../../lib/tela.h"
-#include "../../lib/personagem.c"
-#include "../../lib/movimenta.c"
+#include <math.h>
 
-int main(){
+#include "../../lib/tela.h"
+#include "../../lib/personagem.h"
+#include "../../lib/movimenta.h"
+#include "../../lib/shoot.h"
+
+void fase1();
+
+void main () {
     fase1();
 }
 
 void fase1()
 {
-    InitWindow(800,600,"JOGO"); //temporario
+    InitWindow(1280,720,"JOGO"); //temporario
     Rectangle MAPA[] = {
-        -103, -74, 269, 241,
-        -16, 164, 98, 189,
-        80, 232, 446, 122,
-        521, -181, 96, 956,
-        615, -178, 430, 52,
-        697, -117, 170, 91,
-        878, -116, 171, 88,
-        622, -118, 68, 90,
-        622, -19, 99, 183,
-        623, 169, 98, 156,
-        615, 53, 8, 42,
-        616, 223, 9, 43,
-        614, -95, 11, 36,
-        708, -129, 42, 13,
-        891, -129, 46, 13,
-        616, 537, 124, 43,
-        589, 772, 78, 72,
-        665, 809, 179, 61,
-        733, 486, 206, 82,
-        902, 557, 210, 112,
-        841, 812, 509, 41,
-        1076, 667, 38, 146,
-        1010, -32, 32, 141,
-        875, 104, 318, 122,
-        1009, 224, 40, 182,
-        1048, 363, 229, 42,
-        1237, 402, 40, 225,
-        1110, 588, 126, 38,
+        -20,-20,1300, 10,
+        0,720,1280, 10,
+        -20,-20,10, 720,
+        1280,0,10, 720,
     };
+
     Personagem xala;
     xala = personagemConstructor();
     xala.altura = 20;
@@ -47,40 +29,124 @@ void fase1()
 
     Camera2D cam;
     cam.zoom = 3;
+    cam.rotation = 0;
     cam.target = xala.position;
     cam.offset = (Vector2){GetScreenWidth()/2 , GetScreenHeight()/2};
+
+
+    // *************** SHOOT******************
+    Shoot shoot[PLAYER_MAX_SHOOTS] = { 0 };
+
+    for (int i = 0; i < PLAYER_MAX_SHOOTS; i++)
+    {
+        shoot[i].position = (Vector2){0, 0};
+        shoot[i].speed = (Vector2){0, 0};
+        shoot[i].radius = 2;
+        shoot[i].active = false;
+        shoot[i].lifeSpawn = 0;
+        shoot[i].color = WHITE;
+    }
+
+    float angle = 0;
+
+    // *************** SHOOT******************
     
     while(!WindowShouldClose()){
 
-        movimentar(&xala);
-        checkHitBoxes(&xala, &MAPA);
-
-        if(IsKeyPressed(KEY_F)) telaCheia();
-        
+        movimentar(&xala, MAPA, &angle);
         cam.target = xala.position;
-        cam.offset.x = tela.width/2  -cam.target.x;
-        cam.offset.y = tela.height/2 -cam.target.y;
-        
+
+        if (IsKeyPressed(KEY_SPACE))
+        {
+            for (int i = 0; i < PLAYER_MAX_SHOOTS; i++)
+            {
+                if (!shoot[i].active)
+                {
+                    shoot[i].position = (Vector2){ xala.position.x, xala.position.y};
+                    shoot[i].active = true;
+                    shoot[i].speed.x = sin(angle * DEG2RAD);
+                    shoot[i].speed.y = cos(angle * DEG2RAD);
+                    shoot[i].rotation = angle;
+                    break;
+                }
+            }
+        }
+
+        // Shoot life timer
+        for (int i = 0; i < PLAYER_MAX_SHOOTS; i++)
+        {
+            if (shoot[i].active) shoot[i].lifeSpawn++;
+        }
+
+        // Shot logic
+        for (int i = 0; i < PLAYER_MAX_SHOOTS; i++)
+        {
+            if (shoot[i].active)
+            {
+                // Movement
+                shoot[i].position.x += shoot[i].speed.x;
+                shoot[i].position.y -= shoot[i].speed.y;
+
+                // Collision logic: shoot vs walls
+                if  (shoot[i].position.x > tela.width + shoot[i].radius)
+                {
+                    shoot[i].active = false;
+                    shoot[i].lifeSpawn = 0;
+                }
+                else if (shoot[i].position.x < 0 - shoot[i].radius)
+                {
+                    shoot[i].active = false;
+                    shoot[i].lifeSpawn = 0;
+                }
+                if (shoot[i].position.y > tela.height + shoot[i].radius)
+                {
+                    shoot[i].active = false;
+                    shoot[i].lifeSpawn = 0;
+                }
+                else if (shoot[i].position.y < 0 - shoot[i].radius)
+                {
+                    shoot[i].active = false;
+                    shoot[i].lifeSpawn = 0;
+                }
+
+                // Life of shoot
+                if (shoot[i].lifeSpawn >= 360)
+                {
+                    shoot[i].position = (Vector2){0, 0};
+                    shoot[i].speed = (Vector2){0, 0};
+                    shoot[i].lifeSpawn = 0;
+                    shoot[i].active = false;
+                }
+            }
+        }
 
         BeginDrawing();
             ClearBackground(GRAY);
 
             BeginMode2D(cam);
 
-                for(int i = 0; i < 28; i++){
+                for(int i = 0; i < TAM_MAPA; i++){
                     DrawRectangleRec(MAPA[i],BLACK);
                 }
                 DrawCircleV(xala.position,10,BLUE);
-                DrawRectangleRec(xala.linhaColisaoBaixo,BLACK);
-                DrawRectangleRec(xala.linhaColisaoCima,BLACK);
-                DrawRectangleRec(xala.linhaColisaoDireita,BLACK);
-                DrawRectangleRec(xala.linhaColisaoEsquerda,BLACK);
-                
+                DrawRectangleRec(xala.linhaColisaoCima,colideCima);
+                DrawRectangleRec(xala.linhaColisaoBaixo,colideBaixo);
+                DrawRectangleRec(xala.linhaColisaoEsquerda,colideEsq);
+                DrawRectangleRec(xala.linhaColisaoDireita,colideDir);
+
+                // Draw shoot
+                for (int i = 0; i < PLAYER_MAX_SHOOTS; i++)
+                {
+                    if (shoot[i].active) DrawCircleV(shoot[i].position, shoot[i].radius, BLACK);
+                }
+               
+
             EndMode2D();
 
             DrawText(FormatText("%.2f %.2f",cam.target.x, cam.target.y),10,10,20,YELLOW);
-            DrawText(FormatText("%.2f %.2f",xala.inercia.x, xala.inercia.y),10,40,20,YELLOW);
-            
+            DrawText(FormatText("%.2f %.2f",xala.velocidade.x, xala.velocidade.y),10,40,20,YELLOW);
+            DrawText(FormatText("%lu",sizeof(MAPA)),10,70,20,YELLOW);
+
         EndDrawing();
     }
     CloseWindow(); //temporario
