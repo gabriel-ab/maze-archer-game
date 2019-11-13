@@ -32,8 +32,8 @@ void logicaBotoesMenu(Rectangle botoes[], int *telaAtual, Sound somBotao, bool *
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
-                PlaySound(somBotao);
-                *(telaAtual) = 1;
+            PlaySound(somBotao);
+            *(telaAtual) = 1;
             
         }
     }
@@ -43,9 +43,8 @@ void logicaBotoesMenu(Rectangle botoes[], int *telaAtual, Sound somBotao, bool *
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
-                PlaySound(somBotao);
-                *(telaAtual) = 2;
-            
+            PlaySound(somBotao);
+            *(telaAtual) = 2;
         }
     }
 
@@ -54,7 +53,11 @@ void logicaBotoesMenu(Rectangle botoes[], int *telaAtual, Sound somBotao, bool *
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
-            *(jogo_rodando) = false;
+            PlaySound(somBotao);
+            if(!IsSoundPlaying(somBotao)) {
+                *(jogo_rodando) = false;
+            }
+            
         }
     }
    

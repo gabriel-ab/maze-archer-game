@@ -20,25 +20,31 @@ int telaAtual = 0;
 
 int main(){
 
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+
     InitWindow(tela.width, tela.height, "TESTE");
     telaCheia();
-
-    personagemConstructor();
     
+
     //BACKGROUND
     Image backgroundImage = LoadImage("resources/images/wallpaper.png");
     ImageResize(&backgroundImage, tela.width, tela.height);  
     Texture2D backgroundTexture = LoadTextureFromImage(backgroundImage);
     UnloadImage(backgroundImage);
     
+    
     //AUDIO
     InitAudioDevice();
     
-    Sound botaofx = LoadSound("resources/sounds/test.wav");
-    bool btnaction = false;
+    Music menuIntro = LoadMusicStream("resources/soundtrack/epic.ogg");
     
+    Sound somBotao = LoadSound("resources/fx/setting click.wav");
+    //Sound play_btnfx = LoadSound("resources/fx/start click.wav");
+    
+    PlayMusicStream(menuIntro);
     
     //BOTÕES DA TELA DE MENU
+    
     const char *textButtonsMenu[] = {
         "START",
         "LOAD",
@@ -55,6 +61,7 @@ int main(){
 
 
     //BOTÕES DA TELA DE CONFIGURAÇÃO
+
     char *textButtonsConfiguracao[] = {
         "RESOLUÇÃO",
         "MUTE: OFF",
@@ -69,6 +76,7 @@ int main(){
     }
 
     //BOTÕES DE RESOLUÇÃO DE TELA
+
     char *textButtonsResolucao[] = {
         "1920x1080",
         "1280x720",
@@ -92,7 +100,7 @@ int main(){
     {
 
         while(telaAtual == 0 && jogo_rodando) {
-            logicaBotoesMenu(botoesMenu, &telaAtual, botaofx, &jogo_rodando);
+            logicaBotoesMenu(botoesMenu, &telaAtual, somBotao, &jogo_rodando);
             menuScreen(&backgroundTexture, botoesMenu, textButtonsMenu);
         }
 
@@ -101,23 +109,25 @@ int main(){
         }
 
         while(telaAtual == 2 && jogo_rodando) {
-            logicaBotoesConfiguracao(botoesConfiguracao, &telaAtual);
+            logicaBotoesConfiguracao(botoesConfiguracao, somBotao, &telaAtual);
             telaConfiguracao(&backgroundTexture, botoesConfiguracao, textButtonsConfiguracao);
         }
 
         while(telaAtual == 3 && jogo_rodando) {
-            logicaBotoesResolucao(botoesResolucao, botoesConfiguracao, botoesMenu, &telaAtual, &backgroundTexture);
+            logicaBotoesResolucao(botoesResolucao, botoesConfiguracao, botoesMenu, somBotao, &telaAtual, &backgroundTexture);
             telaResolucao(&backgroundTexture, botoesResolucao, textButtonsResolucao);
         }
     }
     
     
     UnloadTexture(backgroundTexture);
-    UnloadSound(botaofx);
+    
+    UnloadSound(somBotao);
+    UnloadMusicStream(menuIntro);
+    
     
     CloseAudioDevice();
     CloseWindow(); 
 
     return 0;
 }
-

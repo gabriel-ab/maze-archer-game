@@ -2,7 +2,7 @@
 #include "../../lib/tela.h"
 
 void telaResolucao(Texture2D *background, Rectangle botoes[], char *textButtons[]);
-void logicaBotoesResolucao(Rectangle botoesResolucao[], Rectangle botoesConfiguracao[], Rectangle botoesMenu[], int *telaAtual, Texture2D *background);
+void logicaBotoesResolucao(Rectangle botoesResolucao[], Rectangle botoesConfiguracao[], Rectangle botoesMenu[], Sound somBotao, int *telaAtual, Texture2D *background);
 void setBackground(Texture2D *background);
 void atualizarPosicaoBotoes(Rectangle botoesResolucao[], Rectangle botoesConfiguracao[], Rectangle botoesMenu[]);
 
@@ -24,12 +24,13 @@ void telaResolucao(Texture2D *background, Rectangle botoes[], char *textButtons[
     EndDrawing();
 }
 
-void logicaBotoesResolucao(Rectangle botoesResolucao[], Rectangle botoesConfiguracao[], Rectangle botoesMenu[], int *telaAtual, Texture2D *background) {
+void logicaBotoesResolucao(Rectangle botoesResolucao[], Rectangle botoesConfiguracao[], Rectangle botoesMenu[], Sound somBotao, int *telaAtual, Texture2D *background) {
 
     if(CheckCollisionPointRec(GetMousePosition(), botoesResolucao[0])) 
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
+            PlaySound(somBotao);
             tela.width = 1920;
             tela.height = 1080;
             SetWindowSize(tela.width, tela.height);
@@ -44,6 +45,7 @@ void logicaBotoesResolucao(Rectangle botoesResolucao[], Rectangle botoesConfigur
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
+            PlaySound(somBotao);
             tela.width = 1280;
             tela.height = 720;
             SetWindowSize(tela.width, tela.height);
@@ -57,6 +59,7 @@ void logicaBotoesResolucao(Rectangle botoesResolucao[], Rectangle botoesConfigur
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
+            PlaySound(somBotao);
             tela.width = 800;
             tela.height = 600;
             SetWindowSize(tela.width, tela.height);
@@ -70,6 +73,7 @@ void logicaBotoesResolucao(Rectangle botoesResolucao[], Rectangle botoesConfigur
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
+            PlaySound(somBotao);
             tela.width = 640;
             tela.height = 480;
             SetWindowSize(tela.width, tela.height);
@@ -88,6 +92,7 @@ void logicaBotoesResolucao(Rectangle botoesResolucao[], Rectangle botoesConfigur
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
+            PlaySound(somBotao);
             *(telaAtual) = 2;
         }
     } 

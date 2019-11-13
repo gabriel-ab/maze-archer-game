@@ -2,7 +2,7 @@
 
 
 void telaConfiguracao(Texture2D *background, Rectangle botoes[], char *textButtons[]);
-void logicaBotoesConfiguracao(Rectangle botoes[], int *telaAtual);
+void logicaBotoesConfiguracao(Rectangle botoes[], Sound somBotao, int *telaAtual);
 
 //TELA DE CONFIGURAÇÃO
 void telaConfiguracao(Texture2D *background, Rectangle botoes[], char *textButtons[]) {
@@ -22,7 +22,7 @@ void telaConfiguracao(Texture2D *background, Rectangle botoes[], char *textButto
     EndDrawing();
 }
 
-void logicaBotoesConfiguracao(Rectangle botoes[], int *telaAtual) {
+void logicaBotoesConfiguracao(Rectangle botoes[], Sound somBotao, int *telaAtual) {
 
     // IR PARA TELA DE RESOLUÇÃO
     if(CheckCollisionPointRec(GetMousePosition(), botoes[0])) 
