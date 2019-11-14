@@ -1,16 +1,17 @@
 #include <math.h>
 #include <raylib.h>
 
-#include "../../lib/tela.h"
-#include "../../lib/personagem.h"
-#include "../../lib/movimenta.h"
-#include "../../lib/acao.h"
-
+#ifndef TELA_H_INCLUDED
+    #include "../../lib/tela.h"
+    #include "../../lib/personagem.h"
+    #include "../../lib/movimenta.h"
+    #include "../../lib/acao.h"
+#endif
 void fase1();
 
 void fase1()
 {
-    InitWindow(800,600,"JOGO"); //temporario
+    // InitWindow(800,600,"JOGO"); //temporario
     
     Rectangle MAPA[] = {
         -278, -166, 18, 332,
@@ -34,7 +35,7 @@ void fase1()
 
     SetTargetFPS(60);
     
-    while(!WindowShouldClose()){
+    while(IsKeyUp(KEY_ESCAPE)){ 
 
         movimentar(&xala, MAPA);
         
@@ -64,8 +65,8 @@ void fase1()
         
         cam.target = xala.position;
 
-        cam.offset.x = tela.width/2  -xala.position.x;
-        cam.offset.y = tela.height/2 -xala.position.y;
+        cam.offset.x = tela.width/2  -cam.target.x;
+        cam.offset.y = tela.height/2 -cam.target.y;
         
 
         BeginDrawing();
@@ -77,9 +78,15 @@ void fase1()
                     DrawRectangleRec(MAPA[i],BLACK);
                 }
                 DrawCircleV(cam.target,10,RED);
+                DrawCircle(0,0,10,RED);
                 DrawCircleV(xala.position,10,BLUE);
                 DrawCircleV(bala.origem,5,GREEN);
                 DrawCircleV(cam.offset,5,PURPLE);
+                DrawCircle(
+                    (GetMouseX() -cam.offset.x),
+                    (GetMouseY() -cam.offset.y),
+                    5,PURPLE);
+
                 DrawRectangleRec(xala.linhaColisaoCima,colideCima);
                 DrawRectangleRec(xala.linhaColisaoBaixo,colideBaixo);
                 DrawRectangleRec(xala.linhaColisaoEsquerda,colideEsq);
@@ -88,7 +95,7 @@ void fase1()
                 
             EndMode2D();
 
-            DrawText(FormatText("target %.2f %.2f",cam.target.x, cam.target.y),10,10,20,YELLOW);
+            DrawText(FormatText("target %.2f %.2f",cam.offset.x, cam.offset.y),10,10,20,YELLOW);
             DrawText(FormatText("vel %.2f %.2f",xala.velocidade.x, xala.velocidade.y),10,40,20,YELLOW);
             DrawText(FormatText("angulo %.2f",bala.angulo),10,70,20,YELLOW);
             DrawText(FormatText("zoom %.2f",cam.zoom),10,100,20,YELLOW);
@@ -96,5 +103,6 @@ void fase1()
 
         EndDrawing();
     }
-    CloseWindow(); //temporario
+    telaAtual = 0;
+    // CloseWindow(); //temporario
 }

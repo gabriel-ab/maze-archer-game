@@ -93,7 +93,7 @@ void logicaBotoesResolucao(Rectangle botoesResolucao[], Rectangle botoesConfigur
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
             PlaySound(somBotao);
-            *(telaAtual) = 2;
+            *(telaAtual) = TELA_CONFIG;
         }
     } 
 }

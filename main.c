@@ -1,14 +1,5 @@
 #include <string.h>
 #include <raylib.h>
-#include "lib/personagem.h"
-#include "lib/tela.h"
-#include "telas/menu/menu.c"
-#include "telas/menu/configuracao.c"
-#include "telas/menu/resolucao.c"
-#include "telas/fases/fase1.c"
-
-bool jogo_rodando = true;
-
 /*
 VARIÁVEL QUE DETERMINA A TELA ATUAL
 0 - MENU
@@ -16,7 +7,27 @@ VARIÁVEL QUE DETERMINA A TELA ATUAL
 2 - SETTINGS
 3 - TELA DE RESOLUÇÃO
 */
+bool jogo_rodando = true;
+
 int telaAtual = 0;
+
+typedef enum{
+    TELA_RESOLUCAO = -2,
+    TELA_CONFIG = -1,
+    TELA_MENU = 0,
+    TELA_FASE1 = 1,
+};
+
+#include "lib/tela.c"
+#include "lib/personagem.c"
+#include "lib/movimenta.c"
+#include "lib/acao.c"
+#include "telas/menu/menu.c"
+#include "telas/menu/configuracao.c"
+#include "telas/menu/resolucao.c"
+#include "telas/fases/fase1.c"
+
+
 
 int main(){
 
@@ -99,24 +110,27 @@ int main(){
     while (jogo_rodando) 
     {
 
-        while(telaAtual == 0 && jogo_rodando) {
+        while(telaAtual == TELA_MENU && jogo_rodando) {
             logicaBotoesMenu(botoesMenu, &telaAtual, somBotao, &jogo_rodando);
             menuScreen(&backgroundTexture, botoesMenu, textButtonsMenu);
         }
 
-        while(telaAtual == 1 && jogo_rodando) {
-            fase1();
-        }
-
-        while(telaAtual == 2 && jogo_rodando) {
+        while(telaAtual == TELA_CONFIG && jogo_rodando) {
             logicaBotoesConfiguracao(botoesConfiguracao, somBotao, &telaAtual);
             telaConfiguracao(&backgroundTexture, botoesConfiguracao, textButtonsConfiguracao);
         }
 
-        while(telaAtual == 3 && jogo_rodando) {
+        while(telaAtual == TELA_RESOLUCAO && jogo_rodando) {
             logicaBotoesResolucao(botoesResolucao, botoesConfiguracao, botoesMenu, somBotao, &telaAtual, &backgroundTexture);
             telaResolucao(&backgroundTexture, botoesResolucao, textButtonsResolucao);
         }
+
+        if(telaAtual == TELA_FASE1) {
+            fase1();
+        }
+
+
+
     }
     
     

@@ -29,7 +29,8 @@ void logicaBotoesConfiguracao(Rectangle botoes[], Sound somBotao, int *telaAtual
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
-            *(telaAtual) = 3;
+            PlaySound(somBotao);
+            *(telaAtual) = TELA_RESOLUCAO;
         }
     }
 
@@ -38,7 +39,8 @@ void logicaBotoesConfiguracao(Rectangle botoes[], Sound somBotao, int *telaAtual
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
-            *(telaAtual) = 0;
+            PlaySound(somBotao);
+            *(telaAtual) = TELA_MENU;
         }
     }
 }

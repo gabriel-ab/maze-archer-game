@@ -27,13 +27,13 @@ void menuScreen(Texture2D *background, Rectangle botoes[], char *textButtons[]) 
 
 void logicaBotoesMenu(Rectangle botoes[], int *telaAtual, Sound somBotao, bool *jogo_rodando) {
     
-    //IR PARA TELA DE CONFIGURAÇÕES
+    //IR PARA TELA DE JOGO
     if (CheckCollisionPointRec(GetMousePosition(), botoes[0]))
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
-            PlaySound(somBotao);
-            *(telaAtual) = 1;
+                PlaySound(somBotao);
+                *(telaAtual) = TELA_FASE1;
             
         }
     }
@@ -43,8 +43,9 @@ void logicaBotoesMenu(Rectangle botoes[], int *telaAtual, Sound somBotao, bool *
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
-            PlaySound(somBotao);
-            *(telaAtual) = 2;
+                PlaySound(somBotao);
+                *(telaAtual) = TELA_CONFIG;
+            
         }
     }
 
@@ -54,9 +55,8 @@ void logicaBotoesMenu(Rectangle botoes[], int *telaAtual, Sound somBotao, bool *
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
             PlaySound(somBotao);
-            if(!IsSoundPlaying(somBotao)) {
-                *(jogo_rodando) = false;
-            }
+            while(IsSoundPlaying(somBotao)) {}
+            *(jogo_rodando) = false;
             
         }
     }

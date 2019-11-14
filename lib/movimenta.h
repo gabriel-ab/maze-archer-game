@@ -4,7 +4,7 @@
 #include <raylib.h>
 #include "personagem.h"
 
-#define VELOCIDADE_MAX 0.05
+#define VELOCIDADE_MAX 3
 #define ACELERACAO 0.5
 #define TAXA_ATRITO 0.05
 
