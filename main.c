@@ -4,20 +4,8 @@
 
 #define MAX_RETANGULOS 100
 
-void desenhaGrid(){
-    DrawLine( -2048,     0, 2048,    0, (Color){100,100,100,255});
-    DrawLine(     0, -2048,    0, 2048, (Color){100,100,100,255});
-    
-    DrawLine(   256, -2048,  256, 2048, (Color){100,100,100,255});
-    DrawLine(  -256, -2048, -256, 2048, (Color){100,100,100,255});
-    DrawLine( -2048,  -256, 2048, -256, (Color){100,100,100,255});
-    DrawLine( -2048,   256, 2048,  250, (Color){100,100,100,255});
-
-    DrawLine(  1024, -2048, 1024, 2048, (Color){100,100,100,255});
-    DrawLine( -1024, -2048,-1024, 2048, (Color){100,100,100,255});
-    DrawLine( -2048, -1024, 2048,-1024, (Color){100,100,100,255});
-    DrawLine( -2048,  1024, 2048, 1024, (Color){100,100,100,255});
-}
+void desenhaGrid();
+void desenhaTelaAjuda();
 int telaSair();
 
 
@@ -27,9 +15,22 @@ int main(){
     InitWindow(tela.width,tela.height,"Criador de fases");
 
     Rectangle retangulo[MAX_RETANGULOS];
-    Rectangle paredeH = {0,0,32,96};
-    Rectangle paredeV = {0,0,96,32};
-    // Rectangle temp = {0,0,0,0};
+
+    
+    /* ----A fazer----
+        Retangulos de piso para, aplicar somente a textura, em colisão.
+        obs: deixar separado dos de colisão;
+    */
+    // Rectangle piso[MAX_RETANGULOS];
+
+    Rectangle paredeH3 = {0,0,32,96};
+    Rectangle paredeV3 = {0,0,96,32};
+
+    Rectangle paredeH5 = {0,0,5*32,32};
+    Rectangle paredeV5 = {0,0,32,5*32};
+
+    Rectangle paredeH8 = {0,0,8*32,32};
+    Rectangle paredeV8 = {0,0,32,8*32};
     
     int modo = 1;
 
@@ -61,56 +62,41 @@ int main(){
         //update
         tela.width = GetScreenWidth();
         tela.height = GetScreenHeight();
-        //camera.offset = (Vector2){x + tela.width/2,y + tela.height/2};
 
         if(IsKeyDown(KEY_PAGE_UP)) camera.zoom += 0.001;
 
         if(IsKeyDown(KEY_PAGE_DOWN) && camera.zoom > 0) camera.zoom -= 0.001;
 
+        if(GetKeyPressed() != -1) modo = 3;
+        
+        if(IsKeyPressed(KEY_ONE))   retangulo[atual] = paredeH3; 
+        if(IsKeyPressed(KEY_TWO))   retangulo[atual] = paredeV3; 
 
-        if(IsKeyPressed(KEY_ONE)) 
-        {
-            retangulo[atual] = paredeH; 
-            modo = 2;
-        }
-        if(IsKeyPressed(KEY_TWO)) 
-        {
-            retangulo[atual] = paredeV; 
-            modo = 2;
-        }
-        if(IsKeyPressed(KEY_THREE))
-        {
+        if(IsKeyPressed(KEY_THREE)) retangulo[atual] = paredeH5;
+        if(IsKeyPressed(KEY_FOUR))  retangulo[atual] = paredeV5;
+        
+        if(IsKeyPressed(KEY_FIVE))  retangulo[atual] = paredeH8;
+        if(IsKeyPressed(KEY_SIX))   retangulo[atual] = paredeV8;
+        
             
-        }
+        
         if(IsKeyPressed(KEY_ESCAPE))
         {
             if(modo != 1) modo = 1;
             else sair = 1;
         }
 
-        //movimentação da camera
+        //MOVIMENTAÇÃO DA CAMERA
         if(IsKeyDown(KEY_W)) camera.offset.y += 2;
         if(IsKeyDown(KEY_S)) camera.offset.y -= 2;
         if(IsKeyDown(KEY_A)) camera.offset.x += 2;
         if(IsKeyDown(KEY_D)) camera.offset.x -= 2;
 
         //MOVIMENTAÇÃO DE OBJETOS
-        if(IsKeyPressed(KEY_UP)) {
-            posicao_retangulo.y -= 32; 
-            modo = 3;
-        }
-        if(IsKeyPressed(KEY_DOWN)) {
-            posicao_retangulo.y += 32; 
-            modo = 3;
-        }
-        if(IsKeyPressed(KEY_LEFT)) {
-            posicao_retangulo.x -= 32; 
-            modo = 3;
-        }
-        if(IsKeyPressed(KEY_RIGHT)) {
-            posicao_retangulo.x += 32; 
-            modo = 3;
-        }
+        if(IsKeyPressed(KEY_UP))    posicao_retangulo.y -= 32; 
+        if(IsKeyPressed(KEY_DOWN))  posicao_retangulo.y += 32; 
+        if(IsKeyPressed(KEY_LEFT))  posicao_retangulo.x -= 32; 
+        if(IsKeyPressed(KEY_RIGHT)) posicao_retangulo.x += 32; 
 
 
         arquivo = fopen("retangulos_da_fase.txt","a");
@@ -208,7 +194,8 @@ int main(){
                         i++; // pula o retangulo atual
                     }
 
-                    DrawRectanglePro(retangulo[i],(Vector2){0,0},0,BLACK);
+                    DrawRectangleRec(retangulo[i],BLACK);
+                    DrawRectangleLinesEx(retangulo[i],1,(Color){100,240,100,255});
                     
                 }
                 DrawCircle(0,0,5,GREEN);
@@ -230,10 +217,7 @@ int main(){
 
             if(IsKeyDown(KEY_F1))
             {
-                DrawText("Clique esquerdo = criar um retangulo", tela.width -MeasureText("Clique esquerdo = criar um retangulo",20)-10, 10,20,YELLOW);
-                DrawText("Clique direito = posição inicial do jogador", tela.width -MeasureText("Clique direito = posição inicial do jogador",20)-10, 40,20,YELLOW);
-                DrawText("Del = Cancela retangulo atual / apaga anteriores", tela.width -MeasureText("Del = Cancela retangulo atual / apaga anteriores",20)-10, 70,20,YELLOW);
-                DrawText("PAGE UP/DOWN = alterar zoom", tela.width -MeasureText("PAGE UP/DOWN = alterar zoom",20)-10, 100,20,YELLOW);
+                desenhaTelaAjuda();
             }
             if(IsKeyUp(KEY_F1))
             {
@@ -248,6 +232,49 @@ int main(){
     CloseWindow();
     
     return 0;
+}
+void desenhaGrid(){
+    DrawLine( -2048,     0, 2048,    0, (Color){100,100,100,255});
+    DrawLine(     0, -2048,    0, 2048, (Color){100,100,100,255});
+    
+    DrawLine(   256, -2048,  256, 2048, (Color){100,100,100,255});
+    DrawLine(  -256, -2048, -256, 2048, (Color){100,100,100,255});
+    DrawLine( -2048,  -256, 2048, -256, (Color){100,100,100,255});
+    DrawLine( -2048,   256, 2048,  250, (Color){100,100,100,255});
+
+    DrawLine(  1024, -2048, 1024, 2048, (Color){100,100,100,255});
+    DrawLine( -1024, -2048,-1024, 2048, (Color){100,100,100,255});
+    DrawLine( -2048, -1024, 2048,-1024, (Color){100,100,100,255});
+    DrawLine( -2048,  1024, 2048, 1024, (Color){100,100,100,255});
+}
+
+void desenhaTelaAjuda()
+{
+    #ifndef TEXTO_AJUDA
+        #define TEXTO_AJUDA
+        #define AJUDA_0 "1,2,3,4,5,6 = Retangulos Predefinidos (32x32)"
+        #define AJUDA_1 "Setas = Movimenta Os Objetos"
+        #define AJUDA_2 "Clique Esquerdo = Retangulo Personalizado"
+        #define AJUDA_3 "Clique Direito = Posição Do Inicio De Jogo"
+        #define AJUDA_4 "Del = Cancela Retangulo Atual / Apaga Anteriores"
+        #define AJUDA_5 "Page Up/Down = Zoom"
+        #define AJUDA_6 "Enter = Fixa Retangulo"
+        #define AJUDA_7 "(Em breve, pisos)"
+        
+        #define ESPACAMENTO 35
+    #endif
+    DrawRectangle(0,0,tela.width,tela.height,(Color){30,30,30,200});
+
+    DrawText( AJUDA_0 , tela.width/2 -MeasureText( AJUDA_0 ,20)/2, tela.width/5 - 2*ESPACAMENTO, 20, YELLOW);
+
+    DrawText( AJUDA_1 , tela.width/2 -MeasureText( AJUDA_1 ,20)/2, tela.width/5 + 0*ESPACAMENTO, 20, YELLOW);
+    DrawText( AJUDA_2 , tela.width/2 -MeasureText( AJUDA_2 ,20)/2, tela.width/5 + 1*ESPACAMENTO, 20, YELLOW);
+    DrawText( AJUDA_3 , tela.width/2 -MeasureText( AJUDA_3 ,20)/2, tela.width/5 + 2*ESPACAMENTO, 20, YELLOW);
+    DrawText( AJUDA_4 , tela.width/2 -MeasureText( AJUDA_4 ,20)/2, tela.width/5 + 3*ESPACAMENTO, 20, YELLOW);
+    DrawText( AJUDA_5 , tela.width/2 -MeasureText( AJUDA_5 ,20)/2, tela.width/5 + 4*ESPACAMENTO, 20, YELLOW);
+    DrawText( AJUDA_6 , tela.width/2 -MeasureText( AJUDA_6 ,20)/2, tela.width/5 + 5*ESPACAMENTO, 20, YELLOW);
+
+    DrawText( AJUDA_7 , tela.width/2 -MeasureText( AJUDA_7 ,20)/2, tela.width/5 + 7*ESPACAMENTO, 20, YELLOW);
 }
 
 int telaSair()
