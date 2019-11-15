@@ -10,7 +10,10 @@
 			"math.h": "c",
 			"blocks.h": "c",
 			"stdio.h": "c",
-			"*.m": "c"
+			"*.m": "c",
+			"tela.h": "c",
+			"personagem.h": "c",
+			"acao.h": "c"
 		}
 	}
 }

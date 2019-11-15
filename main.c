@@ -18,10 +18,11 @@ typedef enum{
     TELA_FASE1 = 1,
 };
 
+#include "lib/define.h"
 #include "lib/tela.c"
 #include "lib/personagem.c"
-#include "lib/movimenta.c"
 #include "lib/acao.c"
+#include "lib/movimenta.c"
 #include "telas/menu/menu.c"
 #include "telas/menu/configuracao.c"
 #include "telas/menu/resolucao.c"

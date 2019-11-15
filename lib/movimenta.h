@@ -4,12 +4,10 @@
 #include <raylib.h>
 #include "personagem.h"
 
-#define VELOCIDADE_MAX 3
-#define ACELERACAO 0.5
-#define TAXA_ATRITO 0.05
+
 
 //Temporario
-#define TAM_MAPA 4
+
 Color colideCima = GREEN;
 Color colideBaixo = GREEN;
 Color colideEsq = GREEN;
@@ -22,8 +20,12 @@ int colisaoEsquerda(Personagem *fulano, Rectangle *MAPA);
 int colisaoDireita(Personagem *fulano, Rectangle *MAPA);
 
 void atualizarColisao(Personagem *fulano);
+
 void aplicarInercia(Personagem *fulano);
+void aplicarInerciaV(Vector2 *posicao, Vector2 velocidade);
+
 void aplicarAtrito(Personagem *fulano, float taxa);
+void aplicarAtritoProjetil(Projetil *bala, float taxa);
 
 void movimentar(Personagem *fulano, Rectangle *MAPA);
 void movimentarV(Vector2 *coisa);

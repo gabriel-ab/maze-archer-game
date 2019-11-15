@@ -4,18 +4,18 @@
     #include <raylib.h>
     #include "personagem.h"
 
-    #define VELOCIDADE_TIRO 20;
+    #define VELOCIDADE_Projetil 20;
 
-    typedef struct tiro
+    typedef struct projetil
     {
-        Vector2 origem;
+        Vector2 posicao;
         Vector2 velocidade;
         float angulo;
         int ativa;
-    }Tiro;
+    }Projetil;
 
-    void mira(Personagem fulano, Tiro *bala, Camera2D cam);
-    void atira(Tiro *bala);
-    void atualizaTiro(Tiro *bala);
+    void mira(Personagem fulano, Projetil *bala, Camera2D cam);
+    void atira(Personagem fulano ,Projetil *bala);
+    void atualizaProjetil(Projetil *bala);
 
 #endif
