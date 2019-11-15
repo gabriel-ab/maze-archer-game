@@ -14,15 +14,29 @@ void fase1()
     // InitWindow(800,600,"JOGO"); //temporario
     
     Rectangle MAPA[] = {
-        -278, -166, 18, 332,
-        -264, -164, 481, 13,
-        -261, 146, 466, 14,
-        204, -156, 19, 256
+        -256, -256, 256, 32,
+        -256, -224, 32, 256,
+        -256, 32, 256, 32,
+        -96, -96, 96, 32,
+        0, -160, 32, 96,
+        32, -96, 32, 96,
+        64, -96, 96, 32,
+        96, -256, 32, 160,
+        -32, 64, 96, 32,
+        64, 64, 256, 32,
+        288, -96, 32, 160,
+        128, -192, 256, 32,
+        448, -288, 32, 256,
+        384, 32, 160, 32,
     };
-    Tiro bala;
+    Projetil bala;
+
+    // Texture2D grama = LoadTexture("resources/images/grama.png");
+    Texture2D piso = LoadTexture("resources/images/ciano.png");
 
     Personagem xala;
     xala = personagemConstructor();
+    xala.position = (Vector2){-175,-161};
     xala.altura = 20;
     xala.largura = 20;
 
@@ -32,6 +46,7 @@ void fase1()
     cam.target = xala.position;
     cam.offset = (Vector2){0,0};
     cam.offset = (Vector2){tela.width/2 , tela.height/2};
+    int largura = 32, altura = 32;
 
     SetTargetFPS(60);
     
@@ -39,49 +54,63 @@ void fase1()
 
         movimentar(&xala, MAPA);
         
+        //------------Logica do Projetil--------------
         if(IsMouseButtonDown(MOUSE_LEFT_BUTTON))
         {
             bala.ativa = 1;
             mira(xala,&bala,cam);
-            atira(&bala);
+            atira(xala,&bala);
         }
-        
-        atualizaTiro(&bala);
-
-        if(bala.origem.x == 20*xala.position.x || bala.origem.y == 20*xala.position.y )
-        {
-            bala.origem = xala.position;
-            bala.velocidade = (Vector2){0,0};
+        if(bala.velocidade.x == 0 && bala.velocidade.y == 0){
             bala.ativa = 0;
         }
-        
-        if(IsKeyPressed(KEY_F))
-        {
-            telaCheia();
-            atualizaCamera(&cam);
+        else{
+            atualizaProjetil(&bala);
+            aplicarAtritoProjetil(&bala,0.4);
+            colisaoProjetil(&bala,MAPA);
         }
-        if(IsKeyDown(KEY_PAGE_UP)) cam.zoom += 0.01;
-        if(IsKeyDown(KEY_PAGE_DOWN)) cam.zoom -= 0.01;
+        
+        if(IsKeyPressed(KEY_F)) telaCheia();            //
+        if(IsKeyDown(KEY_PAGE_UP)) cam.zoom += 0.01;    // Temporario
+        if(IsKeyDown(KEY_PAGE_DOWN)) cam.zoom -= 0.01;  //
         
         cam.target = xala.position;
-
-        cam.offset.x = tela.width/2  -cam.target.x;
-        cam.offset.y = tela.height/2 -cam.target.y;
-        
-
+        cameraSegue(&cam,REC_SEGUE);
+        /*
+        #ifdef __linux__
+            cam.offset.x = tela.width/2 ;
+            cam.offset.y = tela.height/2;
+        #elif __WIN32
+            cam.offset.x = tela.width/2  -cam.target.x;
+            cam.offset.y = tela.height/2 -cam.target.y;
+        #endif
+        */
         BeginDrawing();
             ClearBackground(GRAY);
 
             BeginMode2D(cam);
 
-                for(int i = 0; i < TAM_MAPA; i++){
+                for(int i = 0; i < TAM_MAPA1; i++){
                     DrawRectangleRec(MAPA[i],BLACK);
+                    
+                    // Função para colocar textura em retangulos
+                    /* 
+                        sourceRec = retangulo no espaço vetorial da textura
+                        destRec = retangulo onde o sourceRec vai ser colocado
+                    */
+                    DrawTexturePro(piso,
+                        (Rectangle){0,0,MAPA[i].width,MAPA[i].height},
+                        MAPA[i],
+                        (Vector2){0,0},
+                        0,WHITE
+                    );
+                    
                 }
+                DrawCircleV(cam.offset,10,YELLOW);
                 DrawCircleV(cam.target,10,RED);
                 DrawCircle(0,0,10,RED);
                 DrawCircleV(xala.position,10,BLUE);
-                DrawCircleV(bala.origem,5,GREEN);
-                DrawCircleV(cam.offset,5,PURPLE);
+                DrawCircleV(bala.posicao,5,GREEN);
                 DrawCircle(
                     (GetMouseX() -cam.offset.x),
                     (GetMouseY() -cam.offset.y),
@@ -95,11 +124,13 @@ void fase1()
                 
             EndMode2D();
 
-            DrawText(FormatText("target %.2f %.2f",cam.offset.x, cam.offset.y),10,10,20,YELLOW);
+            DrawText(FormatText("xala.position %.2f %.2f",xala.position.x, xala.position.y),10,150,20,YELLOW);
+            DrawText(FormatText("target %.2f %.2f",cam.target.x, cam.target.y),10,200,20,YELLOW);
+            DrawText(FormatText("offset %.2f %.2f",cam.offset.x, cam.offset.y),10,10,20,YELLOW);
             DrawText(FormatText("vel %.2f %.2f",xala.velocidade.x, xala.velocidade.y),10,40,20,YELLOW);
             DrawText(FormatText("angulo %.2f",bala.angulo),10,70,20,YELLOW);
             DrawText(FormatText("zoom %.2f",cam.zoom),10,100,20,YELLOW);
-            DrawText(FormatText("tiro %i",bala.ativa),10,130,20,YELLOW);
+            DrawText(FormatText("Projetil %i",bala.ativa),10,130,20,YELLOW);
 
         EndDrawing();
     }

@@ -1,11 +1,11 @@
 #include <math.h>
 #include "acao.h"
 
-// A FAZER: PONTO DE ORIGEM PARA O TIRO NÃO CENTRALIZADO
+// A FAZER: PONTO DE posicao PARA O Projetil NÃO CENTRALIZADO
 
-void mira(Personagem fulano, Tiro *bala, Camera2D cam)
+void mira(Personagem fulano, Projetil *bala, Camera2D cam)
 {
-    bala->origem = fulano.position;
+    bala->posicao = fulano.position;
 
     int posMouseX = (GetMouseX() -cam.offset.x);
     int posMouseY = (GetMouseY() -cam.offset.y);
@@ -16,13 +16,50 @@ void mira(Personagem fulano, Tiro *bala, Camera2D cam)
     bala->angulo = atan2(deltaY,deltaX);
     
 }
-void atira(Tiro *bala)
+void atira(Personagem fulano ,Projetil *bala)
 {
-    bala->velocidade.y = sin(bala->angulo)*VELOCIDADE_TIRO;
-    bala->velocidade.x = cos(bala->angulo)*VELOCIDADE_TIRO;
+    bala->velocidade.y = sin(bala->angulo)*VELOCIDADE_Projetil;
+    bala->velocidade.x = cos(bala->angulo)*VELOCIDADE_Projetil;
 }
-void atualizaTiro(Tiro *bala)
+void atualizaProjetil(Projetil *bala)
 {
-    bala->origem.y += bala->velocidade.y;
-    bala->origem.x += bala->velocidade.x;
+    bala->posicao.y += bala->velocidade.y;
+    bala->posicao.x += bala->velocidade.x;
+}
+
+//Reduz a velocidade fornecida conforme a taxa de atrito 
+//Taxa positiva somente
+void aplicarAtritoProjetil(Projetil *bala, float taxa)
+{
+    if(bala->velocidade.y > 1){
+        bala->velocidade.y -= taxa*sin(bala->angulo);
+    }
+    else if(bala->velocidade.y < -1){
+        bala->velocidade.y -= taxa*sin(bala->angulo);
+    }
+    else{
+        bala->velocidade.y = 0;
+    }
+
+    if(bala->velocidade.x > 1){
+        bala->velocidade.x -= taxa*cos(bala->angulo);
+    }
+    else if(bala->velocidade.x < -1){
+        bala->velocidade.x -= taxa*cos(bala->angulo);
+    }
+    else{
+        bala->velocidade.x = 0;
+    }
+}
+
+int colisaoProjetil(Projetil *bala, Rectangle *MAPA)
+{
+    for( int i = 0; i < TAM_MAPA1; i++)
+    {
+       if( CheckCollisionCircleRec(bala->posicao,10,MAPA[i]))
+       {
+           bala->velocidade = (Vector2){0,0};
+           return 1;
+       }
+    }
 }
