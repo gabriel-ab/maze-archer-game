@@ -1,5 +1,6 @@
 #include <math.h>
 #include "acao.h"
+#include "define.h"
 
 // A FAZER: PONTO DE posicao PARA O Projetil NÃO CENTRALIZADO
 
