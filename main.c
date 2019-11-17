@@ -36,7 +36,7 @@ int main(){
     InitWindow(tela.width, tela.height, "TESTE");
     telaCheia();
     
-
+    
     //BACKGROUND
     Image backgroundImage = LoadImage("resources/images/wallpaper.png");
     ImageResize(&backgroundImage, tela.width, tela.height);  
@@ -109,20 +109,24 @@ int main(){
 
     while (jogo_rodando) 
     {
+        
 
         while(telaAtual == TELA_MENU && jogo_rodando) {
             logicaBotoesMenu(botoesMenu, &telaAtual, somBotao, &jogo_rodando);
             menuScreen(&backgroundTexture, botoesMenu, textButtonsMenu);
+            UpdateMusicStream(menuIntro);
         }
 
         while(telaAtual == TELA_CONFIG && jogo_rodando) {
-            logicaBotoesConfiguracao(botoesConfiguracao, somBotao, &telaAtual);
+            logicaBotoesConfiguracao(botoesConfiguracao, somBotao, &telaAtual, textButtonsConfiguracao);
             telaConfiguracao(&backgroundTexture, botoesConfiguracao, textButtonsConfiguracao);
+            UpdateMusicStream(menuIntro);
         }
 
         while(telaAtual == TELA_RESOLUCAO && jogo_rodando) {
             logicaBotoesResolucao(botoesResolucao, botoesConfiguracao, botoesMenu, somBotao, &telaAtual, &backgroundTexture);
             telaResolucao(&backgroundTexture, botoesResolucao, textButtonsResolucao);
+            UpdateMusicStream(menuIntro);
         }
 
         if(telaAtual == TELA_FASE1) {

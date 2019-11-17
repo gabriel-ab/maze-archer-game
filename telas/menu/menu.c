@@ -1,4 +1,3 @@
-
 #include <raylib.h>
 
 void menuScreen(Texture2D *background, Rectangle botoes[], char *textButtons[]);

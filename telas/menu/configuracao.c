@@ -2,7 +2,7 @@
 
 
 void telaConfiguracao(Texture2D *background, Rectangle botoes[], char *textButtons[]);
-void logicaBotoesConfiguracao(Rectangle botoes[], Sound somBotao, int *telaAtual);
+void logicaBotoesConfiguracao(Rectangle botoes[], Sound somBotao, int *telaAtual, char *textButtons[]);
 
 //TELA DE CONFIGURAÇÃO
 void telaConfiguracao(Texture2D *background, Rectangle botoes[], char *textButtons[]) {
@@ -22,7 +22,7 @@ void telaConfiguracao(Texture2D *background, Rectangle botoes[], char *textButto
     EndDrawing();
 }
 
-void logicaBotoesConfiguracao(Rectangle botoes[], Sound somBotao, int *telaAtual) {
+void logicaBotoesConfiguracao(Rectangle botoes[], Sound somBotao, int *telaAtual, char *textButtons[]) {
 
     // IR PARA TELA DE RESOLUÇÃO
     if(CheckCollisionPointRec(GetMousePosition(), botoes[0])) 
@@ -31,6 +31,30 @@ void logicaBotoesConfiguracao(Rectangle botoes[], Sound somBotao, int *telaAtual
         {
             PlaySound(somBotao);
             *(telaAtual) = TELA_RESOLUCAO;
+        }
+    }
+    
+    //OPÇÂO DE MUTAR O JOGO
+    if(CheckCollisionPointRec(GetMousePosition(), botoes[1])) 
+    {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+        {
+            static bool mute = false;
+            PlaySound(somBotao);
+            while(IsSoundPlaying(somBotao)){}
+            if(!mute){
+                textButtons[1] = "MUTE: ON";
+                SetMasterVolume(0);
+                mute = true;
+            }else{
+                SetMasterVolume(100);
+                mute = false;
+                textButtons[1] = "MUTE: OFF";
+                
+            }
+            
+            
+        
         }
     }
 
