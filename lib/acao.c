@@ -31,21 +31,15 @@ void atualizaProjetil(Projetil *bala)
 //Taxa positiva somente
 void aplicarAtritoProjetil(Projetil *bala, float taxa)
 {
-    if(bala->velocidade.y > 1){
-        bala->velocidade.y -= taxa*sin(bala->angulo);
-    }
-    else if(bala->velocidade.y < -1){
-        bala->velocidade.y -= taxa*sin(bala->angulo);
+    if(bala->velocidade.y > 0.1 || bala->velocidade.y < -0.1){
+        bala->velocidade.y -= sin(bala->angulo)/taxa;
     }
     else{
         bala->velocidade.y = 0;
     }
 
-    if(bala->velocidade.x > 1){
-        bala->velocidade.x -= taxa*cos(bala->angulo);
-    }
-    else if(bala->velocidade.x < -1){
-        bala->velocidade.x -= taxa*cos(bala->angulo);
+    if(bala->velocidade.x > 0.1 || bala->velocidade.x < -0.1){
+        bala->velocidade.x -= cos(bala->angulo)/taxa;
     }
     else{
         bala->velocidade.x = 0;

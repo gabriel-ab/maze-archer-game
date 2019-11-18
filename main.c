@@ -51,7 +51,6 @@ int main(){
     Music menuIntro = LoadMusicStream("resources/soundtrack/epic.ogg");
     
     Sound somBotao = LoadSound("resources/fx/setting click.wav");
-    //Sound play_btnfx = LoadSound("resources/fx/start click.wav");
     
     PlayMusicStream(menuIntro);
     
