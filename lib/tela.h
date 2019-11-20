@@ -12,6 +12,6 @@ Rectangle telaAnterior = {0, 0, LARGURA_TELA, ALTURA_TELA};
 bool is_fullscreen = false; 
 
 void telaCheia();
-void cameraSegue(Camera2D *cam, Rectangle rec);
+void cameraSegueFocoRec(Camera2D *cam, Vector2 foco, Rectangle rec);
 
 #endif

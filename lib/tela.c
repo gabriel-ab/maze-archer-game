@@ -21,13 +21,23 @@ void telaCheia()
 }
 // (Rectangle){tela.width/4, tela.height/4 ,tela.width/2, tela.height/2};
 
-//Camera segue o target quando o mesmo tenta sair do retangulo dado
-//(WINDOWS)
-void cameraSegue(Camera2D *cam, Rectangle rec)
+//Se o foco sair do retangulo inserido A camera seguirá o foco
+//(WINDOWS) / (LINUX)
+void cameraSegueFocoRec(Camera2D *cam, Vector2 foco, Rectangle rec)
 {
-    if(cam->target.x + cam->offset.x < rec.x) cam->offset.x   += VEL_MAX_PERSONAGEM;
-    if(cam->target.y + cam->offset.y < rec.y) cam->offset.y  += VEL_MAX_PERSONAGEM;
+    #ifdef __WIN32
+        cam->target = foco;
+        if(foco.x + cam->offset.x < rec.x) cam->offset.x    += VEL_MAX_PERSONAGEM;
+        if(foco.y + cam->offset.y < rec.y) cam->offset.y    += VEL_MAX_PERSONAGEM;
 
-    if(cam->target.x + cam->offset.x > rec.x + rec.width) cam->offset.x    -= VEL_MAX_PERSONAGEM;
-    if(cam->target.y + cam->offset.y > rec.y + rec.height) cam->offset.y   -= VEL_MAX_PERSONAGEM;
+        if(foco.x + cam->offset.x > rec.x + rec.width) cam->offset.x    -= VEL_MAX_PERSONAGEM;
+        if(foco.y + cam->offset.y > rec.y + rec.height) cam->offset.y   -= VEL_MAX_PERSONAGEM;
+
+    #elif __linux__
+        if(foco.x + cam->target.x < rec.x) cam->target.x    -= VEL_MAX_PERSONAGEM;
+        if(foco.y + cam->target.y < rec.y) cam->target.y    -= VEL_MAX_PERSONAGEM;
+
+        if(foco.x + cam->target.x > rec.x + rec.width) cam->target.x    += VEL_MAX_PERSONAGEM;
+        if(foco.y + cam->target.y > rec.y + rec.height) cam->target.y   += VEL_MAX_PERSONAGEM;
+    #endif
 }

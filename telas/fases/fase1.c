@@ -5,7 +5,7 @@
     #include "../../lib/tela.h"
     #include "../../lib/personagem.h"
     #include "../../lib/movimenta.h"
-    #include "../../lib/acao.h"
+    #include "../../lib/projetil.h"
 #endif
 void fase1();
 
@@ -14,31 +14,60 @@ void fase1()
     // InitWindow(800,600,"JOGO"); //temporario
     
     Rectangle parede[] = {
-        -192, -224, 448, 32,
-        -192, -192, 32, 384,
-        -160, 160, 416, 32,
-        224, 32, 32, 128,
-        224, -192, 32, 128,
-        256, 32, 320, 32,
-        256, -96, 320, 32,
-        576, -224, 32, 160,
-        576, 32, 288, 32,
-        704, -352, 32, 288,
-        576, -512, 32, 288,
-        608, -512, 480, 32,
-        704, -384, 480, 32,
-        736, -96, 128, 32,
+        -256, -256, 32, 512,
+        -224, -256, 352, 32,
+        -224, 224, 352, 32,
+        96, -96, 32, 320,
+        128, -256, 544, 32,
+        128, -96, 544, 32,
+        640, -672, 32, 416,
+        640, -64, 32, 416,
+        800, -96, 32, 416,
+        800, -640, 32, 416,
+        832, -256, 512, 32,
+        832, -96, 512, 32,
+        1312, -544, 512, 32,
+        1312, 160, 512, 32,
+        1312, -64, 32, 224,
+        1312, -512, 32, 256,
+        1792, -512, 32, 672,
+        448, 480, 32, 320,
+        1056, 320, 32, 320,
+        960, 320, 96, 32,
+        832, 288, 160, 32,
+        544, 320, 96, 32,
+        480, 352, 96, 32,
+        448, 384, 64, 32,
+        448, 416, 32, 64,
+        480, 768, 480, 32,
+        960, 736, 32, 64,
+        992, 704, 32, 64,
+        1024, 672, 32, 64,
+        1056, 640, 32, 64
     };
     Rectangle piso[] = {
-        -160, -192, 384, 352,
-        608, -480, 96, 416,
-        224, -64, 640, 96,
-        704, -480, 480, 96
+        -224, -224, 320, 448,
+        96, -224, 1248, 128,
+        672, -96, 128, 416,
+        672, -640, 128, 416,
+        1344, -512, 448, 672,
+        672, 320, 288, 448,
+        480, 416, 192, 352,
+        960, 352, 96, 320,
+        960, 672, 64, 32,
+        960, 704, 32, 32,
+        576, 352, 96, 64,
+        512, 384, 64, 32
     };
     Projetil bala;
 
-    Texture2D chao = LoadTexture("resources/images/teste_ceramica.png");
-    Texture2D bloco = LoadTexture("resources/images/bosGround.png");
+    Texture2D chao = LoadTexture("resources/images/chao_cav.png");
+    Texture2D bloco = LoadTexture("resources/images/pedra.png");
+    Image temp = LoadImage("resources/images/flechas.png");
+    ImageCrop(&temp,(Rectangle){0,0,64,64});
+    bala.textura = LoadTextureFromImage(temp);
+
+    UnloadImage(temp);
 
     Personagem xala;
     xala = personagemConstructor();
@@ -70,34 +99,27 @@ void fase1()
         if(bala.velocidade.x == 0 && bala.velocidade.y == 0){
             bala.ativa = 0;
         }
-        else{
+        if(bala.ativa){
             atualizaProjetil(&bala);
             aplicarAtritoProjetil(&bala,1.5);
             colisaoProjetil(&bala,parede);
         }
+        //---------------------------------------------
         
         if(IsKeyPressed(KEY_F)) telaCheia();            //
         if(IsKeyDown(KEY_PAGE_UP)) cam.zoom += 0.01;    // Temporario
         if(IsKeyDown(KEY_PAGE_DOWN)) cam.zoom -= 0.01;  //
         
-        
-        
-        
-        #ifdef __linux__
-            cam.offset.x = tela.width/2 ;
-            cam.offset.y = tela.height/2;
-        #elif __WIN32   //possivel problema de versões do OpenGl 2.1 e 3.3
-            cam.target = xala.position;
-            cameraSegue(&cam,REC_SEGUE);
-        #endif
+        //-----------Atualização da Camera-------------
+        cameraSegueFocoRec(&cam, xala.position, REC_TELA_1_POR_3);
         
         BeginDrawing();
             ClearBackground(DARKGRAY);
 
             BeginMode2D(cam);
 
-                for(int i = 0; i < TAM_MAPA1; i++){
-                    DrawRectangleRec(parede[i],BLACK);
+                for(int i = 0; i < sizeof(piso)/sizeof(Rectangle); i++){
+                    // DrawRectangleRec(parede[i],BLACK);
                     
                     // Função para colocar textura em retangulos
                     /* 
@@ -111,7 +133,7 @@ void fase1()
                         0,WHITE
                     );
                 }
-                for(int i = 0; i < TAM_MAPA1; i++){
+                for(int i = 0; i < sizeof(parede)/sizeof(Rectangle); i++){
                     DrawTexturePro(bloco,
                         (Rectangle){0,0,parede[i].width,parede[i].height},
                         parede[i],
@@ -122,10 +144,19 @@ void fase1()
                     
                 }
                 DrawCircleV(cam.offset,10,YELLOW);
-                DrawCircleV(cam.target,10,RED);
-                DrawCircle(0,0,10,RED);
+                DrawCircle(0,0,2,WHITE);
                 DrawCircleV(xala.position,10,BLUE);
                 DrawCircleV(bala.posicao,5,GREEN);
+
+                DrawTexturePro(bala.textura,
+                (Rectangle){0,28,64,8},
+                (Rectangle){
+                    bala.posicao.x,
+                    bala.posicao.y,
+                    64, 6},
+                (Vector2){48,2},
+                bala.angulo,WHITE);
+
                 DrawCircle(
                     (GetMouseX() -cam.offset.x),
                     (GetMouseY() -cam.offset.y),
@@ -138,7 +169,7 @@ void fase1()
                 
                 
             EndMode2D();
-            DrawRectangleLinesEx(REC_SEGUE,1,WHITE);
+            DrawRectangleLinesEx(REC_TELA_1_POR_3,1,WHITE);
 
             DrawText(FormatText("xala.position %.2f %.2f",xala.position.x, xala.position.y),10,150,20,YELLOW);
             DrawText(FormatText("target %.2f %.2f",cam.target.x, cam.target.y),10,200,20,YELLOW);
@@ -147,6 +178,9 @@ void fase1()
             DrawText(FormatText("angulo %.2f",bala.angulo),10,70,20,YELLOW);
             DrawText(FormatText("zoom %.2f",cam.zoom),10,100,20,YELLOW);
             DrawText(FormatText("Projetil %i",bala.ativa),10,130,20,YELLOW);
+            
+            DrawText(FormatText("cos(angulo)*textura %f",cos(bala.angulo*DEG2RAD)*bala.textura.width/2),10,300,20,YELLOW);
+            DrawText(FormatText("sin(angulo)*textura %f",sin(bala.angulo*DEG2RAD)*bala.textura.height/2),10,320,20,YELLOW);
 
         EndDrawing();
     }

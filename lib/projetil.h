@@ -8,6 +8,7 @@
 
     typedef struct projetil
     {
+        Texture2D textura;
         Vector2 posicao;
         Vector2 velocidade;
         float angulo;

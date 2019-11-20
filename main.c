@@ -21,7 +21,7 @@ typedef enum{
 #include "lib/define.h"
 #include "lib/tela.c"
 #include "lib/personagem.c"
-#include "lib/acao.c"
+#include "lib/projetil.c"
 #include "lib/movimenta.c"
 #include "telas/menu/menu.c"
 #include "telas/menu/configuracao.c"
