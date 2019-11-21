@@ -1,7 +1,6 @@
-#include <raylib.h>
-#include "../../lib/background.h"
 #include "../../lib/botoes.h"
 #include "../../lib/som.h"
+#include "../../lib/tela.h"
 
 void telaConfiguracao();
 void drawTelaConfiguracao(Texture2D background, Rectangle botoes[]);
@@ -32,13 +31,13 @@ void drawTelaConfiguracao(Texture2D background, Rectangle botoes[]) {
 
 void logicaBotoesConfiguracao(Rectangle botoes[]) {
 
-    // IR PARA TELA DE RESOLUÇÃO
+    // MUDAR PARA TELA CHEIA
     if(CheckCollisionPointRec(GetMousePosition(), botoes[0])) 
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
             PlaySound(somBotao);
-            telaAtual = TELA_RESOLUCAO;
+            telaCheia();
         }
     }
 

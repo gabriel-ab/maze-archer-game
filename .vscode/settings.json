@@ -10,6 +10,12 @@
 	},
 	"files.associations": {
 		"background.h": "c",
-		"acao.h": "c"
+		"acao.h": "c",
+		"personagem.h": "c",
+		"tela.h": "c",
+		"define.h": "c",
+		"jogo.h": "c",
+		"raylib.h": "c",
+		"som.h": "c"
 	}
 }

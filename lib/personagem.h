@@ -15,6 +15,9 @@ typedef struct Personagem
     Rectangle linhaColisaoEsquerda;
     Rectangle linhaColisaoBaixo;
     Rectangle linhaColisaoDireita;
+    bool invulneravel;
+    int vida;
+    int flechas;
 }Personagem;
 
 

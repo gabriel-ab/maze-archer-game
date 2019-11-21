@@ -5,7 +5,7 @@
     #include "../../lib/tela.h"
     #include "../../lib/personagem.h"
     #include "../../lib/movimenta.h"
-    #include "../../lib/acao.h"
+    #include "../../lib/projetil.h"
 #endif
 void fase1();
 

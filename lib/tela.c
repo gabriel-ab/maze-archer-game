@@ -32,3 +32,33 @@ void cameraSegue(Camera2D *cam, Rectangle rec)
     if(cam->target.x + cam->offset.x > rec.x + rec.width) cam->offset.x    -= VEL_MAX_PERSONAGEM;
     if(cam->target.y + cam->offset.y > rec.y + rec.height) cam->offset.y   -= VEL_MAX_PERSONAGEM;
 }
+
+//-------------- BACKGROUND ---------------//
+void setImageBackground(char* imagePath) {
+    pathImageBackground = imagePath;
+}
+
+void updateBackground() {
+    Image backgroundImage = LoadImage(pathImageBackground);
+    ImageResize(&backgroundImage, tela.width, tela.height);  
+    background = LoadTextureFromImage(backgroundImage);
+    UnloadImage(backgroundImage);
+}
+
+
+//-------------- HUD ---------------//
+
+void setVidaSprite(char* spritePath){
+    Image vidaImage =  LoadImage(spritePath);
+    ImageResize(&vidaImage, 30 , 30);
+    vida = LoadTextureFromImage(vidaImage);
+    UnloadImage(vidaImage);
+}
+
+
+void drawHUD(int quantidadeVida){
+    for (int i = 0; i < quantidadeVida; i++)
+    {
+        DrawTexture(vida, 10+35*i, 10, GRAY);
+    }
+}

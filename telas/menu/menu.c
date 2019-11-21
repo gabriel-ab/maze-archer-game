@@ -1,8 +1,4 @@
-
-#include <raylib.h>
-#include "../../lib/background.h"
 #include "../../lib/botoes.h"
-#include "../../lib/som.h"
 
 void telaMenu();
 void drawTelaMenu(Texture2D background, Rectangle botoes[]);

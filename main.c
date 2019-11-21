@@ -1,20 +1,19 @@
 #include <string.h>
 #include <raylib.h>
 
-#include "lib/jogo.h"
 #include "lib/define.h"
 #include "lib/som.h"
-#include "lib/background.h"
 #include "lib/tela.h"
 #include "lib/personagem.h"
-#include "lib/acao.h"
+#include "lib/projetil.h"
 #include "lib/movimenta.h"
-#include "telas/menu/menu.c"
 
+#include "telas/menu/menu.c"
 #include "telas/menu/configuracao.c"
-#include "telas/menu/resolucao.c"
 #include "telas/fases/fase1.c"
 #include "telas/fases/fase_3.c"
+#include "telas/telaFracasso.c"
+
 
 int main(){
 
@@ -33,7 +32,9 @@ int main(){
     
     SetTargetFPS(60);
 
-    telaAtual = TELA_MENU;
+    SetExitKey(0);
+
+    telaAtual = TELA_FASE_3;
 
     while (jogo_rodando) 
     {
@@ -46,8 +47,8 @@ int main(){
             telaConfiguracao();
         }
 
-        while(telaAtual == TELA_RESOLUCAO) {
-            telaResolucao();
+        if(telaAtual == TELA_FRACASSO) {
+            telaFracasso();
         }
 
         if(telaAtual == TELA_FASE1) {

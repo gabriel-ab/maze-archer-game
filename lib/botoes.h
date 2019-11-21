@@ -16,7 +16,7 @@ Rectangle* getBotoesMenu();
 
 //BOTÕES DA TELA DE CONFIGURAÇÃO
 char *textButtonsConfiguracao[] = {
-    "RESOLUÇÃO",
+    "FULLSCREEN",
     "MUTE: OFF",
     "BACK",
 };
@@ -24,19 +24,7 @@ Rectangle botoesConfiguracao[3];
 Rectangle* getBotoesConfiguracao();
 
 
-//BOTÕES DE RESOLUÇÃO DE TELA
-char *textButtonsResolucao[] = {
-    "1920x1080",
-    "1280x720",
-    "800x600",
-    "640x480",
-    "BACK"
-};
-Rectangle botoesResolucao[5];
-Rectangle* getBotoesResolucao();
-
-
-//BOTÕES DA TELA DE CONFIGURAÇÃO
+//BOTÕES DA TELA DE PAUSA
 char *textButtonsPausa[] = {
     "CONTINUE",
     "RESTART",

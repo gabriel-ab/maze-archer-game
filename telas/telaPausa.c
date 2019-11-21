@@ -1,4 +1,4 @@
-#include "../lib/background.h"
+#include "../lib/tela.h"
 #include "../lib/botoes.h"
 
 void telaPausa(bool* isPaused);
@@ -11,9 +11,9 @@ void telaPausa(bool* isPaused) {
     setImageBackground("resources/images/wallpaper.png");
     updateBackground();
 
-    while(*isPaused){
-        logicatelaPausa(isPaused);
+    while(isPaused){
         drawtelaPausa(background, getBotoesPausa());
+        logicatelaPausa();
     }
 }
 
@@ -33,6 +33,4 @@ void drawtelaPausa(Texture2D background, Rectangle botoes[]) {
     EndDrawing();
 }
 
-void logicatelaPausa(bool* isPaused){
-    if(IsKeyDown(KEY_ESCAPE)) *isPaused = false;
-}
+void logicatelaPausa(){}

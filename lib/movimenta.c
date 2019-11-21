@@ -1,6 +1,6 @@
 #include "movimenta.h"
 #include "define.h"
-#include "acao.h"
+#include "projetil.h"
 
 void movimentarV(Vector2 *coisa){
     if(IsKeyDown(KEY_W)) coisa->y -= 2;
