@@ -22,7 +22,7 @@ typedef enum{
 bool is_fullscreen = false; 
 
 void telaCheia();
-void cameraSegue(Camera2D *cam, Rectangle rec);
+void cameraSegueFocoRec(Camera2D *cam, Vector2 foco, Rectangle rec);
 
 
 //-------------- BACKGROUND ---------------//

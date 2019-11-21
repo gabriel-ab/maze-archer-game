@@ -14,13 +14,13 @@ void mira(Personagem fulano, Projetil *bala, Camera2D cam)
     int deltaY = posMouseY -fulano.position.y;
     int deltaX = posMouseX -fulano.position.x;
 
-    bala->angulo = atan2(deltaY,deltaX);
+    bala->angulo = atan2(deltaY,deltaX)*RAD2DEG;
     
 }
 void atira(Personagem fulano ,Projetil *bala)
 {
-    bala->velocidade.y = sin(bala->angulo)*VELOCIDADE_Projetil;
-    bala->velocidade.x = cos(bala->angulo)*VELOCIDADE_Projetil;
+    bala->velocidade.y = sin(bala->angulo*DEG2RAD)*VELOCIDADE_Projetil;
+    bala->velocidade.x = cos(bala->angulo*DEG2RAD)*VELOCIDADE_Projetil;
 }
 void atualizaProjetil(Projetil *bala)
 {
@@ -32,21 +32,15 @@ void atualizaProjetil(Projetil *bala)
 //Taxa positiva somente
 void aplicarAtritoProjetil(Projetil *bala, float taxa)
 {
-    if(bala->velocidade.y > 1){
-        bala->velocidade.y -= taxa*sin(bala->angulo);
-    }
-    else if(bala->velocidade.y < -1){
-        bala->velocidade.y -= taxa*sin(bala->angulo);
+    if(bala->velocidade.y > 0.1 || bala->velocidade.y < -0.1){
+        bala->velocidade.y -= sin(bala->angulo*DEG2RAD)/taxa;
     }
     else{
         bala->velocidade.y = 0;
     }
 
-    if(bala->velocidade.x > 1){
-        bala->velocidade.x -= taxa*cos(bala->angulo);
-    }
-    else if(bala->velocidade.x < -1){
-        bala->velocidade.x -= taxa*cos(bala->angulo);
+    if(bala->velocidade.x > 0.1 || bala->velocidade.x < -0.1){
+        bala->velocidade.x -= cos(bala->angulo*DEG2RAD)/taxa;
     }
     else{
         bala->velocidade.x = 0;

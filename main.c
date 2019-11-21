@@ -17,8 +17,11 @@
 
 int main(){
 
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+
     InitWindow(tela.width, tela.height, "TESTE");
     telaCheia();
+    
 
     //BACKGROUND
     setImageBackground("resources/images/wallpaper.png");
@@ -31,8 +34,6 @@ int main(){
     PlayMusicStream(music);
     
     SetTargetFPS(60);
-
-    SetExitKey(0);
 
     telaAtual = TELA_FASE_3;
 
