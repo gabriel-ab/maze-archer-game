@@ -17,6 +17,7 @@ void drawTelaMenu(Texture2D background, Rectangle botoes[]) {
 
         DrawTexture(background, 0, 0, WHITE);
 
+        
         for (int i = 0; i < 4; i++)
         {
             DrawRectangleRec(botoes[i], CheckCollisionPointRec(GetMousePosition(), botoes[i]) ? (Color){128,0,0, 255} : (Color){164,0,0, 255});
@@ -24,6 +25,7 @@ void drawTelaMenu(Texture2D background, Rectangle botoes[]) {
             DrawText( textButtonsMenu[i], (int)( botoes[i].x + botoes[i].width/2 - MeasureText(textButtonsMenu[i], 20)/2), (int) botoes[i].y + 16, 20, WHITE);
         }
         
+
     EndDrawing();
 }
 
