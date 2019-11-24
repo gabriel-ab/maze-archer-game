@@ -1,19 +1,30 @@
 #include "../lib/tela.h"
 #include "../lib/botoes.h"
 
-void telaPausa(bool* isPaused);
+void telaPausa(bool* isPaused, bool* isRestarting);
 void drawtelaPausa(Texture2D background, Rectangle botoes[]);
-void logicatelaPausa();
+void logicatelaPausa(bool* isPaused, bool* isRestarting, Rectangle botoes[]);
 
-void telaPausa(bool* isPaused) {
+void telaPausa(bool* isPaused, bool* isRestarting) {
     
     //pathImageBackgroundAnterior = pathImageBackground;
     setImageBackground("resources/images/wallpaper.png");
     updateBackground();
+    
+    while(*isPaused) {
 
-    while(isPaused){
         drawtelaPausa(background, getBotoesPausa());
-        logicatelaPausa();
+        logicatelaPausa(isPaused, isRestarting, getBotoesPausa());
+
+        while (telaAtual == TELA_CONFIG)
+        {
+            if(IsKeyPressed(KEY_P)) {
+                telaAtual = previousScreen;
+                *isPaused = !(*isPaused);
+            }
+            telaConfiguracao();
+        }
+        
     }
 }
 
@@ -33,4 +44,51 @@ void drawtelaPausa(Texture2D background, Rectangle botoes[]) {
     EndDrawing();
 }
 
-void logicatelaPausa(){}
+void logicatelaPausa(bool *isPaused, bool* isRestarting, Rectangle botoes[]){
+    //VOLTAR PARA O JOGO
+    if (CheckCollisionPointRec(GetMousePosition(), botoes[0]))
+    {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+        {
+            PlaySound(somBotao);
+            *isPaused = !(*isPaused);
+        }
+    }
+
+    //VOLTAR PARA REINICIAR O JOGO
+    if (CheckCollisionPointRec(GetMousePosition(), botoes[1]))
+    {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+        {
+            PlaySound(somBotao);
+            *isRestarting = true;
+            *isPaused = !(*isPaused);
+        }
+    }
+
+    //VOLTAR PARA A TELA DE CONFIGURAÇÕES
+    if (CheckCollisionPointRec(GetMousePosition(), botoes[2]))
+    {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+        {
+            PlaySound(somBotao);
+            previousScreen = telaAtual;
+            telaAtual = TELA_CONFIG;
+        }
+    }
+    
+    //IR PARA TELA DE MENU
+    if (CheckCollisionPointRec(GetMousePosition(), botoes[3]))
+    {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+        {
+            PlaySound(somBotao);
+            telaAtual = TELA_MENU;
+            *isPaused = !*isPaused;   
+        }
+    }
+
+    if(IsKeyPressed(KEY_P)) {
+        *isPaused = !(*isPaused);
+    }
+}

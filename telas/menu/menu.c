@@ -48,6 +48,7 @@ void logicaBotoesMenu(Rectangle botoes[]) {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
             PlaySound(somBotao);
+            previousScreen = telaAtual;
             telaAtual = TELA_CONFIG;
             
         }

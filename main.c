@@ -32,6 +32,10 @@ int main(){
     setMusic("resources/soundtrack/epic.ogg");
     setSomBotao("resources/fx/setting click.wav");
     PlayMusicStream(music);
+
+    //HUD
+    setTexture(&vida, "resources/images/heart pixel art 254x254.png", 30, 30);
+    setTexture(&arrow, "resources/images/Arrow.png", 30, 20);
     
     SetTargetFPS(60);
 

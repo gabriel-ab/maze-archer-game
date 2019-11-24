@@ -8,6 +8,7 @@ void logicaBotoesConfiguracao(Rectangle botoes[]);
 
 //TELA DE CONFIGURAÇÃO
 void telaConfiguracao() {
+    
     drawTelaConfiguracao(background, getBotoesConfiguracao());
     logicaBotoesConfiguracao(getBotoesConfiguracao());
 }
@@ -41,13 +42,22 @@ void logicaBotoesConfiguracao(Rectangle botoes[]) {
         }
     }
 
+    // DEIXAR O JOGO SEM SOM
+    if(CheckCollisionPointRec(GetMousePosition(), botoes[1])) 
+    {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+        {
+            //A FAZER: CONFIGURA O BOTÃO MUTE
+        }
+    }
+
     //VOLTAR PARA O MENU
     if (CheckCollisionPointRec(GetMousePosition(), botoes[2]))
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
             PlaySound(somBotao);
-            telaAtual = TELA_MENU;
+            telaAtual = previousScreen;
         }
     }
 }

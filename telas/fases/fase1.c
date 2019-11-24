@@ -111,8 +111,10 @@ void fase1()
         if(IsKeyDown(KEY_PAGE_DOWN)) cam.zoom -= 0.01;  //
         
         //-----------Atualização da Camera-------------
-        cameraSegueFocoRec(&cam, xala.position, REC_TELA_1_POR_3);
+        //cameraSegueFocoRec(&cam, xala.position, REC_TELA_1_POR_3);
         
+        cam.target = xala.position;
+
         BeginDrawing();
             ClearBackground(DARKGRAY);
 

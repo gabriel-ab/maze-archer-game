@@ -35,6 +35,15 @@ Rectangle botoesPausa[4];
 Rectangle* getBotoesPausa();
 
 
+//BOTÕES DA TELA DE FRACASSO
+char *textButtonsFracasso[] = {
+    "RESTART",
+    "QUIT",
+};
+Rectangle botoesFracasso[2];
+Rectangle* getBotoesFracasso();
+
+
 void atualizarPosicaoBotoes();
 
 
