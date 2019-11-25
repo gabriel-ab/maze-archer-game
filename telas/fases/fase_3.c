@@ -14,10 +14,10 @@ int count = 0;
 int tempoInvunerabilidade = TEMPO_INVULNERAVEL;
 
 void fase_3();
-void draw_fase_3(Camera2D* cam,Personagem* xala, Texture2D piso, Rectangle MAPA[], Rectangle ARMADILHAS[]);
-void logica_fase_3(Camera2D* cam,Personagem* xala, Rectangle MAPA[], Rectangle ARMADILHA[]);
+void draw_fase_3(Camera2D* cam,Personagem* xala, Texture2D piso, Rectangle MAPA[], Rectangle ARMADILHAS[], int tamMapa);
+void logica_fase_3(Camera2D* cam,Personagem* xala, Rectangle MAPA[], Rectangle ARMADILHA[], int tamMapa);
 
-void drawMapa(Texture2D piso, Rectangle MAPA[]);
+void drawMapa(Texture2D piso, Rectangle MAPA[],int tamMapa);
 void drawArmadilhas(Rectangle ARMADILHAS[]);
 
 void fase_3() {
@@ -94,6 +94,7 @@ void fase_3() {
         1792, 1824, 288, 32,
         1792, 2272, 288, 32,
     };
+    int tamMapa = sizeof(MAPA)/sizeof(Rectangle);
 
     Rectangle ARMADILHAS[] = {
         50, 100, 20, 20,
@@ -104,26 +105,26 @@ void fase_3() {
 
     Personagem xala;
     xala = personagemConstructor();
-    xala.position = (Vector2){10,10};
+    xala.posicao = (Vector2){10,10};
     xala.altura = 20;
     xala.largura = 20;
 
     Camera2D cam;
     cam.zoom = 1;
     cam.rotation = 0;
-    cam.target = xala.position;
+    cam.target = xala.posicao;
     cam.offset = (Vector2){0,0};
     cam.offset = (Vector2){tela.width/2 , tela.height/2};
     int largura = 32, altura = 32;
 
     while(telaAtual == TELA_FASE_3) {
-        draw_fase_3(&cam, &xala, piso, MAPA, ARMADILHAS);
-        logica_fase_3(&cam, &xala, MAPA, ARMADILHAS);
+        draw_fase_3(&cam, &xala, piso, MAPA, ARMADILHAS, tamMapa);
+        logica_fase_3(&cam, &xala, MAPA, ARMADILHAS, tamMapa);
     }
 
 }
 
-void draw_fase_3(Camera2D* cam, Personagem* xala, Texture2D piso, Rectangle MAPA[], Rectangle ARMADILHAS[]) {
+void draw_fase_3(Camera2D* cam, Personagem* xala, Texture2D piso, Rectangle MAPA[], Rectangle ARMADILHAS[], int tamMapa) {
     
     BeginDrawing();
         BeginMode2D(*cam);
@@ -131,14 +132,8 @@ void draw_fase_3(Camera2D* cam, Personagem* xala, Texture2D piso, Rectangle MAPA
             ClearBackground(GRAY);
 
             drawArmadilhas(ARMADILHAS);
-            drawMapa(piso, MAPA);
-            DrawRectangle(xala->position.x, xala->position.y, xala->largura, xala->altura, RED);
-            DrawRectangleRec(xala->linhaColisaoCima,colideCima);
-            DrawRectangleRec(xala->linhaColisaoBaixo,colideBaixo);
-            DrawRectangleRec(xala->linhaColisaoEsquerda,colideEsq);
-            DrawRectangleRec(xala->linhaColisaoDireita,colideDir);
-
-            
+            drawMapa(piso, MAPA, tamMapa);
+            DrawRectangle(xala->posicao.x, xala->posicao.y, xala->largura, xala->altura, RED);            
 
         EndMode2D();
 
@@ -153,16 +148,16 @@ void draw_fase_3(Camera2D* cam, Personagem* xala, Texture2D piso, Rectangle MAPA
     EndDrawing();
 }
 
-void logica_fase_3(Camera2D* cam,Personagem* xala, Rectangle MAPA[], Rectangle ARMADILHA[]) {
+void logica_fase_3(Camera2D* cam,Personagem* xala, Rectangle MAPA[], Rectangle ARMADILHA[], int tamMapa) {
     if(xala->vida < 1) {
         telaAtual = TELA_FRACASSO;
     }
     
     if(IsKeyDown(KEY_ESCAPE)) isPaused = true;
-    movimentar(xala, MAPA);
-    cam->target = xala->position;
+    movimentar(xala);
+    cam->target = xala->posicao;
 
-    if(CheckCollisionPointRec(xala->position, ARMADILHA[0]) && !(xala->invulneravel)) {
+    if(CheckCollisionPointRec(xala->posicao, ARMADILHA[0]) && !(xala->invulneravel)) {
          xala->vida--;
          xala->invulneravel = !(xala->invulneravel);
     }
@@ -185,8 +180,8 @@ void logica_fase_3(Camera2D* cam,Personagem* xala, Rectangle MAPA[], Rectangle A
 
 }
 
-void drawMapa(Texture2D piso, Rectangle MAPA[]) {
-    for(int i = 0; i < TAM_MAPA1; i++){
+void drawMapa(Texture2D piso, Rectangle MAPA[], int tamMapa) {
+    for(int i = 0; i < tamMapa; i++){
                 
         DrawRectangleRec(MAPA[i],BLACK);
         

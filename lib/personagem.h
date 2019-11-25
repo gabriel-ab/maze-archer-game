@@ -7,7 +7,7 @@
 typedef struct Personagem
 {
     Texture2D sprite;
-    Vector2 position;
+    Vector2 posicao;
     Vector2 velocidade;
     int largura;
     int altura;

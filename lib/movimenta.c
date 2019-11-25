@@ -10,67 +10,61 @@ void movimentarV(Vector2 *coisa){
 }
 
 //Faz a movimentação do personagem com inercia e atrito, verificando colisão com o mapa fornecido
-void movimentar(Personagem *fulano, Rectangle *MAPA){
+void movimentar(Personagem *fulano){
 
     aplicarInercia(fulano);
-    atualizarColisao(fulano);
-
-    int naoColisaoCima = !colisaoCima(fulano,MAPA);
-    int naoColisaoBaixo = !colisaoBaixo(fulano,MAPA);
-    int naoColisaoEsquerda = !colisaoEsquerda(fulano,MAPA);
-    int naoColisaoDireita = !colisaoDireita(fulano,MAPA);
+    atualizarLinhasColisao(fulano);
     
-    if(fulano->velocidade.y > -VEL_MAX_PERSONAGEM && naoColisaoCima)
+    if(fulano->velocidade.y > -VEL_MAX_PERSONAGEM)
     {
         if(IsKeyDown(KEY_W)) fulano->velocidade.y += -ACELERACAO;
     }
 
-    if(fulano->velocidade.y < VEL_MAX_PERSONAGEM && naoColisaoBaixo)
+    if(fulano->velocidade.y < VEL_MAX_PERSONAGEM)
     {
         if(IsKeyDown(KEY_S)) fulano->velocidade.y += ACELERACAO;
     }
 
-    if(fulano->velocidade.x > -VEL_MAX_PERSONAGEM && naoColisaoEsquerda)
+    if(fulano->velocidade.x > -VEL_MAX_PERSONAGEM)
     {
         if(IsKeyDown(KEY_A)) fulano->velocidade.x += -ACELERACAO;
     }
 
-    if(fulano->velocidade.x < VEL_MAX_PERSONAGEM && naoColisaoDireita)
+    if(fulano->velocidade.x < VEL_MAX_PERSONAGEM)
     {
         if(IsKeyDown(KEY_D)) fulano->velocidade.x += ACELERACAO;
     }
-
 
     aplicarAtrito(fulano,TAXA_ATRITO);
 
 }
 //atualiza caixas de colisao
-void atualizarColisao(Personagem *fulano){
+void atualizarLinhasColisao(Personagem *fulano){
     fulano->linhaColisaoCima =                          //  X========
         (Rectangle){                                    //  |       |
-            fulano->position.x - fulano->largura/2 +2,  //  |   .   |
-            fulano->position.y - fulano->altura/2 -1,   //  |       |
+            fulano->posicao.x - fulano->largura/2 +2,   //  |   .   |
+            fulano->posicao.y - fulano->altura/2 -1,    //  |       |
             fulano->largura -4, 1                       //  ---------
         };
 
     fulano->linhaColisaoBaixo =                         //  ---------
         (Rectangle){                                    //  |       |
-            fulano->position.x - fulano->largura/2 +2,  //  |   .   |
-            fulano->position.y + fulano->altura/2,      //  |       |
+            fulano->posicao.x - fulano->largura/2 +2,   //  |   .   |
+            fulano->posicao.y + fulano->altura/2,       //  |       |
             fulano->largura -4, 1                       //  X========
         };
 
     fulano->linhaColisaoEsquerda  =                     //  --------X
         (Rectangle){                                    //  |       H
-            fulano->position.x -fulano->largura/2 -1,   //  |   .   H
-            fulano->position.y -fulano->altura/2 +2,    //  |       H
+            fulano->posicao.x -fulano->largura/2 -1,    //  |   .   H
+            fulano->posicao.y -fulano->altura/2 +2,     //  |       H
             1, fulano->altura -4                        //  --------H
         };
 
     fulano->linhaColisaoDireita =                       //  X--------
         (Rectangle){                                    //  H       |
-            fulano->position.x + fulano->largura/2,     //  H   .   |
-            fulano->position.y - fulano->altura/2 +2,   //  H       |
+            fulano->posicao.x + fulano->largura/2,      //  H   .   |
+            fulano->posicao.y - fulano->altura/2 +2,    //  H       |
             1, fulano->altura -4                        //  H--------
         };
 }
@@ -78,8 +72,8 @@ void atualizarColisao(Personagem *fulano){
 //aplica a velocidade a posicao do personagem
 void aplicarInercia(Personagem *fulano)
 {
-    fulano->position.x += fulano->velocidade.x;
-    fulano->position.y += fulano->velocidade.y;
+    fulano->posicao.x += fulano->velocidade.x;
+    fulano->posicao.y += fulano->velocidade.y;
 }
 
 //aplica a velocidade a posicao de Qualquer objeto
@@ -101,74 +95,81 @@ void aplicarAtrito(Personagem *fulano, float taxa)
     else fulano->velocidade.y = 0;
 }
 
-//zera a velocidade para cima caso haja uma colisao
-int colisaoCima(Personagem *fulano, Rectangle *MAPA){
-    for(int i = 0;i < TAM_MAPA1; i++)
+void atualizarPersonagem(Personagem *inimigo)
+{
+    aplicarInercia(inimigo);
+    atualizarLinhasColisao(inimigo);
+    aplicarAtrito(inimigo,TAXA_ATRITO);
+}
+
+//Verifica as Colisões laterais
+//COM retorno -> vetor com 4 elementos p/ ser enviadas as info. de colisao.
+//SEM retorno -> 0
+void colisaoPersonagem(Personagem *fulano, Rectangle *MAPA, int tamMapa, int *retorno)
+{
+    //variaveis de retorno
+    int cima = 0,baixo = 0,esq = 0,dir = 0;
+
+    //COLISAO CIMA
+    for(int i = 0;i < tamMapa; i++)
     {
         if ( CheckCollisionRecs(fulano->linhaColisaoCima, MAPA[i]) )
         {
-            colideCima = GREEN;//temporario
             if(fulano->velocidade.y < 0)
             {
                 fulano->velocidade.y = 0;
             }
-            return 1;
+            cima = 1;
+            break;
         }
     }
-    colideCima = RED;//temporario
-    return 0;
-}
 
-//zera a velocidade para baixo caso haja uma colisao
-int colisaoBaixo(Personagem *fulano, Rectangle *MAPA){
-    for(int i = 0;i < TAM_MAPA1; i++)
+    //COLISAO BAIXO
+    for(int i = 0;i < tamMapa; i++)
     {
         if ( CheckCollisionRecs(fulano->linhaColisaoBaixo, MAPA[i]) )
         {
-            colideBaixo = GREEN;//temporario
             if(fulano->velocidade.y > 0)
             {
                 fulano->velocidade.y = 0;
             }
-            return 1;
+            baixo = 1;
+            break;
         }
     }
-    colideBaixo = RED; //temporario
-    return 0;
-}
 
-//zera a velocidade para a esquerda caso haja uma colisao
-int colisaoEsquerda(Personagem *fulano, Rectangle *MAPA){
-    for(int i = 0;i < TAM_MAPA1; i++)
+
+    //COLISAO ESQUERDA
+    for(int i = 0;i < tamMapa; i++)
     {
         if ( CheckCollisionRecs(fulano->linhaColisaoEsquerda, MAPA[i]) )
         {
-            colideEsq = GREEN;//temporario
             if(fulano->velocidade.x < 0)
             {
                 fulano->velocidade.x = 0;
             }
-            return 1;
+            esq = 1;
+            break;
         }
     }
-    colideEsq = RED;//temporario
-    return 0;
-}
 
-//zera a velocidade para a direita caso haja uma colisao
-int colisaoDireita(Personagem *fulano, Rectangle *MAPA){
-    for(int i = 0;i < TAM_MAPA1; i++)
+    //COLISAO DIREITA
+    for(int i = 0;i < tamMapa; i++)
     {
         if ( CheckCollisionRecs(fulano->linhaColisaoDireita, MAPA[i]) )
         {
-            colideDir = GREEN;//temporario
             if(fulano->velocidade.x > 0)
             {
                 fulano->velocidade.x = 0;
             }
-            return 1;
+            dir = 1;
+            break;
         }
     }
-    colideDir = RED;//temporario
-    return 0;
+    if(retorno != 0){
+        retorno[0] = cima;
+        retorno[1] = baixo;
+        retorno[2] = esq;
+        retorno[3] = dir;
+    }
 }

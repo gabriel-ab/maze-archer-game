@@ -45,6 +45,8 @@ void fase1()
         1024, 672, 32, 64,
         1056, 640, 32, 64
     };
+    int n_paredes = sizeof(parede)/sizeof(Rectangle);
+
     Rectangle piso[] = {
         -224, -224, 320, 448,
         96, -224, 1248, 128,
@@ -59,51 +61,97 @@ void fase1()
         576, 352, 96, 64,
         512, 384, 64, 32
     };
-    Projetil bala;
+    int n_pisos = sizeof(piso)/sizeof(Rectangle);
+    
+    
 
-    Texture2D chao = LoadTexture("resources/images/chao_cav.png");
-    Texture2D bloco = LoadTexture("resources/images/pedra.png");
+    Projetil bala[N_MAX_PROJETEIS];
+
+    //NUMERO ATUAL DE FLECHAS
+    int n_projeteis = 4;
+
+    //indice da flecha
+    int projetil_atual = n_projeteis -1;
+
+    //Limpando atributos
+    for(int i = 0; i < N_MAX_PROJETEIS; i++){
+        bala[i].ativa = 0;
+    }
+
+    Texture2D pisoTexture = LoadTexture("resources/images/chao_cav.png");
+    Texture2D paredeTexture = LoadTexture("resources/images/pedra.png");
+
     Image temp = LoadImage("resources/images/flechas.png");
     ImageCrop(&temp,(Rectangle){0,0,64,64});
-    bala.textura = LoadTextureFromImage(temp);
 
+    for( int i = 0; i < N_MAX_PROJETEIS; i++) {
+        bala[i].textura = LoadTextureFromImage(temp);
+    }
     UnloadImage(temp);
 
     Personagem xala;
     xala = personagemConstructor();
-    xala.position = (Vector2){0,0};
+    xala.posicao = (Vector2){0,0};
     xala.altura = 20;
     xala.largura = 20;
+
+    Personagem inimigo[2];
+    int n_inimigos = sizeof(inimigo)/sizeof(Personagem);
+
+    for(int i = 0; i < 2; i++)
+    {
+        inimigo[i] = inimigoContructor();
+        inimigo[i].posicao = (Vector2){GetRandomValue(-200,200), GetRandomValue(-200,200)};
+    }
 
     Camera2D cam;
     cam.zoom = 1;
     cam.rotation = 0;
-    cam.target = xala.position;
+    cam.target = xala.posicao;
     cam.offset = (Vector2){0,0};
     cam.offset = (Vector2){tela.width/2 , tela.height/2};
-    int largura = 32, altura = 32;
 
     SetTargetFPS(60);
     
     while(IsKeyUp(KEY_ESCAPE)){ 
 
-        movimentar(&xala, parede);
-        
+        movimentar(&xala);
+        colisaoPersonagem(&xala, parede, n_paredes, 0);
         //------------Logica do Projetil--------------
-        if(IsMouseButtonDown(MOUSE_LEFT_BUTTON))
+        
+        if(projetil_atual > -1)
         {
-            bala.ativa = 1;
-            mira(xala,&bala,cam);
-            atira(xala,&bala);
+            if(IsMouseButtonDown(MOUSE_LEFT_BUTTON))
+            {
+                mira(xala,&bala[projetil_atual],cam);
+            }
+            if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
+            {
+                bala[projetil_atual].ativa = 1;
+                atira(xala,&bala[projetil_atual]);
+                projetil_atual--;
+            }
         }
-        if(bala.velocidade.x == 0 && bala.velocidade.y == 0){
-            bala.ativa = 0;
+        
+        for(int i = 0; i < n_projeteis; i++)
+        {   
+            if(bala[i].ativa)
+            {
+                aplicarInerciaV(&bala[i].posicao, bala[i].velocidade);
+                aplicarAtritoProjetil(&bala[i],0.5);
+                colisaoProjetil_mapa(&bala[i], parede, n_paredes);
+                colisaoProjetil_inimigo(&bala[i], inimigo, n_inimigos);
+            }
         }
-        if(bala.ativa){
-            atualizaProjetil(&bala);
-            aplicarAtritoProjetil(&bala,1.5);
-            colisaoProjetil(&bala,parede);
+        
+        if(bala[projetil_atual].velocidade.x == 0 && bala[projetil_atual].velocidade.y == 0 && bala[projetil_atual].ativa)
+        {
+            bala[projetil_atual].ativa = 0;
         }
+        
+        // RAFAEL PARTE DE PEGAR OBJETO (flechas)
+        if(projetil_atual +1 < n_projeteis && IsKeyPressed(KEY_SPACE)) projetil_atual++; //temporario
+
         //---------------------------------------------
         
         if(IsKeyPressed(KEY_F)) telaCheia();            //
@@ -111,77 +159,79 @@ void fase1()
         if(IsKeyDown(KEY_PAGE_DOWN)) cam.zoom -= 0.01;  //
         
         //-----------Atualização da Camera-------------
-        cameraSegueFocoRec(&cam, xala.position, REC_TELA_1_POR_3);
-        
+        atualizarCamera(&cam, xala.posicao);
+
+        verificarTamanhoTela();
+
+        //----------Atualização dos inimigos-----------
+        for( int i = 0; i < n_inimigos; i++)
+        {
+            atualizarPersonagem(&inimigo[i]);
+            inimigoAproxima(&inimigo[i], xala.posicao);
+            
+            colisaoPersonagem(&inimigo[i], parede, n_paredes, 0);
+            // inimigoFoge(&inimigo[i], xala.posicao);
+        }
+
         BeginDrawing();
             ClearBackground(DARKGRAY);
 
             BeginMode2D(cam);
 
-                for(int i = 0; i < sizeof(piso)/sizeof(Rectangle); i++){
-                    // DrawRectangleRec(parede[i],BLACK);
-                    
-                    // Função para colocar textura em retangulos
-                    /* 
-                        sourceRec = retangulo no espaço vetorial da textura
-                        destRec = retangulo onde o sourceRec vai ser colocado
-                    */
-                    DrawTexturePro(chao,
+                for(int i = 0; i < n_pisos; i++)
+                {
+                    DrawTexturePro(pisoTexture,
                         (Rectangle){0,0,piso[i].width,piso[i].height},
                         piso[i],
                         (Vector2){0,0},
                         0,WHITE
                     );
                 }
-                for(int i = 0; i < sizeof(parede)/sizeof(Rectangle); i++){
-                    DrawTexturePro(bloco,
+                for(int i = 0; i < n_paredes; i++)
+                {
+                    DrawTexturePro(paredeTexture,
                         (Rectangle){0,0,parede[i].width,parede[i].height},
                         parede[i],
                         (Vector2){0,0},
                         0,WHITE
                     );
-
-                    
                 }
-                DrawCircleV(cam.offset,10,YELLOW);
-                DrawCircle(0,0,2,WHITE);
-                DrawCircleV(xala.position,10,BLUE);
-                DrawCircleV(bala.posicao,5,GREEN);
+                for(int i = 0; i < n_inimigos; i++)
+                {
+                    DrawCircleV(inimigo[i].posicao, 10, (Color){150,150,255,120});
+                }
 
-                DrawTexturePro(bala.textura,
-                (Rectangle){0,28,64,8},
-                (Rectangle){
-                    bala.posicao.x,
-                    bala.posicao.y,
-                    64, 6},
-                (Vector2){48,2},
-                bala.angulo,WHITE);
+                DrawCircle(0,0,2,WHITE);
+                DrawCircleV(xala.posicao,10,BLUE);
+                for (int i = 0; i < n_projeteis; i++)
+                {
+                    DrawCircleV(bala[i].posicao,5,GREEN);
+
+                    DrawTexturePro(bala[i].textura,
+                    (Rectangle){0,28,64,8},
+                    (Rectangle){
+                        bala[i].posicao.x,
+                        bala[i].posicao.y,
+                        64, 6},
+                    (Vector2){48,2},
+                    bala[i].angulo,WHITE);
+                }
 
                 DrawCircle(
                     (GetMouseX() -cam.offset.x),
                     (GetMouseY() -cam.offset.y),
-                    5,PURPLE);
-
-                DrawRectangleRec(xala.linhaColisaoCima,colideCima);
-                DrawRectangleRec(xala.linhaColisaoBaixo,colideBaixo);
-                DrawRectangleRec(xala.linhaColisaoEsquerda,colideEsq);
-                DrawRectangleRec(xala.linhaColisaoDireita,colideDir);
-                
+                    5,PURPLE);                
                 
             EndMode2D();
-            DrawRectangleLinesEx(REC_TELA_1_POR_3,1,WHITE);
 
-            DrawText(FormatText("xala.position %.2f %.2f",xala.position.x, xala.position.y),10,150,20,YELLOW);
+            DrawText(FormatText("xala.posicao %.2f %.2f",xala.posicao.x, xala.posicao.y),10,150,20,YELLOW);
             DrawText(FormatText("target %.2f %.2f",cam.target.x, cam.target.y),10,200,20,YELLOW);
             DrawText(FormatText("offset %.2f %.2f",cam.offset.x, cam.offset.y),10,10,20,YELLOW);
             DrawText(FormatText("vel %.2f %.2f",xala.velocidade.x, xala.velocidade.y),10,40,20,YELLOW);
-            DrawText(FormatText("angulo %.2f",bala.angulo),10,70,20,YELLOW);
             DrawText(FormatText("zoom %.2f",cam.zoom),10,100,20,YELLOW);
-            DrawText(FormatText("Projetil %i",bala.ativa),10,130,20,YELLOW);
+            DrawText(FormatText("Projetil atual %i",projetil_atual),10,130,20,YELLOW);
             
-            DrawText(FormatText("cos(angulo)*textura %f",cos(bala.angulo*DEG2RAD)*bala.textura.width/2),10,300,20,YELLOW);
-            DrawText(FormatText("sin(angulo)*textura %f",sin(bala.angulo*DEG2RAD)*bala.textura.height/2),10,320,20,YELLOW);
-
+            DrawText(FormatText("nparedes %i",n_pisos),10,350,20,YELLOW);
         EndDrawing();
     }
     telaAtual = 0;

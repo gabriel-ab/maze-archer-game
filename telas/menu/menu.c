@@ -1,4 +1,4 @@
-#include "../../lib/botoes.h"
+#include "../../lib/botoes.c"
 
 void telaMenu();
 void drawTelaMenu(Texture2D background, Rectangle botoes[]);
@@ -8,12 +8,14 @@ void logicaBotoesMenu(Rectangle botoes[]);
 void telaMenu() {
     drawTelaMenu(background, getBotoesMenu());
     logicaBotoesMenu(getBotoesMenu());
+
+    verificarTamanhoTela();
 }
 
 void drawTelaMenu(Texture2D background, Rectangle botoes[]) {
     BeginDrawing();
             
-        ClearBackground(RAYWHITE);
+        ClearBackground(BLACK);
 
         DrawTexture(background, 0, 0, WHITE);
 
@@ -37,7 +39,7 @@ void logicaBotoesMenu(Rectangle botoes[]) {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
             PlaySound(somBotao);
-            telaAtual = TELA_FASE1;
+            telaAtual = TELA_FASE_1;
             
         }
     }
