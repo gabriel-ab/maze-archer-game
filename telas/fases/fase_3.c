@@ -1,5 +1,6 @@
 #include <raylib.h>
 #include "../../lib/personagem.h"
+#include "../../lib/inimigo.h"
 #include "../../lib/movimenta.h"
 #include "../../lib/tela.h"
 
@@ -22,6 +23,11 @@ void drawArmadilhas(Rectangle ARMADILHAS[]);
 Rectangle frameRec;
 int currentFrame;
 int frameCount;
+
+Inimigo inimigo;
+Projetil bala;
+Color corInimigo = YELLOW;
+
 
 //Função responsável por representar a Fase 3
 void fase_3() {
@@ -46,6 +52,18 @@ void fase_3() {
     setTextureCropped(&armadilha, "resources/images/full.png", (Rectangle){1920,160,128,32 });
 
     frameRec = (Rectangle){ 0.0f, 0.0f, (float)armadilha.width/4, (float)armadilha.height };
+
+
+    inimigo = inimigoContructor();
+    inimigo.position = (Vector2){200,200};
+    inimigo.altura = 20;
+    inimigo.largura = 20;
+    inimigo.range = (Circle) {inimigo.position.x + (inimigo.largura/2), inimigo.position.y + (inimigo.altura/2), 100};
+
+    Image temp = LoadImage("resources/images/Flechas.png");
+    ImageCrop(&temp,(Rectangle){0,0,64,64});
+    bala.textura = LoadTextureFromImage(temp);
+    UnloadImage(temp);
 
     Personagem xala;
     xala = personagemConstructor();
@@ -91,6 +109,31 @@ void draw_fase_3(Camera2D* cam, Personagem* xala, Rectangle PAREDES[], Rectangle
             drawPiso(PISO);
             drawArmadilhas(ARMADILHAS);
             drawParedes(PAREDES);
+
+            if(inimigo.vida > 0) {
+                DrawCircle(inimigo.range.centerX, inimigo.range.centerY, inimigo.range.radius, PURPLE);
+                DrawRectangleV(inimigo.position, (Vector2) {inimigo.largura, inimigo.altura}, corInimigo);
+            }
+            
+            
+
+            DrawTexturePro(bala.textura,
+                (Rectangle){0,28,64,8},
+                (Rectangle){
+                    bala.posicao.x,
+                    bala.posicao.y,
+                    64, 6},
+                (Vector2){48,2},
+                bala.angulo,WHITE);
+
+                DrawCircle(
+                    (GetMouseX() -cam->offset.x),
+                    (GetMouseY() -cam->offset.y),
+                    5,PURPLE);
+
+            
+            
+
             DrawRectangleRec(xala->linhaColisaoCima,colideCima);
             DrawRectangleRec(xala->linhaColisaoBaixo,colideBaixo);
             DrawRectangleRec(xala->linhaColisaoEsquerda,colideEsq);
@@ -99,6 +142,7 @@ void draw_fase_3(Camera2D* cam, Personagem* xala, Rectangle PAREDES[], Rectangle
         EndMode2D();
 
         drawHUD(xala->vida, 4);
+        DrawText(FormatText("VIDA INIMIGO: %i", inimigo.vida), 0, 100, 20, RED);
 
     EndDrawing();
 }
@@ -118,6 +162,7 @@ void logica_fase_3(Camera2D* cam,Personagem* xala, Rectangle PAREDES[], Rectangl
     movimentar(xala, PAREDES);
     cam->target = xala->position;
 
+    //------------Logica do INVULNERABILIDADE--------------
     if(CheckCollisionPointRec(xala->position, ARMADILHA[0]) && !(xala->invulneravel)) {
          xala->vida--;
          xala->invulneravel = !(xala->invulneravel);
@@ -135,9 +180,11 @@ void logica_fase_3(Camera2D* cam,Personagem* xala, Rectangle PAREDES[], Rectangl
         xala->invulneravel = !(xala->invulneravel);
         tempoInvunerabilidade = TEMPO_INVULNERAVEL;
     }
+    //---------------------------------------------------
 
+
+    //--------Logica do ANIMAÇÃO SPRITE LAVA----------
     frameCount++;
-
     if (frameCount >= (60))
     {
         frameCount = 0;
@@ -147,7 +194,64 @@ void logica_fase_3(Camera2D* cam,Personagem* xala, Rectangle PAREDES[], Rectangl
 
         frameRec.x = (float)currentFrame*(float)armadilha.width/4;
     }
+    //-------------------------------------------
 
+
+
+    //------------Logica do Projetil--------------
+    if(IsMouseButtonDown(MOUSE_LEFT_BUTTON))
+    {
+        bala.ativa = 1;
+        mira(*xala,&bala,*cam);
+        atira(*xala,&bala);
+    }
+    if(bala.velocidade.x == 0 && bala.velocidade.y == 0){
+        bala.ativa = 0;
+    }
+    if(bala.ativa){
+        atualizaProjetil(&bala);
+        aplicarAtritoProjetil(&bala,1.5);
+        colisaoProjetil(&bala,PAREDES);
+    }
+    //---------------------------------------------
+
+    //------------Logica do Inimigo--------------
+    inimigo.range = (Circle) {inimigo.position.x + (inimigo.largura/2), inimigo.position.y + (inimigo.altura/2), 100};
+
+    if(CheckCollisionCircleRec(
+        (Vector2) { inimigo.range.centerX,  inimigo.range.centerY}, 
+        inimigo.range.radius,
+        (Rectangle) {xala->position.x, xala->position.y, xala->largura, xala->altura}
+    ))
+    {
+        corInimigo = RED;
+        if(inimigo.position.x > xala->position.x) {
+            inimigo.position.x--;
+        }
+        if(inimigo.position.x < xala->position.x) {
+            inimigo.position.x++;
+        }
+        if(inimigo.position.y > xala->position.y) {
+            inimigo.position.y--;
+        }
+        if(inimigo.position.y < xala->position.y) {
+            inimigo.position.y++;
+        }
+    } else {
+        corInimigo = YELLOW;
+    }
+    //---------------------------------------------
+
+    //------------Logica do Colisão Bala contra Inimigo--------------
+    if(CheckCollisionPointRec(
+        bala.posicao, 
+        (Rectangle) {inimigo.position.x, inimigo.position.y, inimigo.largura, inimigo.altura}
+    ) && bala.ativa == true)
+    {
+        inimigo.vida--;
+        bala.ativa = false;
+    }
+    //---------------------------------------------
 }
 
 //Função responsável por incluir as delimitações da Fase 3
