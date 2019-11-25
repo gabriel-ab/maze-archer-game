@@ -2,11 +2,11 @@
 #include <raylib.h>
 
 #include "lib/define.h"
-#include "lib/som.h"
-#include "lib/tela.h"
-#include "lib/personagem.h"
-#include "lib/projetil.h"
-#include "lib/movimenta.h"
+#include "lib/som.c"
+#include "lib/tela.c"
+#include "lib/personagem.c"
+#include "lib/projetil.c"
+#include "lib/movimenta.c"
 
 #include "telas/menu/menu.c"
 #include "telas/menu/configuracao.c"
@@ -18,11 +18,17 @@
 int main(){
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-
+    
     InitWindow(tela.width, tela.height, "TESTE");
+    SetWindowMinSize(800,500);
+    
     telaCheia();
     
-
+    //Apagando tela no carregamento do jogo (A FAZER)
+    // BeginDrawing();
+        // ClearBackground(BLACK);
+    // EndDrawing();
+    
     //BACKGROUND
     setImageBackground("resources/images/wallpaper.png");
     updateBackground();
@@ -35,7 +41,7 @@ int main(){
     
     SetTargetFPS(60);
 
-    telaAtual = TELA_FASE_3;
+    telaAtual = TELA_FASE_1;
 
     while (jogo_rodando) 
     {
@@ -52,7 +58,7 @@ int main(){
             telaFracasso();
         }
 
-        if(telaAtual == TELA_FASE1) {
+        if(telaAtual == TELA_FASE_1) {
             fase1();
         }
 

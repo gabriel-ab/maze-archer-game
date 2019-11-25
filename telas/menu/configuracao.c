@@ -10,12 +10,14 @@ void logicaBotoesConfiguracao(Rectangle botoes[]);
 void telaConfiguracao() {
     drawTelaConfiguracao(background, getBotoesConfiguracao());
     logicaBotoesConfiguracao(getBotoesConfiguracao());
+
+    verificarTamanhoTela();
 }
 
 void drawTelaConfiguracao(Texture2D background, Rectangle botoes[]) {
     BeginDrawing();
             
-        ClearBackground(RAYWHITE);
+        ClearBackground(BLACK);
 
         DrawTexture(background, 0, 0, WHITE);
 
@@ -38,6 +40,7 @@ void logicaBotoesConfiguracao(Rectangle botoes[]) {
         {
             PlaySound(somBotao);
             telaCheia();
+            updateBackground();
         }
     }
 

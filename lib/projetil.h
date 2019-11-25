@@ -17,6 +17,8 @@
 
     void mira(Personagem fulano, Projetil *bala, Camera2D cam);
     void atira(Personagem fulano ,Projetil *bala);
-    void atualizaProjetil(Projetil *bala);
+
+    int colisaoProjetil_inimigo(Projetil *bala, Personagem *inimigo, int n_inimigos);
+    int colisaoProjetil_mapa(Projetil *bala, Rectangle *MAPA, int n_mapa);
 
 #endif
