@@ -6,6 +6,7 @@
     #include "../../lib/personagem.h"
     #include "../../lib/movimenta.h"
     #include "../../lib/projetil.h"
+    #include "../../lib/som.h"
 #endif
 void fase1();
 
@@ -96,8 +97,12 @@ void fase1()
             mira(xala,&bala,cam);
             atira(xala,&bala);
         }
+        if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON)){
+            playFx(3);
+        }
         if(bala.velocidade.x == 0 && bala.velocidade.y == 0){
             bala.ativa = 0;
+            
         }
         if(bala.ativa){
             atualizaProjetil(&bala);

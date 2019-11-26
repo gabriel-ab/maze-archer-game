@@ -10,6 +10,7 @@ void logicaBotoesConfiguracao(Rectangle botoes[]);
 void telaConfiguracao() {
     drawTelaConfiguracao(background, getBotoesConfiguracao());
     logicaBotoesConfiguracao(getBotoesConfiguracao());
+    
 }
 
 void drawTelaConfiguracao(Texture2D background, Rectangle botoes[]) {
@@ -36,8 +37,27 @@ void logicaBotoesConfiguracao(Rectangle botoes[]) {
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
-            PlaySound(somBotao);
+            playFx(1);
             telaCheia();
+        }
+    }
+    
+    if(CheckCollisionPointRec(GetMousePosition(), botoes[1])) 
+    {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+        {
+            static bool mute = false;
+            playFx(1);
+            if(!mute){
+               textButtonsConfiguracao[1] = "MUTE: ON";
+               SetMasterVolume(0);
+               mute = true;
+            }else{
+                textButtonsConfiguracao[1] = "MUTE: OFF";
+                SetMasterVolume(100);
+                mute = false;
+            }
+            
         }
     }
 
@@ -46,7 +66,7 @@ void logicaBotoesConfiguracao(Rectangle botoes[]) {
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
-            PlaySound(somBotao);
+            playFx(1);
             telaAtual = TELA_MENU;
         }
     }

@@ -2,6 +2,7 @@
 #include "projetil.h"
 #include "define.h"
 
+
 // A FAZER: PONTO DE posicao PARA O Projetil NÃO CENTRALIZADO
 
 void mira(Personagem fulano, Projetil *bala, Camera2D cam)

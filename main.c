@@ -2,11 +2,11 @@
 #include <raylib.h>
 
 #include "lib/define.h"
-#include "lib/som.h"
-#include "lib/tela.h"
-#include "lib/personagem.h"
-#include "lib/projetil.h"
-#include "lib/movimenta.h"
+#include "lib/som.c"
+#include "lib/tela.c"
+#include "lib/personagem.c"
+#include "lib/projetil.c"
+#include "lib/movimenta.c"
 
 #include "telas/menu/menu.c"
 #include "telas/menu/configuracao.c"
@@ -31,21 +31,26 @@ int main(){
     InitAudioDevice();
     setMusic("resources/soundtrack/epic.ogg");
     setSomBotao("resources/fx/setting click.wav");
+    setTiroFx("resources/fx/tiro.wav");
     PlayMusicStream(music);
     
     SetTargetFPS(60);
 
-    telaAtual = TELA_FASE_3;
+    telaAtual = TELA_MENU;
 
     while (jogo_rodando) 
     {
 
         while(telaAtual == TELA_MENU && jogo_rodando) {
             telaMenu();
+            playMusic(1);
+          
         }
 
         while(telaAtual == TELA_CONFIG) {
             telaConfiguracao();
+            playMusic(1);
+            
         }
 
         if(telaAtual == TELA_FRACASSO) {
