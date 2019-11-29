@@ -57,13 +57,16 @@ int main(){
     Vector2 inicio;
     Vector2 fim = {0,0};
 
-    Vector2 inicioJogo = {0,0};
+    Vector2 inicioFase = {0,0};
+    Vector2 fimFase = {0,0};
     
     FILE *arquivo;
     
     int clique = 0, tipo = 1, sair = 0;
     int parede_atual = 0;
     int piso_atual = 0;
+
+    Vector2 bufferPosicao;
     SetExitKey(0);
     
     while(!WindowShouldClose() && !sair)
@@ -76,6 +79,10 @@ int main(){
         if(IsKeyDown(KEY_PAGE_DOWN) && camera.zoom > 0) camera.zoom -= 0.001;
 
         if(GetKeyPressed() != -1) modo = 2;
+
+        bufferPosicao.x = retangulo.x;
+        bufferPosicao.y = retangulo.y;
+
         switch(tipo)
         {
             case PAREDE:
@@ -97,6 +104,8 @@ int main(){
                 break;
         }
         
+        retangulo.x = bufferPosicao.x;
+        retangulo.y = bufferPosicao.y;        
         if(IsKeyPressed(KEY_TAB)) 
         {
             tipo = SELECIONE;
@@ -179,8 +188,8 @@ int main(){
 
         if(IsMouseButtonPressed(MOUSE_RIGHT_BUTTON))
         {
-            inicioJogo.x = (GetMouseX() -camera.offset.x)/ camera.zoom;
-            inicioJogo.y = (GetMouseY() -camera.offset.y)/ camera.zoom;
+            inicioFase.x = (GetMouseX() -camera.offset.x)/ camera.zoom;
+            inicioFase.y = (GetMouseY() -camera.offset.y)/ camera.zoom;
         }
         
         
@@ -241,7 +250,7 @@ int main(){
                 }
 
                 DrawCircle(0,0,2,GREEN);
-                DrawCircleV(inicioJogo,5,BLUE);
+                DrawCircleV(inicioFase,5,BLUE);
             EndMode2D();
 
             DrawText(FormatText("Numero de paredes: %i",parede_atual),10,10,20,YELLOW);
@@ -270,23 +279,25 @@ int main(){
     }
 
     //Impressão do MAPA
-    arquivo = fopen("retangulos_da_fase.txt","a");
-    fprintf(arquivo,"\nPosição inicial do Jogador = (Vector2){%.f,%.f}", inicioJogo.x , inicioJogo.y);
-    
-    fprintf(arquivo,"\n\n//------------PAREDES----------//");
-    for(int i = 0; i < 100; i++)
-    {
-        if(parede[i].width == 0 && parede[i].height == 0) break;
-        fprintf(arquivo,"\n    %.f, %.f, %.f, %.f,",parede[i].x, parede[i].y, parede[i].width, parede[i].height);
-    }
+    if(piso_atual > 0 || parede_atual > 0){
+        arquivo = fopen("retangulos_da_fase.txt","a");
+        fprintf(arquivo,"\nPosição inicial do Jogador = (Vector2){%.f,%.f}", inicioFase.x , inicioFase.y);
+        
+        fprintf(arquivo,"\n\n//------------PAREDES----------//");
+        for(int i = 0; i < 100; i++)
+        {
+            if(parede[i].width == 0 && parede[i].height == 0) break;
+            fprintf(arquivo,"\n    %.f, %.f, %.f, %.f,",parede[i].x, parede[i].y, parede[i].width, parede[i].height);
+        }
 
-    fprintf(arquivo,"\n\n//-------------PISOS-----------//");
-    for(int i = 0; i < 100; i++)
-    {
-        if(piso[i].width == 0 && piso[i].height == 0) break;
-        fprintf(arquivo,"\n    %.f, %.f, %.f, %.f,",piso[i].x, piso[i].y, piso[i].width, piso[i].height);
+        fprintf(arquivo,"\n\n//-------------PISOS-----------//");
+        for(int i = 0; i < 100; i++)
+        {
+            if(piso[i].width == 0 && piso[i].height == 0) break;
+            fprintf(arquivo,"\n    %.f, %.f, %.f, %.f,",piso[i].x, piso[i].y, piso[i].width, piso[i].height);
+        }
+        fclose(arquivo);
     }
-    fclose(arquivo);
     CloseWindow();
     
     return 0;
