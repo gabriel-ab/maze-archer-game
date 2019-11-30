@@ -10,7 +10,8 @@
 			"math.h": "c",
 			"blocks.h": "c",
 			"stdio.h": "c",
-			"*.m": "c"
+			"*.m": "c",
+			"raygui.h": "c"
 		}
 	}
 }
