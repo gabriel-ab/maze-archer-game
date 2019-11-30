@@ -22,8 +22,6 @@ typedef struct Personagem
 
 
 Personagem personagemConstructor();
-Personagem inimigoContructor();
-
 
 #endif
 

@@ -11,6 +11,7 @@ int larguraAnterior = 800;
 int alturaAnterior = 500;
 
 int telaAtual = 0;
+int telaAnterior = 0;
 
 typedef enum{
     TELA_FRACASSO = -2,
@@ -25,6 +26,7 @@ bool is_fullscreen = false;
 void telaCheia();
 void atualizarCamera(Camera2D *cam, Vector2 posicao);
 void verificarTamanhoTela();
+void redimensionarTela();
 
 //-------------- BACKGROUND ---------------//
 Texture2D background;
@@ -32,17 +34,22 @@ char* pathImageBackground;
 char* pathImageBackgroundAnterior;
 
 void setImageBackground(char* imagePath);
-
 void updateBackground();
-
-
-
 
 //-------------- HUD ---------------//
 Texture2D vida;
+Texture2D arrow;
+Texture2D parede;
+Texture2D piso;
+Texture2D armadilha;
+Font font;
 
-void setVidaSprite(char* spritePath);
-void drawHUD(int quantidadeVida);
+void setTexture(Texture* texture, char* spritePath, int altura, int largura);
+void setTextureCropped(Texture* texture, char* spritePath, Rectangle crop);
+void setFont(char* fontPath);
+
+
+void drawHUD(int quantidadeVida, int quantidadeArrow);
 
 
 #endif

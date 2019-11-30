@@ -1,164 +1,169 @@
 #include <raylib.h>
 #include "../../lib/personagem.h"
+#include "../../lib/inimigo.h"
 #include "../../lib/movimenta.h"
 #include "../../lib/tela.h"
-
 
 #include "../telaPausa.c"
 
 #define TEMPO_INVULNERAVEL 2
-
-bool isPaused = false;
-
 int count = 0;
 int tempoInvunerabilidade = TEMPO_INVULNERAVEL;
 
-void fase_3();
-void draw_fase_3(Camera2D* cam,Personagem* xala, Texture2D piso, Rectangle MAPA[], Rectangle ARMADILHAS[], int tamMapa);
-void logica_fase_3(Camera2D* cam,Personagem* xala, Rectangle MAPA[], Rectangle ARMADILHA[], int tamMapa);
+bool isPaused;
+bool isRestarting;
 
-void drawMapa(Texture2D piso, Rectangle MAPA[],int tamMapa);
+void fase_3();
+void draw_fase_3(Camera2D* cam, Personagem* xala,Rectangle PAREDES[], Rectangle PISO[], Rectangle ARMADILHAS[]);
+void logica_fase_3(Camera2D* cam,Personagem* xala, Rectangle PAREDES[], Rectangle ARMADILHA[]);
+void drawParedes(Rectangle PAREDES[]);
+void drawPiso(Rectangle PISO[]);
 void drawArmadilhas(Rectangle ARMADILHAS[]);
 
+Rectangle frameRec;
+int currentFrame;
+int frameCount;
+
+Inimigo inimigo;
+Projetil bala;
+Color corInimigo = YELLOW;
+
+
+//Função responsável por representar a Fase 3
 void fase_3() {
 
-    Rectangle MAPA[] = {
-        -32, 0, 32, 448,
-        -32, -32, 960, 32,
-        -32, 448, 288, 32,
+    Rectangle PAREDES[] = {
+        -32, 0, 32, 256,
         256, 0, 32, 256,
-        256, 352, 32, 704,
-        -32, 1024, 288, 32,
-        -32, 1056, 32, 736,
-        -32, 1792, 288, 32,
-        128, 1664, 288, 32,
-        128, 1184, 32, 480,
-        128, 1152, 352, 32,
-        224, 1824, 32, 448,
-        256, 2240, 800, 32,
-        416, 1664, 640, 32,
-        1056, 1856, 32, 416,
-        544, 1824, 256, 256,
-        480, 128, 32, 1056,
-        800, 128, 32, 1056,
-        512, 128, 288, 32,
-        928, -32, 288, 32,
-        1216, -32, 32, 320,
-        992, 128, 32, 896,
-        1024, 128, 32, 896,
-        1248, 256, 416, 32,
-        1664, -32, 32, 320,
-        2208, -32, 32, 320,
-        1664, -64, 576, 32,
-        1056, 448, 576, 32,
-        1632, 448, 32, 96,
-        1632, 544, 32, 288,
-        1056, 992, 192, 32,
-        1248, 736, 32, 288,
-        1248, 704, 352, 32,
-        1568, 736, 32, 832,
-        992, 1152, 64, 320,
-        1056, 1152, 224, 32,
-        1248, 1184, 32, 384,
-        1280, 1536, 288, 32,
-        800, 1184, 32, 480,
-        992, 1472, 192, 32,
-        1152, 1504, 32, 192,
-        1184, 1664, 480, 32,
-        1632, 832, 32, 832,
-        1696, 256, 352, 32,
-        2208, 288, 352, 32,
-        2208, 800, 352, 32,
-        2528, 320, 32, 480,
-        2208, 512, 32, 288,
-        2208, 832, 32, 448,
-        2528, 832, 32, 736,
-        2208, 1536, 320, 32,
-        2208, 1440, 32, 96,
-        2208, 1568, 32, 576,
-        2528, 1568, 32, 864,
-        2208, 2336, 32, 96,
-        2240, 2400, 288, 32,
-        1792, 576, 32, 960,
-        2048, 576, 32, 960,
-        1792, 544, 288, 32,
-        1792, 1536, 288, 32,
-        1088, 1856, 576, 32,
-        1248, 1888, 32, 544,
-        1280, 2400, 928, 32,
-        1632, 2144, 32, 256,
-        1632, 1888, 32, 96,
-        1440, 1888, 32, 384,
-        1792, 1856, 32, 416,
-        2048, 1856, 32, 416,
-        1792, 1824, 288, 32,
-        1792, 2272, 288, 32,
+        -32, -32, 320, 32,
+        -32, 256, 320, 32,
     };
-    int tamMapa = sizeof(MAPA)/sizeof(Rectangle);
+
+    Rectangle PISO[] = {
+        0, 0, 256, 256,
+    };
 
     Rectangle ARMADILHAS[] = {
         50, 100, 20, 20,
     };
 
-    setVidaSprite("resources/images/heart pixel art 254x254.png");
-    Texture2D piso = LoadTexture("resources/images/ciano.png");
+    setTextureCropped(&piso, "resources/images/full.png", (Rectangle){960,64,32,32 });
+    setTextureCropped(&parede, "resources/images/floortileset.png", (Rectangle){32,128,32,32 });
+    setTextureCropped(&armadilha, "resources/images/full.png", (Rectangle){1920,160,128,32 });
+
+    frameRec = (Rectangle){ 0.0f, 0.0f, (float)armadilha.width/4, (float)armadilha.height };
+
+
+    inimigo = inimigoContructor();
+    inimigo.position = (Vector2){200,200};
+    inimigo.altura = 20;
+    inimigo.largura = 20;
+    inimigo.range = (Circle) {inimigo.position.x + (inimigo.largura/2), inimigo.position.y + (inimigo.altura/2), 100};
+
+    Image temp = LoadImage("resources/images/Flechas.png");
+    ImageCrop(&temp,(Rectangle){0,0,64,64});
+    bala.textura = LoadTextureFromImage(temp);
+    UnloadImage(temp);
 
     Personagem xala;
     xala = personagemConstructor();
-    xala.posicao = (Vector2){10,10};
+    xala.position = (Vector2){10,10};
     xala.altura = 20;
     xala.largura = 20;
 
     Camera2D cam;
     cam.zoom = 1;
     cam.rotation = 0;
-    cam.target = xala.posicao;
+    cam.target = xala.position;
     cam.offset = (Vector2){0,0};
     cam.offset = (Vector2){tela.width/2 , tela.height/2};
     int largura = 32, altura = 32;
 
+    isPaused = false;
+    isRestarting = false;
+
     while(telaAtual == TELA_FASE_3) {
-        draw_fase_3(&cam, &xala, piso, MAPA, ARMADILHAS, tamMapa);
-        logica_fase_3(&cam, &xala, MAPA, ARMADILHAS, tamMapa);
+        
+        if(isPaused) {
+            telaPausa(&isPaused, &isRestarting);
+        } else {
+            draw_fase_3(&cam, &xala, PAREDES, PISO, ARMADILHAS);
+            logica_fase_3(&cam, &xala, PAREDES, ARMADILHAS); 
+        }
+
+        if(isRestarting) {
+            break;
+        }
     }
 
 }
 
-void draw_fase_3(Camera2D* cam, Personagem* xala, Texture2D piso, Rectangle MAPA[], Rectangle ARMADILHAS[], int tamMapa) {
+//Função responsável por exibir a Fase 3
+void draw_fase_3(Camera2D* cam, Personagem* xala, Rectangle PAREDES[], Rectangle PISO[], Rectangle ARMADILHAS[]) {
     
     BeginDrawing();
         BeginMode2D(*cam);
 
-            ClearBackground(GRAY);
+            ClearBackground(BLACK);
 
+            drawPiso(PISO);
             drawArmadilhas(ARMADILHAS);
-            drawMapa(piso, MAPA, tamMapa);
-            DrawRectangle(xala->posicao.x, xala->posicao.y, xala->largura, xala->altura, RED);            
+            drawParedes(PAREDES);
+
+            if(inimigo.vida > 0) {
+                DrawCircle(inimigo.range.centerX, inimigo.range.centerY, inimigo.range.radius, PURPLE);
+                DrawRectangleV(inimigo.position, (Vector2) {inimigo.largura, inimigo.altura}, corInimigo);
+            }
+            
+            
+
+            DrawTexturePro(bala.textura,
+                (Rectangle){0,28,64,8},
+                (Rectangle){
+                    bala.posicao.x,
+                    bala.posicao.y,
+                    64, 6},
+                (Vector2){48,2},
+                bala.angulo,WHITE);
+
+                DrawCircle(
+                    (GetMouseX() -cam->offset.x),
+                    (GetMouseY() -cam->offset.y),
+                    5,PURPLE);
+
+            
+            
+
+            DrawRectangleRec(xala->linhaColisaoCima,colideCima);
+            DrawRectangleRec(xala->linhaColisaoBaixo,colideBaixo);
+            DrawRectangleRec(xala->linhaColisaoEsquerda,colideEsq);
+            DrawRectangleRec(xala->linhaColisaoDireita,colideDir);
 
         EndMode2D();
 
-        DrawText(FormatText("Vida: %i", xala->vida), 10,40,20, YELLOW);
-        DrawText(FormatText("Contador: %i", count), 10,60,20, YELLOW);
-        DrawText(FormatText("Tempo Invulnerável: %i", tempoInvunerabilidade), 10,80,20, YELLOW);
-
-        drawHUD(xala->vida);
-
-        if(isPaused) telaPausa(&isPaused);
+        drawHUD(xala->vida, 4);
+        DrawText(FormatText("VIDA INIMIGO: %i", inimigo.vida), 0, 100, 20, RED);
 
     EndDrawing();
 }
 
-void logica_fase_3(Camera2D* cam,Personagem* xala, Rectangle MAPA[], Rectangle ARMADILHA[], int tamMapa) {
+//Função responsável pela lógica da Fase 3
+void logica_fase_3(Camera2D* cam,Personagem* xala, Rectangle PAREDES[], Rectangle ARMADILHA[]) {
+    
+    if(IsKeyPressed(KEY_P)) {
+        isPaused = !isPaused;
+    }
+
     if(xala->vida < 1) {
+        previousScreen = telaAtual;
         telaAtual = TELA_FRACASSO;
     }
     
-    if(IsKeyDown(KEY_ESCAPE)) isPaused = true;
-    movimentar(xala);
-    colisaoPersonagem(xala, MAPA, tamMapa);
-    cam->target = xala->posicao;
+    movimentar(xala, PAREDES);
+    cam->target = xala->position;
 
-    if(CheckCollisionPointRec(xala->posicao, ARMADILHA[0]) && !(xala->invulneravel)) {
+    //------------Logica do INVULNERABILIDADE--------------
+    if(CheckCollisionPointRec(xala->position, ARMADILHA[0]) && !(xala->invulneravel)) {
          xala->vida--;
          xala->invulneravel = !(xala->invulneravel);
     }
@@ -175,31 +180,110 @@ void logica_fase_3(Camera2D* cam,Personagem* xala, Rectangle MAPA[], Rectangle A
         xala->invulneravel = !(xala->invulneravel);
         tempoInvunerabilidade = TEMPO_INVULNERAVEL;
     }
+    //---------------------------------------------------
 
-    if(IsKeyDown(KEY_PAGE_UP)) cam->zoom += 0.01;    // Temporario
-    if(IsKeyDown(KEY_PAGE_DOWN)) cam->zoom -= 0.01;
 
+    //--------Logica do ANIMAÇÃO SPRITE LAVA----------
+    frameCount++;
+    if (frameCount >= (60))
+    {
+        frameCount = 0;
+        currentFrame++;
+
+        if (currentFrame > 4) currentFrame = 0;
+
+        frameRec.x = (float)currentFrame*(float)armadilha.width/4;
+    }
+    //-------------------------------------------
+
+
+
+    //------------Logica do Projetil--------------
+    if(IsMouseButtonDown(MOUSE_LEFT_BUTTON))
+    {
+        bala.ativa = 1;
+        mira(*xala,&bala,*cam);
+        atira(*xala,&bala);
+    }
+    if(bala.velocidade.x == 0 && bala.velocidade.y == 0){
+        bala.ativa = 0;
+    }
+    if(bala.ativa){
+        atualizaProjetil(&bala);
+        aplicarAtritoProjetil(&bala,1.5);
+        colisaoProjetil(&bala,PAREDES);
+    }
+    //---------------------------------------------
+
+    //------------Logica do Inimigo--------------
+    inimigo.range = (Circle) {inimigo.position.x + (inimigo.largura/2), inimigo.position.y + (inimigo.altura/2), 100};
+
+    if(CheckCollisionCircleRec(
+        (Vector2) { inimigo.range.centerX,  inimigo.range.centerY}, 
+        inimigo.range.radius,
+        (Rectangle) {xala->position.x, xala->position.y, xala->largura, xala->altura}
+    ))
+    {
+        corInimigo = RED;
+        if(inimigo.position.x > xala->position.x) {
+            inimigo.position.x--;
+        }
+        if(inimigo.position.x < xala->position.x) {
+            inimigo.position.x++;
+        }
+        if(inimigo.position.y > xala->position.y) {
+            inimigo.position.y--;
+        }
+        if(inimigo.position.y < xala->position.y) {
+            inimigo.position.y++;
+        }
+    } else {
+        corInimigo = YELLOW;
+    }
+    //---------------------------------------------
+
+    //------------Logica do Colisão Bala contra Inimigo--------------
+    if(CheckCollisionPointRec(
+        bala.posicao, 
+        (Rectangle) {inimigo.position.x, inimigo.position.y, inimigo.largura, inimigo.altura}
+    ) && bala.ativa == true)
+    {
+        inimigo.vida--;
+        bala.ativa = false;
+    }
+    //---------------------------------------------
 }
 
-void drawMapa(Texture2D piso, Rectangle MAPA[], int tamMapa) {
-    for(int i = 0; i < tamMapa; i++){
+//Função responsável por incluir as delimitações da Fase 3
+void drawParedes(Rectangle PAREDES[]) {
+    for(int i = 0; i < TAM_MAPA1; i++){
                 
-        DrawRectangleRec(MAPA[i],BLACK);
+        DrawRectangleRec(PAREDES[i],RED);
         
-        DrawTexturePro(piso,
-            (Rectangle){0,0,MAPA[i].width,MAPA[i].height},
-            MAPA[i],
+        DrawTexturePro(parede,
+            (Rectangle){0,0,PAREDES[i].width,PAREDES[i].height},
+            PAREDES[i],
             (Vector2){0,0},
-            0,WHITE
+            0,BROWN
         );
         
     }
 }
 
-void drawArmadilhas(Rectangle ARMADILHAS[]) {
-    for(int i = 0; i < 4; i++){
-                
-        DrawRectangleRec(ARMADILHAS[i],BLACK);
+//Função responsável por incluir as delimitações da Fase 3
+void drawPiso(Rectangle PISO[]) {     
+    for(int posX = 0; posX < PISO[0].width; posX+=32) {
+        for (int posY = 0; posY < PISO[0].height; posY+=32)
+        {
+            DrawTexture(piso,posX, posY,WHITE);
+        }
         
+    }
+}
+
+//Função responsável por incluir as armadilhas da Fase 3
+void drawArmadilhas(Rectangle ARMADILHAS[]) {
+    for(int i = 0; i < 1; i++){
+        DrawTextureRec(armadilha, frameRec, (Vector2) {ARMADILHAS[i].x,ARMADILHAS[i].y}, WHITE);
     }
 }
