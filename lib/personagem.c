@@ -1,6 +1,7 @@
 #include "personagem.h"
 #include "tela.h"
 #include "movimenta.h"
+#include "define.h"
 #include <math.h>
 
 

@@ -60,7 +60,7 @@ void logicaBotoesConfiguracao(Rectangle botoes[]) {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
             PlaySound(somBotao);
-            telaAtual = previousScreen;
+            telaAtual = telaAnterior;
         }
     }
 }

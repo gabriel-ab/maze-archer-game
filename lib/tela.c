@@ -44,15 +44,6 @@ void verificarTamanhoTela(){
     }
 }
 
-void redimensionarTela() {
-    if(IsWindowResized()) {
-        tela.width = GetScreenWidth();
-        tela.height = GetScreenHeight();
-        updateBackground();
-        atualizarPosicaoBotoes();
-    }
-}
-
 //-------------- BACKGROUND ---------------//
 void setImageBackground(char* imagePath) {
     pathImageBackground = imagePath;
@@ -68,6 +59,20 @@ void updateBackground() {
 
 //-------------- HUD ---------------//
 
+void drawHUD(int quantidadeVida, int quantidadeArrow){
+    for (int i = 0; i < quantidadeVida; i++)
+    {
+        DrawTexture(vida, 10+35*i, 10, GRAY);
+    }
+
+    for (int i = 0; i < quantidadeArrow; i++)
+    {
+        DrawTexture(arrow, 10+35*i, 50, GRAY);
+    }
+}
+
+//-------------- TEXTURE ---------------//
+
 void setTexture(Texture* texture, char* spritePath, int altura, int largura) {
     Image imagem =  LoadImage(spritePath);
     ImageResize(&imagem, largura , altura);
@@ -82,19 +87,9 @@ void setTextureCropped(Texture* texture, char* spritePath, Rectangle crop) {
     UnloadImage(imagem);
 }
 
+//-------------- FONT ---------------//
+
 void setFont(char* fontPath) {
     font = LoadFont(fontPath);
 }
 
-
-void drawHUD(int quantidadeVida, int quantidadeArrow){
-    for (int i = 0; i < quantidadeVida; i++)
-    {
-        DrawTexture(vida, 10+35*i, 10, GRAY);
-    }
-
-    for (int i = 0; i < quantidadeArrow; i++)
-    {
-        DrawTexture(arrow, 10+35*i, 50, GRAY);
-    }
-}

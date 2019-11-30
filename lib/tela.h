@@ -26,7 +26,6 @@ bool is_fullscreen = false;
 void telaCheia();
 void atualizarCamera(Camera2D *cam, Vector2 posicao);
 void verificarTamanhoTela();
-void redimensionarTela();
 
 //-------------- BACKGROUND ---------------//
 Texture2D background;
@@ -37,19 +36,24 @@ void setImageBackground(char* imagePath);
 void updateBackground();
 
 //-------------- HUD ---------------//
+
+void drawHUD(int quantidadeVida, int quantidadeArrow);
+
+//-------------- TEXTURE ---------------//
+
 Texture2D vida;
 Texture2D arrow;
 Texture2D parede;
 Texture2D piso;
 Texture2D armadilha;
-Font font;
 
 void setTexture(Texture* texture, char* spritePath, int altura, int largura);
 void setTextureCropped(Texture* texture, char* spritePath, Rectangle crop);
+
+//-------------- FONT ---------------//
+Font font;
+
 void setFont(char* fontPath);
-
-
-void drawHUD(int quantidadeVida, int quantidadeArrow);
 
 
 #endif

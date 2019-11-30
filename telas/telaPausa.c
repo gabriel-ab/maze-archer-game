@@ -19,7 +19,7 @@ void telaPausa(bool* isPaused, bool* isRestarting) {
         while (telaAtual == TELA_CONFIG)
         {
             if(IsKeyPressed(KEY_P)) {
-                telaAtual = previousScreen;
+                telaAtual = telaAnterior;
                 *isPaused = !(*isPaused);
             }
             telaConfiguracao();
@@ -72,7 +72,7 @@ void logicatelaPausa(bool *isPaused, bool* isRestarting, Rectangle botoes[]){
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
             PlaySound(somBotao);
-            previousScreen = telaAtual;
+            telaAnterior = telaAtual;
             telaAtual = TELA_CONFIG;
         }
     }
