@@ -1,4 +1,8 @@
-#include "../../lib/botoes.c"
+#include "../../lib/botoes.h"
+#include "../../lib/som.h"
+#include "../../lib/tela.h"
+#include "../../lib/define.h"
+#include "../../lib/data.h"
 
 void telaMenu();
 void drawTelaMenu(Texture2D background, Rectangle botoes[]);
@@ -40,6 +44,17 @@ void logicaBotoesMenu(Rectangle botoes[]) {
         {
             PlaySound(somBotao);
             telaAtual = TELA_FASE_1;
+            
+        }
+    }
+
+    //IR PARA TELA DE JOGO
+    if (CheckCollisionPointRec(GetMousePosition(), botoes[1]))
+    {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+        {
+            PlaySound(somBotao);
+            telaAtual = load();
             
         }
     }

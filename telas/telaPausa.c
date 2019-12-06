@@ -1,5 +1,6 @@
 #include "../lib/tela.h"
 #include "../lib/botoes.h"
+#include "../lib/som.h"
 
 void telaPausa(bool* isPaused, bool* isRestarting);
 void drawtelaPausa(Texture2D background, Rectangle botoes[]);
@@ -30,7 +31,7 @@ void telaPausa(bool* isPaused, bool* isRestarting) {
 
 void drawtelaPausa(Texture2D background, Rectangle botoes[]) {
     BeginDrawing();
-        ClearBackground(GRAY);
+        ClearBackground(BLACK);
 
         DrawTexture(background, 0, 0, WHITE);
 

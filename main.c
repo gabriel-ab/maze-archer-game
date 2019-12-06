@@ -12,7 +12,9 @@
 #include "telas/menu/configuracao.c"
 #include "telas/fases/fase1.c"
 #include "telas/fases/fase_3.c"
+#include "telas/fases/fase_4.c"
 #include "telas/telaFracasso.c"
+#include "telas/telaPausa.c"
 
 
 int main(){
@@ -45,7 +47,7 @@ int main(){
     
     SetTargetFPS(60);
 
-    telaAtual = TELA_FASE_3;
+    telaAtual = TELA_MENU;
 
     while (jogo_rodando) 
     {
@@ -68,6 +70,10 @@ int main(){
 
         while(telaAtual == TELA_FASE_3) {
             fase_3();
+        }
+
+        while(telaAtual == TELA_FASE_4) {
+            fase_4();
         }
     }
     

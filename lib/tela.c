@@ -73,7 +73,7 @@ void drawHUD(int quantidadeVida, int quantidadeArrow){
 
 //-------------- TEXTURE ---------------//
 
-void setTexture(Texture* texture, char* spritePath, int altura, int largura) {
+void setTexture(Texture* texture, char* spritePath, int largura, int altura) {
     Image imagem =  LoadImage(spritePath);
     ImageResize(&imagem, largura , altura);
     *texture = LoadTextureFromImage(imagem);
@@ -91,5 +91,16 @@ void setTextureCropped(Texture* texture, char* spritePath, Rectangle crop) {
 
 void setFont(char* fontPath) {
     font = LoadFont(fontPath);
+}
+
+
+// ------------- CÂMERA ----------- //
+void setTargetCamera(Personagem *target)
+{
+    cam.zoom = 1.5;
+    cam.rotation = 0;
+    cam.target = target->posicao;
+    cam.offset = (Vector2){0,0};
+    cam.offset = (Vector2){tela.width/2 , tela.height/2};
 }
 

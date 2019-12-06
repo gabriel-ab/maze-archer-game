@@ -2,9 +2,10 @@
 #define TELA_H_INCLUDED
 
 #include <raylib.h>
+#include "personagem.h"
 
-#define LARGURA_TELA 800
-#define ALTURA_TELA 500
+#define LARGURA_TELA 1280
+#define ALTURA_TELA 720
 
 Rectangle tela = {100, 100, LARGURA_TELA, ALTURA_TELA};
 int larguraAnterior = 800;
@@ -19,6 +20,7 @@ typedef enum{
     TELA_MENU = 0,
     TELA_FASE_1 = 1,
     TELA_FASE_3 = 3,
+    TELA_FASE_4 = 4
 };
 
 bool is_fullscreen = false; 
@@ -46,6 +48,7 @@ Texture2D arrow;
 Texture2D parede;
 Texture2D piso;
 Texture2D armadilha;
+Texture2D portal;
 
 void setTexture(Texture* texture, char* spritePath, int altura, int largura);
 void setTextureCropped(Texture* texture, char* spritePath, Rectangle crop);
@@ -55,5 +58,7 @@ Font font;
 
 void setFont(char* fontPath);
 
-
+// ------------- CÂMERA ----------- //
+Camera2D cam;
+void setTargetCamera(Personagem *target);
 #endif
