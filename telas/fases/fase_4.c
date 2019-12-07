@@ -84,7 +84,7 @@ void draw_fase_4(Personagem* xala, Rectangle PAREDES[], Rectangle PISO[], Rectan
 
             ClearBackground(BLACK);
 
-            drawPiso(PISO, TAM_PISO_4, frameRec);
+            drawPiso(PISO, TAM_PISO_4);
             drawArmadilhas(ARMADILHAS, TAM_ARMADILHAS_4, frameRec);
             drawParedes(PAREDES, TAM_MAPA_4);
             DrawTextureRec(portal, frameRecPortal, (Vector2){2720, -1184}, RED);

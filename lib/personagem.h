@@ -20,7 +20,7 @@ typedef struct Personagem
     Rectangle linhaColisaoDireita;
     bool invulneravel;
     int vida;
-    int flechas;
+    int quantidadeFlechas;
 }Personagem;
 
 
