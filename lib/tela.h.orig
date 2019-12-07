@@ -4,8 +4,8 @@
 #include <raylib.h>
 #include "personagem.h"
 
-#define LARGURA_TELA 800
-#define ALTURA_TELA 500
+#define LARGURA_TELA 1280
+#define ALTURA_TELA 720
 
 Rectangle tela = {100, 100, LARGURA_TELA, ALTURA_TELA};
 int larguraAnterior = 800;
@@ -49,8 +49,11 @@ Texture2D arrow;
 Texture2D parede;
 Texture2D piso;
 Texture2D armadilha;
+<<<<<<< HEAD
 Texture2D xala;
+=======
 Texture2D portal;
+>>>>>>> cf471111cbcdcbfb097ab1d34af2364290d7872d
 
 void setTexture(Texture* texture, char* spritePath, int altura, int largura);
 void setTextureCropped(Texture* texture, char* spritePath, Rectangle crop);

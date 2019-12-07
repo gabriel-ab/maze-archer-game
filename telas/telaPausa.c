@@ -1,18 +1,24 @@
 #include "../lib/tela.h"
 #include "../lib/botoes.h"
+#include "../lib/som.h"
 
 void telaPausa(bool* isPaused, bool* isRestarting);
 void drawtelaPausa(Texture2D background, Rectangle botoes[]);
 void logicatelaPausa(bool* isPaused, bool* isRestarting, Rectangle botoes[]);
 
+Shader shader;
+
 void telaPausa(bool* isPaused, bool* isRestarting) {
     
     //pathImageBackgroundAnterior = pathImageBackground;
-    setImageBackground("resources/images/wallpaper.png");
-    updateBackground();
+    Image image = GetScreenData();
+    ImageColorContrast(&image, -40);
+    ImageColorBrightness(&image, -80);
+    setImageBackground(image);
+    setShader("resources/shaders/blur.fs");
     
     while(*isPaused) {
-
+        
         drawtelaPausa(background, getBotoesPausa());
         logicatelaPausa(isPaused, isRestarting, getBotoesPausa());
 
@@ -30,9 +36,11 @@ void telaPausa(bool* isPaused, bool* isRestarting) {
 
 void drawtelaPausa(Texture2D background, Rectangle botoes[]) {
     BeginDrawing();
-        ClearBackground(GRAY);
+        ClearBackground(BLACK);
 
-        DrawTexture(background, 0, 0, WHITE);
+        BeginShaderMode(shader);
+            DrawTexture(background, 0, 0, WHITE);
+        EndShaderMode();
 
         for (int i = 0; i < 4; i++)
         {
@@ -82,6 +90,8 @@ void logicatelaPausa(bool *isPaused, bool* isRestarting, Rectangle botoes[]){
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
+            setPathImageBackground("resources/images/wallpaper.png");
+            updateBackground();
             PlaySound(somBotao);
             telaAtual = TELA_MENU;
             *isPaused = !*isPaused;   

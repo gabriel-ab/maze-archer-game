@@ -20,7 +20,15 @@ void drawTelaConfiguracao(Texture2D background, Rectangle botoes[]) {
             
         ClearBackground(BLACK);
 
-        DrawTexture(background, 0, 0, WHITE);
+        if(isPaused) {
+            BeginShaderMode(shader);
+                DrawTexture(background, 0, 0, WHITE);
+            EndShaderMode();
+        } else {
+            DrawTexture(background, 0, 0, WHITE);
+        }
+
+        
 
         for (int i = 0; i < 3; i++)
         {

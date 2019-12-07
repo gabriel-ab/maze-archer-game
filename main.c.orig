@@ -47,7 +47,11 @@ int main(){
     
     SetTargetFPS(60);
 
+<<<<<<< HEAD
+    telaAtual = TELA_FASE_1;
+=======
     telaAtual = TELA_MENU;
+>>>>>>> cf471111cbcdcbfb097ab1d34af2364290d7872d
 
     while (jogo_rodando) 
     {
