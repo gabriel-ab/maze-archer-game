@@ -28,7 +28,6 @@ Rectangle vidaUpgrade = (Rectangle) {20, 20, 16, 16};
 //Função responsável por representar a Fase 3
 void fase_3()
 {
-
     Rectangle PAREDES[] = {
         -128, -160, 256, 32,
         -128, 128, 256, 32,
@@ -155,7 +154,6 @@ void fase_3()
     setTexture(&portal, "resources/images/portal.png",260, 160);
     //--------------------------------------------------//
 
-
     frameRec = (Rectangle) {0 ,0 ,30, 30};
     frameRecPortal = (Rectangle) {0 ,0 , portal.width/4, 160};
 
@@ -242,13 +240,13 @@ void logica_fase_3(Personagem* xala, Rectangle PAREDES[], Rectangle ARMADILHA[])
     }
 
     if(CheckCollisionPointRec(xala->posicao, vidaUpgrade) && isUpgradeNotGetted) {
-        vida_maxima++;
-        xala->vida = vida_maxima;
+        vida_maxima_xala++;
+        xala->vida = vida_maxima_xala;
         isUpgradeNotGetted = false;
     }
 
     if(CheckCollisionPointRec(xala->posicao, portalCollision)) {
-        save(TELA_FASE_4);
+        save(TELA_FASE_4, vida_maxima_xala, quantidade_maxima_flechas);
         telaAtual = TELA_FASE_4;
     }
     

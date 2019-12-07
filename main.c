@@ -1,5 +1,6 @@
 #include <string.h>
 #include <raylib.h>
+#include<stdio.h>
 
 #include "lib/define.h"
 #include "lib/som.c"
@@ -52,7 +53,6 @@ int main(){
 
     while (jogo_rodando) 
     {
-
         while(telaAtual == TELA_MENU && jogo_rodando) {
             telaMenu();
             playMusic(1);

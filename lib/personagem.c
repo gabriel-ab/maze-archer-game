@@ -10,7 +10,7 @@ Personagem personagemConstructor() {
     //A FAZER Definir sprite para personagem principal
     //xala.sprite = LoadTexture("resources/DF_Actor.png");
     xala.invulneravel = false;
-    xala.vida = vida_maxima;
+    xala.vida = vida_maxima_xala;
     xala.velocidade = (Vector2){0,0};
     xala.posicao = (Vector2){0,0};
     xala.altura = 8;

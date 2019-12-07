@@ -6,7 +6,7 @@ Rectangle* getBotoesMenu() {
     {
         botoesMenu[i] = (Rectangle) {tela.width/2 - 100, tela.height/8*i + tela.height/2, 200, 50};
     }
-    return &botoesMenu;
+    return botoesMenu;
 }
 
 Rectangle* getBotoesConfiguracao() {
@@ -14,7 +14,7 @@ Rectangle* getBotoesConfiguracao() {
     {
         botoesConfiguracao[i] = (Rectangle) {tela.width/2 - 100, tela.height/8*i + tela.height/2, 200, 50};
     }
-    return &botoesConfiguracao;
+    return botoesConfiguracao;
 }
 
 
@@ -23,7 +23,7 @@ Rectangle* getBotoesPausa() {
     {
         botoesPausa[i] = (Rectangle) {tela.width/2 - 100, tela.height/8*i + tela.height/2, 200, 50};
     }
-    return &botoesPausa;
+    return botoesPausa;
 }
 
 Rectangle* getBotoesFracasso() {
@@ -31,7 +31,7 @@ Rectangle* getBotoesFracasso() {
     {
         botoesFracasso[i] = (Rectangle) {tela.width/2 - 100, tela.height/8*i + tela.height/1.4, 200, 50};
     }
-    return &botoesFracasso;
+    return botoesFracasso;
 }
 
 
