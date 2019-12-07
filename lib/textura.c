@@ -6,6 +6,8 @@ int timer(){
 
 }
 
-float framelarg(){
+//framelarg(Texture texture, int nlargura);{
+
 
 }
+
