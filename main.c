@@ -39,6 +39,7 @@ int main(){
     InitAudioDevice();
     setMusic("resources/soundtrack/epic.ogg");
     setSomBotao("resources/fx/setting click.wav");
+    setTiroFx("resources/fx/tiro.wav");
     PlayMusicStream(music);
 
     //HUD
@@ -54,10 +55,14 @@ int main(){
 
         while(telaAtual == TELA_MENU && jogo_rodando) {
             telaMenu();
+            playMusic(1);
+          
         }
 
         while(telaAtual == TELA_CONFIG) {
             telaConfiguracao();
+            playMusic(1);
+            
         }
 
         if(telaAtual == TELA_FRACASSO) {

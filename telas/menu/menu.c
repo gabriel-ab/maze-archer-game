@@ -64,7 +64,7 @@ void logicaBotoesMenu(Rectangle botoes[]) {
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
-            PlaySound(somBotao);
+            playFx(2);
             telaAnterior = telaAtual;
             telaAtual = TELA_CONFIG;
             
@@ -76,8 +76,7 @@ void logicaBotoesMenu(Rectangle botoes[]) {
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
-            PlaySound(somBotao);
-            while(IsSoundPlaying(somBotao)) {}
+            playFx(2);
             jogo_rodando = false;
             
         }

@@ -47,9 +47,15 @@ void logicaBotoesConfiguracao(Rectangle botoes[]) {
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
-            PlaySound(somBotao);
+            playFx(1);
             telaCheia();
             updateBackground();
+            if(is_fullscreen){
+               textButtonsConfiguracao[0] = "FULLSCREEN: ON";
+            }else{
+                textButtonsConfiguracao[0] = "FULLSCREEN: OFF";
+            }
+            
         }
     }
 
@@ -58,7 +64,18 @@ void logicaBotoesConfiguracao(Rectangle botoes[]) {
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
-            //A FAZER: CONFIGURA O BOTÃO MUTE
+            static bool mute = false;
+            playFx(1);
+            if(!mute){
+               textButtonsConfiguracao[1] = "MUTE: ON";
+               SetMasterVolume(0);
+               mute = true;
+            }else{
+                textButtonsConfiguracao[1] = "MUTE: OFF";
+                SetMasterVolume(100);
+                mute = false;
+            }
+            
         }
     }
 
@@ -67,7 +84,7 @@ void logicaBotoesConfiguracao(Rectangle botoes[]) {
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
-            PlaySound(somBotao);
+            playFx(1);
             telaAtual = telaAnterior;
         }
     }

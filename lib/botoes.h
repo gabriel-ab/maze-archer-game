@@ -16,7 +16,7 @@ Rectangle* getBotoesMenu();
 
 //BOTÕES DA TELA DE CONFIGURAÇÃO
 char *textButtonsConfiguracao[] = {
-    "FULLSCREEN",
+    "FULLSCREEN: ON",
     "MUTE: OFF",
     "BACK",
 };
