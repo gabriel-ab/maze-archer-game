@@ -45,8 +45,13 @@ void verificarTamanhoTela(){
 }
 
 //-------------- BACKGROUND ---------------//
-void setImageBackground(char* imagePath) {
+void setPathImageBackground(char* imagePath) {
     pathImageBackground = imagePath;
+}
+
+void setImageBackground(Image backgroundImage) {
+    background = LoadTextureFromImage(backgroundImage);
+    UnloadImage(backgroundImage);
 }
 
 void updateBackground() {
@@ -85,6 +90,12 @@ void setTextureCropped(Texture* texture, char* spritePath, Rectangle crop) {
     ImageCrop(&imagem, crop);
     *texture = LoadTextureFromImage(imagem);
     UnloadImage(imagem);
+}
+
+// ------------ SHADERS ----------- //
+
+void setShader(char* shaderPath){
+    shader = LoadShader(0, shaderPath);
 }
 
 //-------------- FONT ---------------//

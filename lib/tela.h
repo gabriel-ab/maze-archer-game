@@ -34,7 +34,8 @@ Texture2D background;
 char* pathImageBackground;
 char* pathImageBackgroundAnterior;
 
-void setImageBackground(char* imagePath);
+void setPathImageBackground(char* imagePath);
+void setImageBackground(Image backgroundImage);
 void updateBackground();
 
 //-------------- HUD ---------------//
@@ -52,6 +53,12 @@ Texture2D portal;
 
 void setTexture(Texture* texture, char* spritePath, int altura, int largura);
 void setTextureCropped(Texture* texture, char* spritePath, Rectangle crop);
+
+// ------------ SHADERS ----------- //
+
+Shader shader;
+
+void setShader();
 
 //-------------- FONT ---------------//
 Font font;

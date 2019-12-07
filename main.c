@@ -32,7 +32,7 @@ int main(){
     // EndDrawing();
     
     //BACKGROUND
-    setImageBackground("resources/images/wallpaper.png");
+    setPathImageBackground("resources/images/wallpaper.png");
     updateBackground();
     
     //AUDIO
