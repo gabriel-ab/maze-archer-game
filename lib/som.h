@@ -5,8 +5,12 @@
 
 Music music;
 Sound somBotao;
+Sound flecha;
 
 void setMusic(char* musicPath);
 void setSomBotao(char* somBotaoPath);
+void playFx(int fxNumber);
+void playMusic(int musicNumber);
+void setTiroFx(char* flechaPath);
 
 #endif

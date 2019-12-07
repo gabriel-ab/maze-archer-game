@@ -6,8 +6,5 @@ int timer(){
 
 }
 
-//framelarg(Texture texture, int nlargura);{
-
-
-}
+//framelarg(Texture texture, int nlargura);{}
 

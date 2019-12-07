@@ -120,9 +120,7 @@ void fase1()
         movimentar(&xala);
         colisaoPersonagem(&xala, parede, n_paredes);
         //------------Logica do Projetil--------------
-        if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON)){
-            playFx(3);
-        }
+        
         if(projetil_atual > -1)
         {
             if(IsMouseButtonDown(MOUSE_LEFT_BUTTON))
@@ -136,6 +134,7 @@ void fase1()
                 projetil_atual--;
             }
         }
+<<<<<<< HEAD
         
         for(int i = 0; i < n_projeteis; i++)
         {   
@@ -146,6 +145,14 @@ void fase1()
                 colisaoProjetil_mapa(&bala[i], parede, n_paredes);
                 colisaoProjetil_inimigo(&bala[i], inimigo, n_inimigos);
             }
+=======
+        if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON)){
+            playFx(3);
+        }
+        if(bala.velocidade.x == 0 && bala.velocidade.y == 0){
+            bala.ativa = 0;
+            
+>>>>>>> 34e7a55ce37927ecf3c75238279738e5a0a39830
         }
         
         if(bala[projetil_atual].velocidade.x == 0 && bala[projetil_atual].velocidade.y == 0 && bala[projetil_atual].ativa)
