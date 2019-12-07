@@ -46,6 +46,7 @@ Texture2D arrow;
 Texture2D parede;
 Texture2D piso;
 Texture2D armadilha;
+Texture2D xala;
 
 void setTexture(Texture* texture, char* spritePath, int altura, int largura);
 void setTextureCropped(Texture* texture, char* spritePath, Rectangle crop);
