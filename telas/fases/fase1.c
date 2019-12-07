@@ -112,6 +112,7 @@ void fase1()
     cam.offset = (Vector2){tela.width/2 , tela.height/2};
 
     SetTargetFPS(60);
+    double contadorInvulneravel =0;
     
     while(IsKeyUp(KEY_ESCAPE)){ 
 
@@ -167,10 +168,19 @@ void fase1()
         for( int i = 0; i < n_inimigos; i++)
         {
             atualizarPersonagem(&inimigo[i]);
-            inimigoAproxima(&inimigo[i], xala.posicao);
+            inimigoAproxima(&inimigo[i], &xala);
             
             colisaoPersonagem(&inimigo[i], parede, n_paredes);
-            // inimigoFoge(&inimigo[i], xala.posicao);
+            // inimigoFoge(&inimigo[i], xala);
+        }
+        //--------------INVUNERABILIDADE---------------
+        if(xala.invulneravel)
+        {
+            if(GetTime() -contadorInvulneravel > 2)
+            {
+                contadorInvulneravel =  GetTime();
+                xala.invulneravel = 0;
+            }
         }
 
         BeginDrawing();
@@ -220,18 +230,21 @@ void fase1()
                 DrawCircle(
                     (GetMouseX() -cam.offset.x),
                     (GetMouseY() -cam.offset.y),
-                    5,PURPLE);                
+                    5,PURPLE);
+                DrawCircleV(c,10,BROWN);
                 
             EndMode2D();
 
-            DrawText(FormatText("xala.posicao %.2f %.2f",xala.posicao.x, xala.posicao.y),10,150,20,YELLOW);
-            DrawText(FormatText("target %.2f %.2f",cam.target.x, cam.target.y),10,200,20,YELLOW);
-            DrawText(FormatText("offset %.2f %.2f",cam.offset.x, cam.offset.y),10,10,20,YELLOW);
-            DrawText(FormatText("vel %.2f %.2f",xala.velocidade.x, xala.velocidade.y),10,40,20,YELLOW);
-            DrawText(FormatText("zoom %.2f",cam.zoom),10,100,20,YELLOW);
-            DrawText(FormatText("Projetil atual %i",projetil_atual),10,130,20,YELLOW);
+            // DrawText(FormatText("xala.posicao %.2f %.2f",xala.posicao.x, xala.posicao.y),10,10,20,YELLOW);
+            // DrawText(FormatText("target %.2f %.2f",cam.target.x, cam.target.y),10,30,20,YELLOW);
+            // DrawText(FormatText("offset %.2f %.2f",cam.offset.x, cam.offset.y),10,50,20,YELLOW);
+            // DrawText(FormatText("vel %.2f %.2f",xala.velocidade.x, xala.velocidade.y),10,70,20,YELLOW);
+            // DrawText(FormatText("zoom %.2f",cam.zoom),10,90,20,YELLOW);
+            // DrawText(FormatText("Projetil atual %i",projetil_atual),10,130,20,YELLOW);
+            DrawText(FormatText("VIDA: %i",xala.vida),10,160,20,YELLOW);
+            DrawText(FormatText("invuneravel: %i",xala.invulneravel),10,200,20,YELLOW);
             
-            DrawText(FormatText("nparedes %i",n_pisos),10,350,20,YELLOW);
+            // DrawText(FormatText("nparedes %i",n_pisos),10,350,20,YELLOW);
         EndDrawing();
     }
     telaAtual = 0;

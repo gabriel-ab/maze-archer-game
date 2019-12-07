@@ -52,8 +52,8 @@ Personagem inimigoContructor() {
     inimigo.vida = 3;
     inimigo.velocidade = (Vector2){0,0};
     inimigo.posicao = (Vector2){0,0};
-    inimigo.altura = 8;
-    inimigo.largura = 12;
+    inimigo.altura = 32;
+    inimigo.largura = 32;
     inimigo.linhaColisaoCima = 
         (Rectangle){
             inimigo.posicao.x - inimigo.largura/2 +2, 
@@ -85,36 +85,80 @@ Personagem inimigoContructor() {
 }
 
 // Movimentação do inimigo para perseguir algo
-void inimigoAproxima(Personagem *inimigo, Vector2 coisa)
+void inimigoAproximaV(Personagem *inimigo, Vector2 coisa)
 {  
     int deltaY = coisa.y -inimigo->posicao.y;
     int deltaX = coisa.x -inimigo->posicao.x;
 
     float angulo = atan2(deltaY,deltaX);
 
-    distancia = sqrt(deltaY*deltaY + deltaX*deltaX);
-
-    if( sqrt(deltaY*deltaY + deltaX*deltaX) < 200 )
+    float distancia = sqrt(deltaY*deltaY + deltaX*deltaX);
+    
+    if( distancia < 14 )
     {
-        inimigo->velocidade.y = sin(angulo)*VEL_MAX_PERSONAGEM*0.6;
-        inimigo->velocidade.x = cos(angulo)*VEL_MAX_PERSONAGEM*0.6;
+        inimigo->velocidade.y = sin(angulo)*VELOCIDADE_XALA*0.8;
+        inimigo->velocidade.x = cos(angulo)*VELOCIDADE_XALA*0.8;
     }
 }
-
-void inimigoFoge(Personagem *inimigo, Vector2 coisa)
-{
-    int deltaY = coisa.y -inimigo->posicao.y;
-    int deltaX = coisa.x -inimigo->posicao.x;
+//Se aproxima de alguem e ataca se estiver proximo
+void inimigoAproxima(Personagem *inimigo, Personagem *fulano)
+{  
+    int deltaY = fulano->posicao.y -inimigo->posicao.y;
+    int deltaX = fulano->posicao.x -inimigo->posicao.x;
 
     float angulo = atan2(deltaY,deltaX);
-    
-    if( sqrt(deltaY*deltaY + deltaX*deltaX) < 14 )
+
+    float distancia = sqrt(deltaY*deltaY + deltaX*deltaX);
+
+    if( distancia < 15 ) 
     {
-        inimigo->velocidade.y = -sin(angulo)*VEL_MAX_PERSONAGEM;
-        inimigo->velocidade.x = -cos(angulo)*VEL_MAX_PERSONAGEM;
+        if(!fulano->invulneravel)
+        {
+            inimigoAtaca(inimigo, fulano);
+        }
+    }
+
+    else if( distancia < 150 )
+    {
+        inimigo->velocidade.y = sin(angulo)*VELOCIDADE_INIMIGO;
+        inimigo->velocidade.x = cos(angulo)*VELOCIDADE_INIMIGO;
     }
 }
 
+void inimigoFoge(Personagem *inimigo, Personagem *fulano)
+{
+    int deltaY = fulano->posicao.y -inimigo->posicao.y;
+    int deltaX = fulano->posicao.x -inimigo->posicao.x;
+
+    float angulo = atan2(deltaY,deltaX);
+
+    float distancia = sqrt(deltaY*deltaY + deltaX*deltaX);
+    
+    if( distancia < 150 )
+    {
+        inimigo->velocidade.y = -sin(angulo)*VELOCIDADE_INIMIGO;
+        inimigo->velocidade.x = -cos(angulo)*VELOCIDADE_INIMIGO;
+    }
+}
+
+void inimigoAtaca(Personagem *inimigo, Personagem *fulano)
+{
+    int deltaY = fulano->posicao.y -inimigo->posicao.y;
+    int deltaX = fulano->posicao.x -inimigo->posicao.x;
+
+    float angulo = atan2(deltaY,deltaX);
+
+    Vector2 pontoDeAtaque = {fulano->posicao.x + sin(angulo)*2, fulano->posicao.y + cos(angulo)*2};
+
+    c = pontoDeAtaque; //Temporario , para desenhar no programa
+    
+    if(CheckCollisionCircles(pontoDeAtaque, 10, fulano->posicao, 16))
+    {
+        fulano->vida--;
+        fulano->invulneravel = 1;
+    }
+    
+}
 // A FAZER
 void inimigoStandby(Personagem *fulano){
 

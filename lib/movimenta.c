@@ -15,22 +15,22 @@ void movimentar(Personagem *fulano){
     aplicarInercia(fulano);
     atualizarLinhasColisao(fulano);
     
-    if(fulano->velocidade.y > -VEL_MAX_PERSONAGEM)
+    if(fulano->velocidade.y > -VELOCIDADE_XALA)
     {
         if(IsKeyDown(KEY_W)) fulano->velocidade.y += -ACELERACAO;
     }
 
-    if(fulano->velocidade.y < VEL_MAX_PERSONAGEM)
+    if(fulano->velocidade.y < VELOCIDADE_XALA)
     {
         if(IsKeyDown(KEY_S)) fulano->velocidade.y += ACELERACAO;
     }
 
-    if(fulano->velocidade.x > -VEL_MAX_PERSONAGEM)
+    if(fulano->velocidade.x > -VELOCIDADE_XALA)
     {
         if(IsKeyDown(KEY_A)) fulano->velocidade.x += -ACELERACAO;
     }
 
-    if(fulano->velocidade.x < VEL_MAX_PERSONAGEM)
+    if(fulano->velocidade.x < VELOCIDADE_XALA)
     {
         if(IsKeyDown(KEY_D)) fulano->velocidade.x += ACELERACAO;
     }

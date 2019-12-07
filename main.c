@@ -45,7 +45,7 @@ int main(){
     
     SetTargetFPS(60);
 
-    telaAtual = TELA_FASE_3;
+    telaAtual = TELA_FASE_1;
 
     while (jogo_rodando) 
     {
