@@ -97,7 +97,11 @@ void fase1()
             mira(xala,&bala,cam);
             atira(xala,&bala);
         }
+        if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
+            playFx(4);
+        }
         if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON)){
+            StopSound(arco);
             playFx(3);
         }
         if(bala.velocidade.x == 0 && bala.velocidade.y == 0){

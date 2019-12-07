@@ -31,7 +31,7 @@ int main(){
     InitAudioDevice();
     setMusic("resources/soundtrack/epic.ogg");
     setSomBotao("resources/fx/setting click.wav");
-    setTiroFx("resources/fx/tiro.wav");
+    setTiroFx("resources/fx/arrow.wav", "resources/fx/arco.wav");
     PlayMusicStream(music);
     
     SetTargetFPS(60);
@@ -40,7 +40,7 @@ int main(){
 
     while (jogo_rodando) 
     {
-
+        
         while(telaAtual == TELA_MENU && jogo_rodando) {
             telaMenu();
             playMusic(1);
@@ -58,7 +58,7 @@ int main(){
         }
 
         if(telaAtual == TELA_FASE1) {
-            fase1();
+            fase1(); 
         }
 
         while(telaAtual == TELA_FASE_3) {
