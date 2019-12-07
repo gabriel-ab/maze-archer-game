@@ -5,14 +5,14 @@
 void telaCheia()
 {
     if(!is_fullscreen){
-        telaAnterior.width = GetScreenWidth();
-        telaAnterior.height = GetScreenHeight();
+        larguraAnterior = GetScreenWidth();
+        alturaAnterior = GetScreenHeight();
         SetWindowSize(GetMonitorWidth(0), GetMonitorHeight(0));
     }
     ToggleFullscreen();
 
     if(is_fullscreen){
-        SetWindowSize(telaAnterior.width, telaAnterior.height);
+        SetWindowSize(larguraAnterior, alturaAnterior);
         SetWindowPosition(tela.x, tela.y);
     }
     is_fullscreen = !is_fullscreen; 
@@ -20,33 +20,38 @@ void telaCheia()
     tela.width = GetScreenWidth();
     tela.height = GetScreenHeight();
 }
-// (Rectangle){tela.width/4, tela.height/4 ,tela.width/2, tela.height/2};
 
-//Se o foco sair do retangulo inserido A camera seguirá o foco
-//(WINDOWS) / (LINUX)
-void cameraSegueFocoRec(Camera2D *cam, Vector2 foco, Rectangle rec)
+void atualizarCamera(Camera2D *cam, Vector2 posicao)
 {
+    cam->target.x = 0.9*cam->target.x + 0.1*posicao.x;
+    cam->target.y = 0.9*cam->target.y + 0.1*posicao.y;
+
     #ifdef __WIN32
-        cam->target = foco;
-        if(foco.x + cam->offset.x < rec.x) cam->offset.x    += VEL_MAX_PERSONAGEM;
-        if(foco.y + cam->offset.y < rec.y) cam->offset.y    += VEL_MAX_PERSONAGEM;
-
-        if(foco.x + cam->offset.x > rec.x + rec.width) cam->offset.x    -= VEL_MAX_PERSONAGEM;
-        if(foco.y + cam->offset.y > rec.y + rec.height) cam->offset.y   -= VEL_MAX_PERSONAGEM;
-
-    #elif __linux__
-        if(foco.x + cam->target.x < rec.x) cam->target.x    -= VEL_MAX_PERSONAGEM;
-        if(foco.y + cam->target.y < rec.y) cam->target.y    -= VEL_MAX_PERSONAGEM;
-
-        if(foco.x + cam->target.x > rec.x + rec.width) cam->target.x    += VEL_MAX_PERSONAGEM;
-        if(foco.y + cam->target.y > rec.y + rec.height) cam->target.y   += VEL_MAX_PERSONAGEM;
+        cam->offset.x = tela.width/2  -cam->target.x;
+        cam->offset.y = tela.height/2 -cam->target.y;
     #endif
 }
 
+void verificarTamanhoTela(){
+    if(IsWindowResized())
+    {
+        tela.width = GetScreenWidth();
+        tela.height = GetScreenHeight();   
+
+        if(telaAtual == TELA_CONFIG || telaAtual == TELA_MENU){
+            updateBackground();
+        }
+    }
+}
 
 //-------------- BACKGROUND ---------------//
-void setImageBackground(char* imagePath) {
+void setPathImageBackground(char* imagePath) {
     pathImageBackground = imagePath;
+}
+
+void setImageBackground(Image backgroundImage) {
+    background = LoadTextureFromImage(backgroundImage);
+    UnloadImage(backgroundImage);
 }
 
 void updateBackground() {
@@ -59,17 +64,54 @@ void updateBackground() {
 
 //-------------- HUD ---------------//
 
-void setVidaSprite(char* spritePath){
-    Image vidaImage =  LoadImage(spritePath);
-    ImageResize(&vidaImage, 30 , 30);
-    vida = LoadTextureFromImage(vidaImage);
-    UnloadImage(vidaImage);
-}
-
-
-void drawHUD(int quantidadeVida){
+void drawHUD(int quantidadeVida, int quantidadeArrow){
     for (int i = 0; i < quantidadeVida; i++)
     {
         DrawTexture(vida, 10+35*i, 10, GRAY);
     }
+
+    for (int i = 0; i < quantidadeArrow; i++)
+    {
+        DrawTexture(arrow, 10+35*i, 50, GRAY);
+    }
 }
+
+//-------------- TEXTURE ---------------//
+
+void setTexture(Texture* texture, char* spritePath, int largura, int altura) {
+    Image imagem =  LoadImage(spritePath);
+    ImageResize(&imagem, largura , altura);
+    *texture = LoadTextureFromImage(imagem);
+    UnloadImage(imagem);
+}
+
+void setTextureCropped(Texture* texture, char* spritePath, Rectangle crop) {
+    Image imagem = LoadImage(spritePath);
+    ImageCrop(&imagem, crop);
+    *texture = LoadTextureFromImage(imagem);
+    UnloadImage(imagem);
+}
+
+// ------------ SHADERS ----------- //
+
+void setShader(char* shaderPath){
+    shader = LoadShader(0, shaderPath);
+}
+
+//-------------- FONT ---------------//
+
+void setFont(char* fontPath) {
+    font = LoadFont(fontPath);
+}
+
+
+// ------------- CÂMERA ----------- //
+void setTargetCamera(Personagem *target)
+{
+    cam.zoom = 1.5;
+    cam.rotation = 0;
+    cam.target = target->posicao;
+    cam.offset = (Vector2){0,0};
+    cam.offset = (Vector2){tela.width/2 , tela.height/2};
+}
+

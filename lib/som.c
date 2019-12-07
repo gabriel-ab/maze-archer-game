@@ -1,7 +1,8 @@
 #include "som.h"
 
-void setMusic(char* musicPath) {
+void setMusic(char* musicPath, char* cave) {
     music = LoadMusicStream(musicPath);
+    caveBG = LoadMusicStream(cave);
 }
 
 void setSomBotao(char* somBotaoPath) {
@@ -31,7 +32,7 @@ void playFx(int fxNumber){
     if(fxNumber == 3){
         PlaySound(flecha);
     }
-    
+    //SOM ARCO
     if(fxNumber == 4){
         PlaySound(arco);
     }
@@ -39,7 +40,28 @@ void playFx(int fxNumber){
 }
 //Musica de fundo
 void playMusic(int musicNumber){
+    //MUSICA MENU
     if(musicNumber == 1){
+        PlayMusicStream(music);
         UpdateMusicStream(music);
     }
+    //SOM DE FUNDO CAVERNA
+    if(musicNumber == 2){
+        SetMusicVolume(caveBG, 0.3);
+        UpdateMusicStream(caveBG);
+    }
+}
+
+void checkClickBow(int projetil_atual){
+        
+        if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && projetil_atual > -1){
+            playFx(4);
+        }
+        if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && projetil_atual > -1){
+            StopSound(arco);
+            playFx(3);
+            
+        }
+        
+    
 }

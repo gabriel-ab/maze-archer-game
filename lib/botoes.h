@@ -16,7 +16,7 @@ Rectangle* getBotoesMenu();
 
 //BOTÕES DA TELA DE CONFIGURAÇÃO
 char *textButtonsConfiguracao[] = {
-    "FULLSCREEN",
+    "FULLSCREEN: ON",
     "MUTE: OFF",
     "BACK",
 };
@@ -33,6 +33,15 @@ char *textButtonsPausa[] = {
 };
 Rectangle botoesPausa[4];
 Rectangle* getBotoesPausa();
+
+
+//BOTÕES DA TELA DE FRACASSO
+char *textButtonsFracasso[] = {
+    "RESTART",
+    "QUIT",
+};
+Rectangle botoesFracasso[2];
+Rectangle* getBotoesFracasso();
 
 
 void atualizarPosicaoBotoes();

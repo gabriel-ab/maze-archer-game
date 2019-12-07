@@ -8,17 +8,27 @@ void logicaBotoesConfiguracao(Rectangle botoes[]);
 
 //TELA DE CONFIGURAÇÃO
 void telaConfiguracao() {
+    
     drawTelaConfiguracao(background, getBotoesConfiguracao());
     logicaBotoesConfiguracao(getBotoesConfiguracao());
-    
+
+    verificarTamanhoTela();
 }
 
 void drawTelaConfiguracao(Texture2D background, Rectangle botoes[]) {
     BeginDrawing();
             
-        ClearBackground(RAYWHITE);
+        ClearBackground(BLACK);
 
-        DrawTexture(background, 0, 0, WHITE);
+        if(isPaused) {
+            BeginShaderMode(shader);
+                DrawTexture(background, 0, 0, WHITE);
+            EndShaderMode();
+        } else {
+            DrawTexture(background, 0, 0, WHITE);
+        }
+
+        
 
         for (int i = 0; i < 3; i++)
         {
@@ -39,9 +49,17 @@ void logicaBotoesConfiguracao(Rectangle botoes[]) {
         {
             playFx(1);
             telaCheia();
+            updateBackground();
+            if(is_fullscreen){
+               textButtonsConfiguracao[0] = "FULLSCREEN: ON";
+            }else{
+                textButtonsConfiguracao[0] = "FULLSCREEN: OFF";
+            }
+            
         }
     }
-    
+
+    // DEIXAR O JOGO SEM SOM
     if(CheckCollisionPointRec(GetMousePosition(), botoes[1])) 
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
@@ -67,7 +85,7 @@ void logicaBotoesConfiguracao(Rectangle botoes[]) {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
             playFx(1);
-            telaAtual = TELA_MENU;
+            telaAtual = telaAnterior;
         }
     }
 }
