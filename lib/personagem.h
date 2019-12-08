@@ -2,10 +2,24 @@
 #define PERSONAGEM_H_INCLUDED
 
 #define VELOCIDADE_XALA 2
-#define VELOCIDADE_INIMIGO 2
+#define VELOCIDADE_INIMIGO 1.5
 
 #include <raylib.h>
+
+typedef enum{
+    INIMIGO_DE_BOA = 0,
+    INIMIGO_PISTOLA,
+    INIMIGO_AI_PAI_PARA
+};
+
 Vector2 c;
+
+typedef struct IA{
+    double contador;
+    Vector2 direcao;
+    float duracao;
+    int atual;
+}IA;
 
 typedef struct Personagem
 {
@@ -21,15 +35,19 @@ typedef struct Personagem
     bool invulneravel;
     int vida;
     int flechas;
+    IA acao;
 }Personagem;
 
 
 Personagem personagemConstructor();
-void inimigoAproximaV(Personagem *inimigo, Vector2 coisa);
-void inimigoAproxima(Personagem *inimigo, Personagem *fulano);
-void inimigoFoge(Personagem *inimigo, Personagem *fulano);
-void inimigoAtaca(Personagem *inimigo, Personagem *fulano);
 
+void inimigoSegue(Personagem *inimigo, Vector2 coisa);
+
+void inimigoPistola(Personagem *inimigo, Personagem *fulano);
+void inimigoFoge(Personagem *inimigo, Personagem *fulano);
+void inimigoStandBy(Personagem *inimigo, Personagem *fulano);
+
+void logicaInimigo(Personagem *inimigo, Personagem *fulano);
 
 #endif
 

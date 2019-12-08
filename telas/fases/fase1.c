@@ -12,9 +12,7 @@ void fase1();
 
 void fase1()
 {
-    // InitWindow(800,600,"JOGO"); //temporario
-    
-    Rectangle parede[] = {
+        Rectangle parede[] = {
         -256, -256, 32, 512,
         -224, -256, 352, 32,
         -224, 224, 352, 32,
@@ -96,10 +94,10 @@ void fase1()
     xala.altura = 20;
     xala.largura = 20;
 
-    Personagem inimigo[2];
+    Personagem inimigo[10];
     int n_inimigos = sizeof(inimigo)/sizeof(Personagem);
 
-    for(int i = 0; i < 2; i++)
+    for(int i = 0; i < n_inimigos; i++)
     {
         inimigo[i] = inimigoContructor();
         inimigo[i].posicao = (Vector2){GetRandomValue(-200,200), GetRandomValue(-200,200)};
@@ -170,11 +168,10 @@ void fase1()
         //----------Atualização dos inimigos-----------
         for( int i = 0; i < n_inimigos; i++)
         {
-            atualizarPersonagem(&inimigo[i]);
-            inimigoAproxima(&inimigo[i], &xala);
-            
+            logicaInimigo(&inimigo[i],&xala);
+
             colisaoPersonagem(&inimigo[i], parede, n_paredes);
-            // inimigoFoge(&inimigo[i], xala);
+            atualizarPersonagem(&inimigo[i]);
         }
         //--------------INVUNERABILIDADE---------------
         if(xala.invulneravel)
@@ -234,7 +231,7 @@ void fase1()
                     (GetMouseX() -cam.offset.x),
                     (GetMouseY() -cam.offset.y),
                     5,PURPLE);
-                DrawCircleV(c,10,BROWN);
+                DrawCircleV(c,10,BROWN); //Temporario visualização do hitbox do inimigo
                 
             EndMode2D();
 
@@ -246,10 +243,10 @@ void fase1()
             // DrawText(FormatText("Projetil atual %i",projetil_atual),10,130,20,YELLOW);
             DrawText(FormatText("VIDA: %i",xala.vida),10,160,20,YELLOW);
             DrawText(FormatText("invuneravel: %i",xala.invulneravel),10,200,20,YELLOW);
+            DrawText(FormatText("contador: %i",inimigo[0].acao.contador),10,240,20,YELLOW);
             
             // DrawText(FormatText("nparedes %i",n_pisos),10,350,20,YELLOW);
         EndDrawing();
     }
     telaAtual = 0;
-    // CloseWindow(); //temporario
 }
