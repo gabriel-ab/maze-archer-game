@@ -19,6 +19,7 @@ typedef enum{
     TELA_CONFIG = -1,
     TELA_MENU = 0,
     TELA_FASE_1 = 1,
+    //TELA_FASE_2 = 2, SO VOU ATIVAR QUANDO TIVER UM PADRÃO DE FASE
     TELA_FASE_3 = 3,
     TELA_FASE_4 = 4
 };

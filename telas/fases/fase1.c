@@ -114,13 +114,21 @@ void fase1()
     double contadorInvulneravel =0;
     
     while(IsKeyUp(KEY_ESCAPE)){ 
-
+       
+        playMusic(2);
+       
         movimentar(&xala);
         colisaoPersonagem(&xala, parede, n_paredes);
         //------------Logica do Projetil--------------
-        if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON)){
-            playFx(3);
+
+        /*if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && projetil_atual > -1){
+            playFx(4);
         }
+        if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && projetil_atual > -1){
+            StopSound(arco);
+            playFx(3);
+        }*/
+        checkClickBow(projetil_atual);
         if(projetil_atual > -1)
         {
             if(IsMouseButtonDown(MOUSE_LEFT_BUTTON))

@@ -1,4 +1,4 @@
-#include "../../lib/botoes.h"
+#include "../../lib/botoes.c"
 #include "../../lib/som.h"
 #include "../../lib/tela.h"
 #include "../../lib/define.h"
@@ -44,6 +44,7 @@ void logicaBotoesMenu(Rectangle botoes[]) {
         {
             PlaySound(somBotao);
             telaAtual = TELA_FASE_1;
+            StopMusicStream(music);
             
         }
     }

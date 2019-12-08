@@ -6,16 +6,17 @@
     #include "../../lib/personagem.h"
     #include "../../lib/movimenta.h"
     #include "../../lib/acao.h"
+    #include "../../lib/draw.c"
 #endif
 
-#define N_CAVEWALLS 31
-#define N_CAVEFLOOR 13
+#define TAM_MAPA_2 31 
+#define TAM_PISO_2 13
 void fase_cave1();
 
 void fase_cave1()
 {
     // InitWindow(800,600,"JOGO"); //temporario
-    Texture2D cave = LoadTexture("cave.png");
+    
     
     Rectangle PAREDE[] = {
         -256, -256, 32, 512,
@@ -66,6 +67,14 @@ void fase_cave1()
         2048, 128, 544, 608,
         2592, 576, 544, 160,  
     };
+    
+    //TEXTURA DO CENARIO
+    setTexture(&piso, "resources/images/chao_cav.png", 32, 32);
+    setTexture(&parede, "resources/images/pedra.png", 32, 32);
+    //----------------------------------------------------------//
+    
+    framerec = (rectangle){0,0, 32, 32};
+    
     Tiro bala;
 
     Personagem xala;
@@ -120,18 +129,9 @@ void fase_cave1()
             ClearBackground(GRAY);
 
             BeginMode2D(cam);
-
-                for(int i = 0; i < N_CAVEWALLS; i++){
-                    DrawRectangleRec(PAREDE[i],BLACK);
-                    
-                    
-                }
                 
-                for(int i = 0; i < N_CAVEFLOOR; i++){
-                    DrawRectangleRec(PISO[i],YELLOW);
-                    
-                    DrawTexturePro(cave, (Rectangle){0,0, PISO[i].width, PISO[i].height}, PISO[i], (Vector2){0, 0}, 0, WHITE);  
-                }
+                drawParedes(PAREDE, TAM_MAPA_2);
+                drawPiso(PISO, TAM_PISO_2, framerec);
                 
                 DrawCircleV(cam.target,10,RED);
                 DrawCircle(0,0,10,RED);
@@ -143,11 +143,11 @@ void fase_cave1()
                     (GetMouseY() -cam.offset.y),
                     5,PURPLE);
 
-                DrawRectangleRec(xala.linhaColisaoCima,colideCima);
-                DrawRectangleRec(xala.linhaColisaoBaixo,colideBaixo);
-                DrawRectangleRec(xala.linhaColisaoEsquerda,colideEsq);
-                DrawRectangleRec(xala.linhaColisaoDireita,colideDir);
-                
+                //DrawRectangleRec(xala.linhaColisaoCima,colideCima);
+                //DrawRectangleRec(xala.linhaColisaoBaixo,colideBaixo);
+                //DrawRectangleRec(xala.linhaColisaoEsquerda,colideEsq);
+                //DrawRectangleRec(xala.linhaColisaoDireita,colideDir);
+                drawXala(xala, count);
                 
             EndMode2D();
 
