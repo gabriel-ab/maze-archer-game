@@ -10,18 +10,21 @@
 #define TAM_MAPA_3 76
 #define TAM_PISO_3 19
 #define TAM_ARMADILHAS_3 15
+#define QTD_INIMIGO_3 60
 
 void fase_3();
-void draw_fase_3(Personagem* xala,Rectangle PAREDES[], Rectangle PISO[], Rectangle ARMADILHAS[]);
-void logica_fase_3(Personagem* xala, Rectangle PAREDES[], Rectangle ARMADILHA[]);
-
+void draw_fase_3(Personagem* xala, Personagem inimigos[], Projetil flechas[], Rectangle PAREDES[], Rectangle PISO[], Rectangle ARMADILHAS[]);
+void logica_fase_3(Personagem* xala, Personagem inimigo[], Projetil flecha[], Rectangle PAREDES[], Rectangle ARMADILHA[]);
+void set_posicao_inimigos(Personagem inimigos[]);
 
 Rectangle frameRecArmadilha;
 Rectangle frameRecPortal;
 Rectangle portalCollision;
 
-bool isUpgradeGetted;
 Rectangle vidaUpgrade;
+bool isUpgradeGetted;
+
+int projetil_atual;
 
 //Função responsável por representar a Fase 3
 void fase_3()
@@ -150,31 +153,71 @@ void fase_3()
     setTextureCropped(&paredeTexture, "resources/images/floortileset.png", (Rectangle){32,128,32,32 });
     setTextureCropped(&armadilhaTexture, "resources/images/full.png", (Rectangle){1920,160,128,32 });
     setTexture(&portalTexture, "resources/images/portal.png",260, 160);
+    setTextureCropped(&flechasTexture, "resources/images/Flechas.png", (Rectangle){0,0,64,64});
     //--------------------------------------------------//
+
 
     frameRecArmadilha = (Rectangle) {0 ,0 ,30, 30};
     frameRecPortal = (Rectangle) {0 ,0 , portalTexture.width/4, 160};
+
+
 
     ///Retangulo responsável por representar a parte
     ///que o personagem colide para passar de fase
     portalCollision = (Rectangle) {2740, -1145, 30, 60 };
 
+
+
     ///Retangulo responsável por representar o item que
     /// aumenta a vida máxima de xala
     vidaUpgrade = (Rectangle) {950, 990, 16, 16};
+    isUpgradeGetted = false;
 
+
+    
+    // ------------ XALA ------------ //
     Personagem xala;
     xala = personagemConstructor();
     xala.posicao = (Vector2){0, 0};
     xala.altura = 20;
     xala.largura = 20;
+    // ----------------------------- //
 
-    isUpgradeGetted = false;
-    isPaused = false;
-    isRestarting = false;
+
+
+    // ------------ INIMIGO ----------- //
+    Personagem inimigos[QTD_INIMIGO_3];
+
+    //Inicializando os inimigos
+    for(int i = 0; i < QTD_INIMIGO_3; i++)
+    {
+        inimigos[i] = inimigoContructor();
+    }
+    set_posicao_inimigos(inimigos);
+
+    // -------------------------------- //
+
+
+
+    // ------------FLECHA ------------ //
+    Projetil flechas[quantidade_maxima_flechas];
+
+    // indice da flecha
+    int projetil_atual = xala.quantidadeFlechas -1;
+
+    // Inicializando as flechas
+    for(int i = 0; i < quantidade_maxima_flechas; i++){
+        flechas[i].ativa = false;
+        flechas[i].textura = flechasTexture;
+    }
+    // -------------------------------- //
+
+
 
     setTargetCamera(&xala);
-    
+
+
+
     while(telaAtual == TELA_FASE_3) {
         
         if(isPaused) 
@@ -183,8 +226,8 @@ void fase_3()
 
         } else 
         {
-            draw_fase_3(&xala, PAREDES, PISO, ARMADILHAS);
-            logica_fase_3(&xala, PAREDES, ARMADILHAS); 
+            draw_fase_3(&xala, inimigos, flechas, PAREDES, PISO, ARMADILHAS);
+            logica_fase_3(&xala, inimigos, flechas, PAREDES, ARMADILHAS); 
         }
 
         if(isRestarting) 
@@ -200,7 +243,7 @@ void fase_3()
 }
 
 //Função responsável por exibir a Fase 3
-void draw_fase_3(Personagem* xala, Rectangle PAREDES[], Rectangle PISO[], Rectangle ARMADILHAS[]) {
+void draw_fase_3(Personagem* xala, Personagem inimigos[], Projetil flechas[], Rectangle PAREDES[], Rectangle PISO[], Rectangle ARMADILHAS[]) {
     
     BeginDrawing();
         BeginMode2D(cam);
@@ -211,24 +254,41 @@ void draw_fase_3(Personagem* xala, Rectangle PAREDES[], Rectangle PISO[], Rectan
             drawArmadilhasRec(ARMADILHAS, TAM_ARMADILHAS_3, frameRecArmadilha);
             drawParedes(PAREDES, TAM_MAPA_3);
             DrawTextureRec(portalTexture, frameRecPortal, (Vector2){2720, -1184}, RED);
-            
+            drawInimigos(inimigos, QTD_INIMIGO_3);
+
+
             if(!isUpgradeGetted) {
                 DrawTexture(vidaTexture, vidaUpgrade.x, vidaUpgrade.y,  WHITE);
             }
             
 
             drawXala(xala, count);
+            drawFlecha(flechas, xala->quantidadeFlechas);
+
+
+            // "Mira" do mouse
+            DrawCircle(
+                (GetMouseX() -cam.offset.x),
+                (GetMouseY() -cam.offset.y),
+                5,PURPLE
+            );
+
 
         EndMode2D();
 
-        drawHUD(xala->vida, 0);
+        DrawText(FormatText("xala.posicao %.2f %.2f",xala->posicao.x, xala->posicao.y),10,10,20,YELLOW);
+
+        drawHUD(xala->vida, projetil_atual+1);
 
     EndDrawing();
 }
 
 //Função responsável pela lógica da Fase 3
-void logica_fase_3(Personagem* xala, Rectangle PAREDES[], Rectangle ARMADILHA[]) {
+void logica_fase_3(Personagem* xala, Personagem inimigo[], Projetil flecha[], Rectangle PAREDES[], Rectangle ARMADILHA[]) {
     
+    playMusic(2);
+    HideCursor();
+
     if(IsKeyPressed(KEY_P)) {
         isPaused = !isPaused;
     }
@@ -251,15 +311,15 @@ void logica_fase_3(Personagem* xala, Rectangle PAREDES[], Rectangle ARMADILHA[])
     
 
 
-    // ----------- ATUALIZAÇÃO DE XALA -------------//
+    // -------------- ATUALIZAÇÃO DE XALA ---------------- //
     movimentar(xala);
     colisaoPersonagem(xala, PAREDES, TAM_MAPA_3);
     atualizarCamera(&cam, xala->posicao);
-    // ---------------------------------------------------//
+    // --------------------------------------------------- //
 
 
 
-    // ------------Logica do INVULNERABILIDADE-------------- //
+    // ------------ LÓGICA DA INVULNERABILIDADE -------------- //
     for (int i = 0; i < TAM_ARMADILHAS_3; i++)
     {
         if(CheckCollisionPointRec(xala->posicao, ARMADILHA[i]) && !(xala->invulneravel)) {
@@ -280,11 +340,70 @@ void logica_fase_3(Personagem* xala, Rectangle PAREDES[], Rectangle ARMADILHA[])
         xala->invulneravel = !(xala->invulneravel);
         tempo_invunerabilidade = TEMPO_MAX_INVULNERAVEL;
     }
-    // ---------------------------------------------------//
+    // -------------------------------------------------------- //
 
 
 
-    // -------- Logica do ANIMAÇÃO SPRITE LAVA & PORTAL ---------- //
+
+    // ---------- ATUALIZAÇÃO DOS INIMIGOS ----------- //
+    for( int i = 0; i < QTD_INIMIGO_3; i++)
+    {
+        if(inimigo[i].vida > 0) {
+            logicaInimigo(&inimigo[i],&xala);
+            colisaoPersonagem(&inimigo[i], PAREDES, TAM_MAPA_3);
+            atualizarPersonagem(&inimigo[i]);
+        }
+    }
+    // ------------------------------------------------ //
+
+
+
+
+    // ----------------------- LÓGICA DO PROJÉTIL ------------------------ //
+    
+    checkClickBow(projetil_atual);
+
+    if(projetil_atual > -1)
+    {
+        if(IsMouseButtonDown(MOUSE_LEFT_BUTTON))
+        {
+            mira(*xala,&flecha[projetil_atual],cam);
+        }
+
+        if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
+        {
+            flecha[projetil_atual].ativa = true;
+
+            atira( *xala, &flecha[projetil_atual] );
+
+            projetil_atual--;
+        }
+    }
+    
+    for(int i = 0; i < xala->quantidadeFlechas; i++)
+    {   
+        if(flecha[i].ativa)
+        {
+            aplicarInerciaV(&flecha[i].posicao, flecha[i].velocidade);
+            aplicarAtritoProjetil(&flecha[i],0.5);
+            colisaoProjetil_mapa(&flecha[i], PAREDES, TAM_MAPA_3);
+            colisaoProjetil_inimigo(&flecha[i], inimigo, QTD_INIMIGO_3);
+        }
+    }
+    
+    if(flecha[projetil_atual].velocidade.x == 0 && flecha[projetil_atual].velocidade.y == 0 && flecha[projetil_atual].ativa)
+    {
+        flecha[projetil_atual].ativa = false;
+    }
+    
+    // RAFAEL PARTE DE PEGAR OBJETO (flechas)
+    if(projetil_atual +1 < xala->quantidadeFlechas && IsKeyPressed(KEY_SPACE)) projetil_atual++; //temporario
+
+    // -------------------------------------------------------- //
+
+
+
+    // -------- LÓGICA DA ANIMAÇÃO: SPRITE LAVA & PORTAL ---------- //
     frameCount++;
     if (frameCount >= (20))
     {
@@ -296,7 +415,75 @@ void logica_fase_3(Personagem* xala, Rectangle PAREDES[], Rectangle ARMADILHA[])
         frameRecArmadilha.x = (float)currentFrame * (float)armadilhaTexture.width/4;
         frameRecPortal.x = (float)currentFrame * (float)portalTexture.width/4;
     }
-    // ------------------------------------------------------------//
+    // ------------------------------------------------------------ //
 
+}
+
+void set_posicao_inimigos(Personagem inimigos[]) {
+    inimigos[0].posicao = (Vector2){666, -99};
+    inimigos[1].posicao = (Vector2){666, 130};
+    inimigos[2].posicao = (Vector2){833, 132};
+    inimigos[3].posicao = (Vector2){911, 210};
+    inimigos[4].posicao = (Vector2){1042, 92};
+    inimigos[5].posicao = (Vector2){1052, -104};
+
+    inimigos[6].posicao = (Vector2){672, -768};
+    inimigos[7].posicao = (Vector2){729, -868};
+    inimigos[8].posicao = (Vector2){650, -968};
+    inimigos[9].posicao = (Vector2){772, -1068};
+    inimigos[10].posicao = (Vector2){900, -1017};
+    inimigos[11].posicao = (Vector2){1041, -1095};
+    inimigos[12].posicao = (Vector2){1000, -948};
+    inimigos[13].posicao = (Vector2){990, -810};
+
+    inimigos[14].posicao = (Vector2){1729, -123};
+    inimigos[15].posicao = (Vector2){1824, -45};
+    inimigos[16].posicao = (Vector2){1902, -123};
+    inimigos[17].posicao = (Vector2){1902, -123};
+    inimigos[18].posicao = (Vector2){1906, 0};
+    inimigos[19].posicao = (Vector2){1828, 75};
+    inimigos[20].posicao = (Vector2){1871, 175};
+    inimigos[21].posicao = (Vector2){1750, 119};
+    inimigos[22].posicao = (Vector2){1781, 41};
+    inimigos[23].posicao = (Vector2){1578, 245};
+
+    inimigos[24].posicao = (Vector2){1670, 911};
+    inimigos[25].posicao = (Vector2){1613, 989};
+    inimigos[26].posicao = (Vector2){1670, 1067};
+    inimigos[27].posicao = (Vector2){1592, 1145};
+    inimigos[28].posicao = (Vector2){1739, 1002};
+    inimigos[29].posicao = (Vector2){1860, 1080};
+    inimigos[30].posicao = (Vector2){1917, 1158};
+    inimigos[31].posicao = (Vector2){1933, 950};
+    inimigos[32].posicao = (Vector2){1909, 806};
+
+    inimigos[33].posicao = (Vector2){2616, -228};
+    inimigos[34].posicao = (Vector2){2672, -328};
+    inimigos[35].posicao = (Vector2){2750, -228};
+    inimigos[36].posicao = (Vector2){2872, -300};
+    inimigos[37].posicao = (Vector2){2928, -159};
+    inimigos[38].posicao = (Vector2){2850, -80};
+    inimigos[39].posicao = (Vector2){2928, 0};
+    inimigos[40].posicao = (Vector2){2930, 74};
+    inimigos[41].posicao = (Vector2){2986, 174};
+    inimigos[42].posicao = (Vector2){2900, 275};
+    inimigos[43].posicao = (Vector2){2864, 352};
+    inimigos[44].posicao = (Vector2){2981, 430};
+    inimigos[45].posicao = (Vector2){2702, 364};
+    inimigos[46].posicao = (Vector2){2581, 420};
+    inimigos[47].posicao = (Vector2){2540, 277};
+    inimigos[48].posicao = (Vector2){2645, 255};
+    inimigos[49].posicao = (Vector2){2726, 205};
+    inimigos[50].posicao = (Vector2){2695, 45};
+
+    inimigos[51].posicao = (Vector2){1828, -724};
+    inimigos[52].posicao = (Vector2){1820, -864};
+    inimigos[53].posicao = (Vector2){1598, -753};
+    inimigos[54].posicao = (Vector2){1605, -945};
+    inimigos[55].posicao = (Vector2){1682, -1023};
+    inimigos[56].posicao = (Vector2){1604, -1101};
+    inimigos[57].posicao = (Vector2){1772, -1046};
+    inimigos[58].posicao = (Vector2){1915, -1042};
+    inimigos[59].posicao = (Vector2){1993, -942};
 }
 

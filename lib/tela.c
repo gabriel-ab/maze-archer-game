@@ -44,6 +44,7 @@ void verificarTamanhoTela(){
     }
 }
 
+
 //-------------- BACKGROUND ---------------//
 void setPathImageBackground(char* imagePath) {
     pathImageBackground = imagePath;
@@ -92,11 +93,13 @@ void setTextureCropped(Texture* texture, char* spritePath, Rectangle crop) {
     UnloadImage(imagem);
 }
 
+
 // ------------ SHADERS ----------- //
 
 void setShader(char* shaderPath){
     shader = LoadShader(0, shaderPath);
 }
+
 
 //-------------- FONT ---------------//
 
@@ -106,6 +109,7 @@ void setFont(char* fontPath) {
 
 
 // ------------- CÂMERA ----------- //
+
 void setTargetCamera(Personagem *target)
 {
     cam.zoom = 1.5;

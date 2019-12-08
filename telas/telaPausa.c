@@ -53,6 +53,9 @@ void drawtelaPausa(Texture2D background, Rectangle botoes[]) {
 }
 
 void logicatelaPausa(Rectangle botoes[]){
+
+    ShowCursor();
+
     //VOLTAR PARA O JOGO
     if (CheckCollisionPointRec(GetMousePosition(), botoes[0]))
     {

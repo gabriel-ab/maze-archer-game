@@ -1,7 +1,10 @@
 #include "draw.h"
 #include "tela.h"
 
+//Função responsável por desenhar a personagem principal
 void drawXala(Personagem* xala, int contador) {
+
+    //Se Xala está invunerável ela começa a piscar
     if(xala->invulneravel) {
         if(contador%10 == 0) {
             DrawCircleV(xala->posicao,10,BLUE);
@@ -10,6 +13,40 @@ void drawXala(Personagem* xala, int contador) {
         DrawCircleV(xala->posicao,10,BLUE);
     }
 }
+
+
+
+//Função responsável por desenhar a personagem principal
+void drawFlecha(Projetil flecha[], int quantidade) {
+    for (int i = 0; i < quantidade; i++)
+    {
+        DrawCircleV(flecha[i].posicao,5,GREEN);
+
+        DrawTexturePro(flecha[i].textura,
+        (Rectangle){0,28,64,8},
+        (Rectangle){
+            flecha[i].posicao.x,
+            flecha[i].posicao.y,
+            64, 6},
+        (Vector2){48,2},
+        flecha[i].angulo,WHITE);
+    }
+}
+
+
+
+//Função responsável por desenhar os inimigos da Fase
+void drawInimigos(Personagem inimigos[], int quantidade) {
+    for(int i = 0; i < quantidade; i++){
+        
+        if(inimigos[i].vida > 0) {
+            DrawCircleV(inimigos[i].posicao, 10, (Color){150,150,255,120});
+        }
+        
+    }
+}
+
+
 
 //Função responsável por desenhar as paredes da Fase
 void drawParedes(Rectangle PAREDES[], int tamanho) {
@@ -24,6 +61,8 @@ void drawParedes(Rectangle PAREDES[], int tamanho) {
         
     }
 }
+
+
 
 //Função responsável por desenhar os pisos da Fase
 void drawPiso(Rectangle PISO[], int tamanho) {     
@@ -41,6 +80,8 @@ void drawPiso(Rectangle PISO[], int tamanho) {
     }
 }
 
+
+
 //Função responsável por desenhar as armadilhas da Fase
 void drawArmadilhas(Rectangle ARMADILHAS[], int tamanho) {
     for(int i = 0; i < tamanho; i++){
@@ -56,6 +97,8 @@ void drawArmadilhas(Rectangle ARMADILHAS[], int tamanho) {
          
     }
 }
+
+
 
 //Função responsável por desenhar as armadilhas da Fase com animação
 void drawArmadilhasRec(Rectangle ARMADILHAS[], int tamanho, Rectangle frameRec) {

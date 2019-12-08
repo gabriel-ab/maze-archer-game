@@ -15,7 +15,7 @@ void mira(Personagem fulano, Projetil *bala, Camera2D cam)
     bala->angulo = atan2(deltaY,deltaX)*RAD2DEG;
     
 }
-void atira(Personagem fulano ,Projetil *bala)
+void atira(Personagem fulano, Projetil *bala)
 {
     bala->velocidade.y = sin(bala->angulo*DEG2RAD)*VELOCIDADE_Projetil;
     bala->velocidade.x = cos(bala->angulo*DEG2RAD)*VELOCIDADE_Projetil;
@@ -47,7 +47,7 @@ int colisaoProjetil_mapa(Projetil *bala, Rectangle *MAPA, int tamMapa)
        if( CheckCollisionCircleRec(bala->posicao,10,MAPA[i]))
        {
            bala->velocidade = (Vector2){0,0};
-           bala->ativa = 0;
+           bala->ativa = false;
            return 1;
        }
     }
@@ -63,7 +63,7 @@ int colisaoProjetil_inimigo(Projetil *bala, Personagem *inimigo, int n_inimigos)
         {
             bala->velocidade = inimigo->velocidade;
             inimigo[i].vida--;
-            bala->ativa = 0;
+            bala->ativa = false;
             return i;
         }
     }

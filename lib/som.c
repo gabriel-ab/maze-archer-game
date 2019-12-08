@@ -52,12 +52,12 @@ void playMusic(int musicNumber){
     }
 }
 
-void checkClickBow(int projetil_atual){
+void checkClickBow(int quantidadeFlechas){
         
-        if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && projetil_atual > -1){
+        if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && quantidadeFlechas > 0){
             playFx(4);
         }
-        if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && projetil_atual > -1){
+        if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && quantidadeFlechas > 0){
             StopSound(arco);
             playFx(3);
             
