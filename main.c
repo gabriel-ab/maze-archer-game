@@ -15,6 +15,7 @@
 #include "telas/fases/fase_2.c"
 #include "telas/fases/fase_3.c"
 #include "telas/fases/fase_4.c"
+#include "telas/fases/boss_fight.c"
 #include "telas/telaFracasso.c"
 #include "telas/telaPausa.c"
 
@@ -47,7 +48,7 @@ int main(){
     
     SetTargetFPS(60);
 
-    telaAtual = TELA_FASE_3;
+    telaAtual = BOSS_FIGHT;
 
     while (jogo_rodando) 
     {
@@ -81,6 +82,10 @@ int main(){
 
         while(telaAtual == TELA_FASE_4) {
             fase_4();
+        }
+
+        while(telaAtual == BOSS_FIGHT) {
+            boss_fight();
         }
     }
     

@@ -41,6 +41,9 @@ void drawTelaFracasso( Rectangle botoes[]) {
 
 
 void logicaTelaFracasso(Rectangle botoes[]) {
+
+    ShowCursor();
+
     //VOLTAR PARA REINICIAR O JOGO
     if (CheckCollisionPointRec(GetMousePosition(), botoes[0]))
     {
