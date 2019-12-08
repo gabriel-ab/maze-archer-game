@@ -146,14 +146,14 @@ void fase_3()
     };
 
     // ----------------- TEXTURE CENÁRIO --------------- //
-    setTextureCropped(&piso, "resources/images/full.png", (Rectangle){960,64,32,32 });
-    setTextureCropped(&parede, "resources/images/floortileset.png", (Rectangle){32,128,32,32 });
-    setTextureCropped(&armadilha, "resources/images/full.png", (Rectangle){1920,160,128,32 });
-    setTexture(&portal, "resources/images/portal.png",260, 160);
+    setTextureCropped(&pisoTexture, "resources/images/full.png", (Rectangle){960,64,32,32 });
+    setTextureCropped(&paredeTexture, "resources/images/floortileset.png", (Rectangle){32,128,32,32 });
+    setTextureCropped(&armadilhaTexture, "resources/images/full.png", (Rectangle){1920,160,128,32 });
+    setTexture(&portalTexture, "resources/images/portal.png",260, 160);
     //--------------------------------------------------//
 
     frameRecArmadilha = (Rectangle) {0 ,0 ,30, 30};
-    frameRecPortal = (Rectangle) {0 ,0 , portal.width/4, 160};
+    frameRecPortal = (Rectangle) {0 ,0 , portalTexture.width/4, 160};
 
     ///Retangulo responsável por representar a parte
     ///que o personagem colide para passar de fase
@@ -179,7 +179,7 @@ void fase_3()
         
         if(isPaused) 
         {
-            telaPausa(&isPaused, &isRestarting);
+            telaPausa();
 
         } else 
         {
@@ -192,6 +192,7 @@ void fase_3()
             if(isUpgradeGetted) {
                 vida_maxima_xala--;
             }
+            isRestarting = false;
             break;
         }
     }
@@ -209,10 +210,10 @@ void draw_fase_3(Personagem* xala, Rectangle PAREDES[], Rectangle PISO[], Rectan
             drawPiso(PISO, TAM_PISO_3);
             drawArmadilhasRec(ARMADILHAS, TAM_ARMADILHAS_3, frameRecArmadilha);
             drawParedes(PAREDES, TAM_MAPA_3);
-            DrawTextureRec(portal, frameRecPortal, (Vector2){2720, -1184}, RED);
+            DrawTextureRec(portalTexture, frameRecPortal, (Vector2){2720, -1184}, RED);
             
             if(!isUpgradeGetted) {
-                DrawTexture(vida, vidaUpgrade.x, vidaUpgrade.y,  WHITE);
+                DrawTexture(vidaTexture, vidaUpgrade.x, vidaUpgrade.y,  WHITE);
             }
             
 
@@ -245,7 +246,7 @@ void logica_fase_3(Personagem* xala, Rectangle PAREDES[], Rectangle ARMADILHA[])
 
     if(CheckCollisionPointRec(xala->posicao, portalCollision)) {
         telaAtual = TELA_FASE_4;
-        save(telaAtual, vida_maxima_xala, quantidade_maxima_flechas);
+        save();
     }
     
 
@@ -292,8 +293,8 @@ void logica_fase_3(Personagem* xala, Rectangle PAREDES[], Rectangle ARMADILHA[])
 
         if (currentFrame > 4) currentFrame = 0;
         
-        frameRecArmadilha.x = (float)currentFrame * (float)armadilha.width/4;
-        frameRecPortal.x = (float)currentFrame * (float)portal.width/4;
+        frameRecArmadilha.x = (float)currentFrame * (float)armadilhaTexture.width/4;
+        frameRecPortal.x = (float)currentFrame * (float)portalTexture.width/4;
     }
     // ------------------------------------------------------------//
 

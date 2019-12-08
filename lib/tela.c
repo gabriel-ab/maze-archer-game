@@ -67,12 +67,12 @@ void updateBackground() {
 void drawHUD(int quantidadeVida, int quantidadeArrow){
     for (int i = 0; i < quantidadeVida; i++)
     {
-        DrawTexture(vida, 10+35*i, 10, GRAY);
+        DrawTexture(vidaTexture, 10+35*i, 10, GRAY);
     }
 
     for (int i = 0; i < quantidadeArrow; i++)
     {
-        DrawTexture(arrow, 10+35*i, 50, GRAY);
+        DrawTexture(arrowTexture, 10+35*i, 50, GRAY);
     }
 }
 

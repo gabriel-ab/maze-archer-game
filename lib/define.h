@@ -1,6 +1,8 @@
 #ifndef DEFINE_H_INCLUDED
 #define DEFINE_H_INCLUDED
 
+#include <raylib.h>
+
 //Definições Gerais para regulagem do jogo
 
 bool jogo_rodando = true;

@@ -37,15 +37,15 @@ void fase_4() {
     };
 
     // ----------------- TEXTURE CENÁRIO --------------- //
-    setTextureCropped(&piso, "resources/images/full.png", (Rectangle){32*17,32*4,32,32 });
-    setTextureCropped(&parede, "resources/images/full.png", (Rectangle){32*23,32*14,32,32 });
-    setTextureCropped(&armadilha, "resources/images/dardo_inativo.png", (Rectangle){0, 0, 32, 32});
-    setTexture(&portal, "resources/images/portal.png",260, 160);
+    setTextureCropped(&pisoTexture, "resources/images/full.png", (Rectangle){32*17,32*4,32,32 });
+    setTextureCropped(&paredeTexture, "resources/images/full.png", (Rectangle){32*23,32*14,32,32 });
+    setTextureCropped(&armadilhaTexture, "resources/images/dardo_inativo.png", (Rectangle){0, 0, 32, 32});
+    setTexture(&portalTexture, "resources/images/portal.png",260, 160);
     //--------------------------------------------------//
 
 
     portalCollision = (Rectangle) {2740, -1145, 30, 60 };
-    frameRecPortal = (Rectangle) {0 ,0 , portal.width/4, 160};
+    frameRecPortal = (Rectangle) {0 ,0 , portalTexture.width/4, 160};
     
     dardo.ativa = false;
     dardo.posicao = (Vector2) {-96, 128, 32, 32,};
@@ -65,7 +65,7 @@ void fase_4() {
     while(telaAtual == TELA_FASE_4) {
         
         if(isPaused) {
-            telaPausa(&isPaused, &isRestarting);
+            telaPausa();
         } else {
             draw_fase_4(&xala, PAREDES, PISO, ARMADILHAS);
             logica_fase_4(&xala, PAREDES, ARMADILHAS); 
@@ -93,7 +93,7 @@ void draw_fase_4(Personagem* xala, Rectangle PAREDES[], Rectangle PISO[], Rectan
             if(dardo.ativa) {
                 DrawTextureEx(dardo.textura, dardo.posicao, 0, 1, WHITE);
             }
-            DrawTextureRec(portal, frameRecPortal, (Vector2){32, -64}, GREEN);
+            DrawTextureRec(portalTexture, frameRecPortal, (Vector2){32, -64}, GREEN);
             drawXala(xala, count);
 
         EndMode2D();
@@ -171,15 +171,15 @@ void logica_fase_4(Personagem* xala, Rectangle PAREDES[], Rectangle ARMADILHA[])
              currentFrame = 0;
         }
 
-        frameRecPortal.x = (float)currentFrame * (float)portal.width/4;
+        frameRecPortal.x = (float)currentFrame * (float)portalTexture.width/4;
     }
 
     if(frameCount == 0) {
-        setTextureCropped(&armadilha, "resources/images/dardo_inativo.png", (Rectangle){0, 0, 32, 32});
+        setTextureCropped(&armadilhaTexture, "resources/images/dardo_inativo.png", (Rectangle){0, 0, 32, 32});
     }
 
     if(frameCount == 180) {
-        setTextureCropped(&armadilha, "resources/images/dardo_ativo.png", (Rectangle){0, 0, 32, 32});
+        setTextureCropped(&armadilhaTexture, "resources/images/dardo_ativo.png", (Rectangle){0, 0, 32, 32});
     }
     
 

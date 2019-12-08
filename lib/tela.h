@@ -19,7 +19,7 @@ typedef enum TELAS {
     TELA_CONFIG = -1,
     TELA_MENU = 0,
     TELA_FASE_1 = 1,
-    //TELA_FASE_2 = 2, SO VOU ATIVAR QUANDO TIVER UM PADRÃO DE FASE
+    TELA_FASE_2 = 2,
     TELA_FASE_3 = 3,
     TELA_FASE_4 = 4
 }TELAS;
@@ -45,13 +45,15 @@ void drawHUD(int quantidadeVida, int quantidadeArrow);
 
 //-------------- TEXTURE ---------------//
 
-Texture2D vida;
-Texture2D arrow;
-Texture2D parede;
-Texture2D piso;
-Texture2D armadilha;
-Texture2D xala;
-Texture2D portal;
+Texture2D vidaTexture;     //HUD 
+Texture2D arrowTexture;    //HUD
+
+Texture2D flechasTexture;  
+Texture2D paredeTexture;
+Texture2D pisoTexture;
+Texture2D armadilhaTexture;
+Texture2D xalaTexture;
+Texture2D portalTexture;
 
 void setTexture(Texture* texture, char* spritePath, int altura, int largura);
 void setTextureCropped(Texture* texture, char* spritePath, Rectangle crop);

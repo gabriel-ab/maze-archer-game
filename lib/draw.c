@@ -15,11 +15,11 @@ void drawXala(Personagem* xala, int contador) {
 void drawParedes(Rectangle PAREDES[], int tamanho) {
     for(int i = 0; i < tamanho; i++){
                 
-        DrawTexturePro(parede,
+        DrawTexturePro(paredeTexture,
             (Rectangle){0,0,PAREDES[i].width,PAREDES[i].height},
             PAREDES[i],
             (Vector2){0,0},
-            0,BROWN
+            0,WHITE
         );
         
     }
@@ -33,7 +33,7 @@ void drawPiso(Rectangle PISO[], int tamanho) {
         {
             for (int y = 0; y < PISO[i].height; y+=32)
             {
-                DrawTextureEx(piso, (Vector2){ PISO[i].x + x, PISO[i].y + y }, 0, 1,WHITE);
+                DrawTextureEx(pisoTexture, (Vector2){ PISO[i].x + x, PISO[i].y + y }, 0, 1,WHITE);
             }
                
         }
@@ -49,7 +49,7 @@ void drawArmadilhas(Rectangle ARMADILHAS[], int tamanho) {
         {
             for (int y = 0; y < ARMADILHAS[i].height; y+=32)
             {
-                DrawTextureEx(armadilha, (Vector2) { ARMADILHAS[i].x + x , ARMADILHAS[i].y + y }, 0, 1,WHITE);
+                DrawTextureEx(armadilhaTexture, (Vector2) { ARMADILHAS[i].x + x , ARMADILHAS[i].y + y }, 0, 1,WHITE);
             }
                
         }
@@ -65,7 +65,7 @@ void drawArmadilhasRec(Rectangle ARMADILHAS[], int tamanho, Rectangle frameRec) 
         {
             for (int y = 0; y < ARMADILHAS[i].height; y+=32)
             {
-                DrawTextureRec(armadilha, frameRec, (Vector2) { ARMADILHAS[i].x + x , ARMADILHAS[i].y + y }, WHITE);
+                DrawTextureRec(armadilhaTexture, frameRec, (Vector2) { ARMADILHAS[i].x + x , ARMADILHAS[i].y + y }, WHITE);
             }
                
         }

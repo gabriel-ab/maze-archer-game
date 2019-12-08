@@ -5,18 +5,17 @@
     #include "../../lib/tela.h"
     #include "../../lib/personagem.h"
     #include "../../lib/movimenta.h"
-    #include "../../lib/acao.h"
-    #include "../../lib/draw.c"
+    #include "../../lib/projetil.h"
+    #include "../../lib/som.h"
 #endif
 
 #define TAM_MAPA_2 31 
 #define TAM_PISO_2 13
-void fase_cave1();
 
-void fase_cave1()
+void fase_2();
+
+void fase_2()
 {
-    // InitWindow(800,600,"JOGO"); //temporario
-    
     
     Rectangle PAREDE[] = {
         -256, -256, 32, 512,
@@ -69,96 +68,85 @@ void fase_cave1()
     };
     
     //TEXTURA DO CENARIO
-    setTexture(&piso, "resources/images/chao_cav.png", 32, 32);
-    setTexture(&parede, "resources/images/pedra.png", 32, 32);
+    setTextureCropped(&pisoTexture, "resources/images/full.png", (Rectangle){32*17,32*4,32,32 });
+    setTextureCropped(&paredeTexture, "resources/images/full.png", (Rectangle){32*23,32*14,32,32 });
     //----------------------------------------------------------//
     
-    framerec = (rectangle){0,0, 32, 32};
-    
-    Tiro bala;
 
     Personagem xala;
     xala = personagemConstructor();
     xala.altura = 20;
     xala.largura = 20;
 
-    Camera2D cam;
-    cam.zoom = 1;
-    cam.rotation = 0;
-    cam.target = xala.position;
-    cam.offset = (Vector2){0,0};
-    cam.offset = (Vector2){tela.width/2 , tela.height/2};
+    setTargetCamera(&xala);
 
-    SetTargetFPS(60);
+    // ------------ PORTAL ------------- //
+    ///Retangulo responsável por representar a parte
+    ///que o personagem colide para passar de fase
+    int currentFrame = 0;
+    int frameCount = 0;
+    setTexture(&portalTexture, "resources/images/portal.png",260, 160);
+    Rectangle portalCollision = (Rectangle) {0, 50, 30, 60 };
+    Rectangle frameRecPortal = (Rectangle) {0 ,0 , portalTexture.width/4, 160};
+    // -------------------------------- //
     
-    while(IsKeyUp(KEY_ESCAPE)){ 
+    while(telaAtual == TELA_FASE_2){ 
 
-        movimentar(&xala, PAREDE);
-        
-        if(IsMouseButtonDown(MOUSE_LEFT_BUTTON))
-        {
-            bala.ativa = 1;
-            mira(xala,&bala,cam);
-            atira(&bala);
-        }
-        
-        atualizaTiro(&bala);
+        if(isPaused) {
+            telaPausa();
+        } else {
+            if(IsKeyPressed(KEY_P)) {
+                isPaused = true;
+            }
 
-        if(bala.origem.x == 20*xala.position.x || bala.origem.y == 20*xala.position.y )
-        {
-            bala.origem = xala.position;
-            bala.velocidade = (Vector2){0,0};
-            bala.ativa = 0;
-        }
-        
-        if(IsKeyPressed(KEY_F))
-        {
-            telaCheia();
-            atualizaCamera(&cam);
-        }
-        if(IsKeyDown(KEY_PAGE_UP)) cam.zoom += 0.01;
-        if(IsKeyDown(KEY_PAGE_DOWN)) cam.zoom -= 0.01;
-        
-        cam.target = xala.position;
+            if(xala.vida < 1) {
+                telaAnterior = telaAtual;
+                telaAtual = TELA_FRACASSO;
+            }
 
-        cam.offset.x = tela.width/2  -cam.target.x;
-        cam.offset.y = tela.height/2 -cam.target.y;
-        
+            if(CheckCollisionPointRec(xala.posicao, portalCollision)) {
+                telaAtual = TELA_FASE_3;
+                save();
+            }
 
-        BeginDrawing();
-            ClearBackground(GRAY);
+            // -------- Logica do ANIMAÇÃO SPRITE PORTAL ---------- //
+            frameCount++;
+            if (frameCount >= (20))
+            {
+                frameCount = 0;
+                currentFrame++;
 
-            BeginMode2D(cam);
+                if (currentFrame > 4) currentFrame = 0;
                 
-                drawParedes(PAREDE, TAM_MAPA_2);
-                drawPiso(PISO, TAM_PISO_2, framerec);
-                
-                DrawCircleV(cam.target,10,RED);
-                DrawCircle(0,0,10,RED);
-                DrawCircleV(xala.position,10,BLUE);
-                DrawCircleV(bala.origem,5,GREEN);
-                DrawCircleV(cam.offset,5,PURPLE);
-                DrawCircle(
-                    (GetMouseX() -cam.offset.x),
-                    (GetMouseY() -cam.offset.y),
-                    5,PURPLE);
+                frameRecPortal.x = (float)currentFrame * (float)portalTexture.width/4;
+            }
+            // -----------------------------------------------------//
 
-                //DrawRectangleRec(xala.linhaColisaoCima,colideCima);
-                //DrawRectangleRec(xala.linhaColisaoBaixo,colideBaixo);
-                //DrawRectangleRec(xala.linhaColisaoEsquerda,colideEsq);
-                //DrawRectangleRec(xala.linhaColisaoDireita,colideDir);
-                drawXala(xala, count);
-                
-            EndMode2D();
 
-            DrawText(FormatText("target %.2f %.2f",cam.offset.x, cam.offset.y),10,10,20,YELLOW);
-            DrawText(FormatText("vel %.2f %.2f",xala.velocidade.x, xala.velocidade.y),10,40,20,YELLOW);
-            DrawText(FormatText("angulo %.2f",bala.angulo),10,70,20,YELLOW);
-            DrawText(FormatText("zoom %.2f",cam.zoom),10,100,20,YELLOW);
-            DrawText(FormatText("tiro %i",bala.ativa),10,130,20,YELLOW);
+            movimentar(&xala);
+            colisaoPersonagem(&xala, PAREDE, TAM_MAPA_2);
+            atualizarCamera(&cam, xala.posicao);
+        
 
-        EndDrawing();
+            BeginDrawing();
+                ClearBackground(GRAY);
+
+                BeginMode2D(cam);
+                    
+                    drawParedes(PAREDE, TAM_MAPA_2);
+                    drawPiso(PISO, TAM_PISO_2);
+                    DrawTextureRec(portalTexture, frameRecPortal, (Vector2){0, 0}, GREEN);
+                    drawXala(&xala, 0);
+                    
+
+                EndMode2D();
+
+            EndDrawing();
+        }
+        if(isRestarting) 
+        {
+            isRestarting = false;
+            break;
+        }
     }
-    telaAtual = 0;
-    // CloseWindow(); //temporario
 }

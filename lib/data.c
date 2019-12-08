@@ -2,17 +2,17 @@
 #include <stdio.h>
 #include <string.h>
 #include "data.h"
-#include "tela.h"
 #include "define.h"
+#include "tela.h"
 
 
-void save(int faseAtual, int vida_maxima_xala, int quantidade_maxima_flechas) {
+void save() {
 	
 	FILE *ponteiro_arquivo;
 
 	ponteiro_arquivo = fopen("save/save.txt", "w");
 
-	fprintf(ponteiro_arquivo, "fase_atual:%d\n", faseAtual);
+	fprintf(ponteiro_arquivo, "fase_atual:%d\n", telaAtual);
 	fprintf(ponteiro_arquivo, "vida_maxima_xala:%d\n", vida_maxima_xala);
 	fprintf(ponteiro_arquivo, "quantidade_maxima_flechas:%d", quantidade_maxima_flechas);
 

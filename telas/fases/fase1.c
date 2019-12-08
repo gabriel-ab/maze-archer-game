@@ -8,11 +8,11 @@
     #include "../../lib/projetil.h"
     #include "../../lib/som.h"
 #endif
-void fase1();
+void fase_1();
 
-void fase1()
+void fase_1()
 {
-        Rectangle parede[] = {
+    Rectangle PAREDES[] = {
         -256, -256, 32, 512,
         -224, -256, 352, 32,
         -224, 224, 352, 32,
@@ -44,9 +44,9 @@ void fase1()
         1024, 672, 32, 64,
         1056, 640, 32, 64
     };
-    int n_paredes = sizeof(parede)/sizeof(Rectangle);
+    int n_paredes = sizeof(PAREDES)/sizeof(Rectangle);
 
-    Rectangle piso[] = {
+    Rectangle PISO[] = {
         -224, -224, 320, 448,
         96, -224, 1248, 128,
         672, -96, 128, 416,
@@ -60,39 +60,32 @@ void fase1()
         576, 352, 96, 64,
         512, 384, 64, 32
     };
-    int n_pisos = sizeof(piso)/sizeof(Rectangle);
-    
-    
-
-    Projetil bala[N_MAX_PROJETEIS];
-
-    //NUMERO ATUAL DE FLECHAS
-    int n_projeteis = 4;
-
-    //indice da flecha
-    int projetil_atual = n_projeteis -1;
-
-    //Limpando atributos
-    for(int i = 0; i < N_MAX_PROJETEIS; i++){
-        bala[i].ativa = 0;
-    }
-
-    Texture2D pisoTexture = LoadTexture("resources/images/chao_cav.png");
-    Texture2D paredeTexture = LoadTexture("resources/images/pedra.png");
-
-    Image temp = LoadImage("resources/images/flechas.png");
-    ImageCrop(&temp,(Rectangle){0,0,64,64});
-
-    for( int i = 0; i < N_MAX_PROJETEIS; i++) {
-        bala[i].textura = LoadTextureFromImage(temp);
-    }
-    UnloadImage(temp);
+    int n_pisoTextures = sizeof(PISO)/sizeof(Rectangle);
+  
 
     Personagem xala;
     xala = personagemConstructor();
     xala.posicao = (Vector2){0,0};
     xala.altura = 20;
     xala.largura = 20;
+
+    Projetil bala[quantidade_maxima_flechas];
+
+    //indice da flecha
+    int projetil_atual = xala.quantidadeFlechas -1;
+
+    //Limpando atributos
+    for(int i = 0; i < quantidade_maxima_flechas; i++){
+        bala[i].ativa = false;
+    }
+
+    pisoTexture = LoadTexture("resources/images/chao_cav.png");
+    paredeTexture = LoadTexture("resources/images/pedra.png");
+    setTextureCropped(&flechasTexture, "resources/images/flechas.png", (Rectangle){0,0,64,64});
+
+    for( int i = 0; i < quantidade_maxima_flechas; i++) {
+        bala[i].textura = flechasTexture;
+    }
 
     Personagem inimigo[10];
     int n_inimigos = sizeof(inimigo)/sizeof(Personagem);
@@ -103,158 +96,202 @@ void fase1()
         inimigo[i].posicao = (Vector2){GetRandomValue(-200,200), GetRandomValue(-200,200)};
     }
 
-    Camera2D cam;
-    cam.zoom = 1;
-    cam.rotation = 0;
-    cam.target = xala.posicao;
-    cam.offset = (Vector2){0,0};
-    cam.offset = (Vector2){tela.width/2 , tela.height/2};
+    setTargetCamera(&xala);
 
-    SetTargetFPS(60);
+    // SetTargetFPS(60);
     double contadorInvulneravel =0;
+
+
+    // ------------ PORTAL ------------- //
+    ///Retangulo responsável por representar a parte
+    ///que o personagem colide para passar de fase
+    int currentFrame = 0;
+    int frameCount = 0;
+    setTexture(&portalTexture, "resources/images/portal.png",260, 160);
+    Rectangle portalCollision = (Rectangle) {1500, -100, 30, 60 };
+    Rectangle frameRecPortal = (Rectangle) {0 ,0 , portalTexture.width/4, 160};
+    // -------------------------------- //
     
-    while(IsKeyUp(KEY_ESCAPE)){ 
-       
-        playMusic(2);
-       
-        movimentar(&xala);
-        colisaoPersonagem(&xala, parede, n_paredes);
-        //------------Logica do Projetil--------------
+    while(telaAtual == TELA_FASE_1){ 
+        
+        if(isPaused) {
+            telaPausa();
+        } else {
 
-        /*if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && projetil_atual > -1){
-            playFx(4);
-        }
-        if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && projetil_atual > -1){
-            StopSound(arco);
-            playFx(3);
-        }*/
-        checkClickBow(projetil_atual);
-        if(projetil_atual > -1)
-        {
-            if(IsMouseButtonDown(MOUSE_LEFT_BUTTON))
-            {
-                mira(xala,&bala[projetil_atual],cam);
+            if(IsKeyPressed(KEY_P)) {
+                isPaused = true;
             }
-            if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
-            {
-                bala[projetil_atual].ativa = 1;
-                atira(xala,&bala[projetil_atual]);
-                projetil_atual--;
+
+            if(xala.vida < 1) {
+                telaAnterior = telaAtual;
+                telaAtual = TELA_FRACASSO;
             }
-        }
-        
-        for(int i = 0; i < n_projeteis; i++)
-        {   
-            if(bala[i].ativa)
-            {
-                aplicarInerciaV(&bala[i].posicao, bala[i].velocidade);
-                aplicarAtritoProjetil(&bala[i],0.5);
-                colisaoProjetil_mapa(&bala[i], parede, n_paredes);
-                colisaoProjetil_inimigo(&bala[i], inimigo, n_inimigos);
+
+            if(CheckCollisionPointRec(xala.posicao, portalCollision)) {
+                telaAtual = TELA_FASE_2;
+                save();
             }
-        }
-        
-        if(bala[projetil_atual].velocidade.x == 0 && bala[projetil_atual].velocidade.y == 0 && bala[projetil_atual].ativa)
-        {
-            bala[projetil_atual].ativa = 0;
-        }
-        
-        // RAFAEL PARTE DE PEGAR OBJETO (flechas)
-        if(projetil_atual +1 < n_projeteis && IsKeyPressed(KEY_SPACE)) projetil_atual++; //temporario
 
-        //---------------------------------------------
-        
-        if(IsKeyPressed(KEY_F)) telaCheia();            //
-        if(IsKeyDown(KEY_PAGE_UP)) cam.zoom += 0.01;    // Temporario
-        if(IsKeyDown(KEY_PAGE_DOWN)) cam.zoom -= 0.01;  //
-        
-        //-----------Atualização da Camera-------------
-        atualizarCamera(&cam, xala.posicao);
-
-        verificarTamanhoTela();
-
-        //----------Atualização dos inimigos-----------
-        for( int i = 0; i < n_inimigos; i++)
-        {
-            logicaInimigo(&inimigo[i],&xala);
-
-            colisaoPersonagem(&inimigo[i], parede, n_paredes);
-            atualizarPersonagem(&inimigo[i]);
-        }
-        //--------------INVUNERABILIDADE---------------
-        if(xala.invulneravel)
-        {
-            if(GetTime() -contadorInvulneravel > 2)
+            // -------- Logica do ANIMAÇÃO SPRITE PORTAL ---------- //
+            frameCount++;
+            if (frameCount >= (20))
             {
-                contadorInvulneravel =  GetTime();
-                xala.invulneravel = 0;
-            }
-        }
+                frameCount = 0;
+                currentFrame++;
 
-        BeginDrawing();
-            ClearBackground(DARKGRAY);
-
-            BeginMode2D(cam);
-
-                for(int i = 0; i < n_pisos; i++)
-                {
-                    DrawTexturePro(pisoTexture,
-                        (Rectangle){0,0,piso[i].width,piso[i].height},
-                        piso[i],
-                        (Vector2){0,0},
-                        0,WHITE
-                    );
-                }
-                for(int i = 0; i < n_paredes; i++)
-                {
-                    DrawTexturePro(paredeTexture,
-                        (Rectangle){0,0,parede[i].width,parede[i].height},
-                        parede[i],
-                        (Vector2){0,0},
-                        0,WHITE
-                    );
-                }
-                for(int i = 0; i < n_inimigos; i++)
-                {
-                    DrawCircleV(inimigo[i].posicao, 10, (Color){150,150,255,120});
-                }
-
-                DrawCircle(0,0,2,WHITE);
-                DrawCircleV(xala.posicao,10,BLUE);
-                for (int i = 0; i < n_projeteis; i++)
-                {
-                    DrawCircleV(bala[i].posicao,5,GREEN);
-
-                    DrawTexturePro(bala[i].textura,
-                    (Rectangle){0,28,64,8},
-                    (Rectangle){
-                        bala[i].posicao.x,
-                        bala[i].posicao.y,
-                        64, 6},
-                    (Vector2){48,2},
-                    bala[i].angulo,WHITE);
-                }
-
-                DrawCircle(
-                    (GetMouseX() -cam.offset.x),
-                    (GetMouseY() -cam.offset.y),
-                    5,PURPLE);
-                DrawCircleV(c,10,BROWN); //Temporario visualização do hitbox do inimigo
+                if (currentFrame > 4) currentFrame = 0;
                 
-            EndMode2D();
+                frameRecPortal.x = (float)currentFrame * (float)portalTexture.width/4;
+            }
+            // -----------------------------------------------------//
 
-            // DrawText(FormatText("xala.posicao %.2f %.2f",xala.posicao.x, xala.posicao.y),10,10,20,YELLOW);
-            // DrawText(FormatText("target %.2f %.2f",cam.target.x, cam.target.y),10,30,20,YELLOW);
-            // DrawText(FormatText("offset %.2f %.2f",cam.offset.x, cam.offset.y),10,50,20,YELLOW);
-            // DrawText(FormatText("vel %.2f %.2f",xala.velocidade.x, xala.velocidade.y),10,70,20,YELLOW);
-            // DrawText(FormatText("zoom %.2f",cam.zoom),10,90,20,YELLOW);
-            // DrawText(FormatText("Projetil atual %i",projetil_atual),10,130,20,YELLOW);
-            DrawText(FormatText("VIDA: %i",xala.vida),10,160,20,YELLOW);
-            DrawText(FormatText("invuneravel: %i",xala.invulneravel),10,200,20,YELLOW);
-            DrawText(FormatText("contador: %i",inimigo[0].acao.contador),10,240,20,YELLOW);
+            playMusic(2);
+       
+            movimentar(&xala);
+            colisaoPersonagem(&xala, PAREDES, n_paredes);
+
+
+            // -----------Atualização da Camera------------- //
+            atualizarCamera(&cam, xala.posicao);
+            verificarTamanhoTela();
+
+
+            if(IsKeyPressed(KEY_F)) telaCheia();            //
+            if(IsKeyDown(KEY_PAGE_UP)) cam.zoom += 0.01;    // Temporario
+            if(IsKeyDown(KEY_PAGE_DOWN)) cam.zoom -= 0.01;  //
             
-            // DrawText(FormatText("nparedes %i",n_pisos),10,350,20,YELLOW);
-        EndDrawing();
+            // -------------------------------------------- //
+            
+
+            //------------Logica do Projetil--------------
+
+            /*if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && projetil_atual > -1){
+                playFx(4);
+            }
+            if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && projetil_atual > -1){
+                StopSound(arco);
+                playFx(3);
+            }*/
+            checkClickBow(projetil_atual);
+            if(projetil_atual > -1)
+            {
+                if(IsMouseButtonDown(MOUSE_LEFT_BUTTON))
+                {
+                    mira(xala,&bala[projetil_atual],cam);
+                }
+                if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
+                {
+                    bala[projetil_atual].ativa = 1;
+                    atira(xala,&bala[projetil_atual]);
+                    projetil_atual--;
+                }
+            }
+            
+            for(int i = 0; i < xala.quantidadeFlechas; i++)
+            {   
+                if(bala[i].ativa)
+                {
+                    aplicarInerciaV(&bala[i].posicao, bala[i].velocidade);
+                    aplicarAtritoProjetil(&bala[i],0.5);
+                    colisaoProjetil_mapa(&bala[i], PAREDES, n_paredes);
+                    colisaoProjetil_inimigo(&bala[i], inimigo, n_inimigos);
+                }
+            }
+            
+            if(bala[projetil_atual].velocidade.x == 0 && bala[projetil_atual].velocidade.y == 0 && bala[projetil_atual].ativa)
+            {
+                bala[projetil_atual].ativa = false;
+            }
+            
+            // RAFAEL PARTE DE PEGAR OBJETO (flechas)
+            if(projetil_atual +1 < xala.quantidadeFlechas && IsKeyPressed(KEY_SPACE)) projetil_atual++; //temporario
+
+            //---------------------------------------------
+            
+
+
+            //----------Atualização dos inimigos-----------
+            for( int i = 0; i < n_inimigos; i++)
+            {
+                logicaInimigo(&inimigo[i],&xala);
+
+                colisaoPersonagem(&inimigo[i], PAREDES, n_paredes);
+                atualizarPersonagem(&inimigo[i]);
+            }
+
+
+
+            //--------------INVUNERABILIDADE---------------
+            if(xala.invulneravel)
+            {
+                if(GetTime() -contadorInvulneravel > 2)
+                {
+                    contadorInvulneravel =  GetTime();
+                    xala.invulneravel = 0;
+                }
+            }
+
+            BeginDrawing();
+                ClearBackground(DARKGRAY);
+
+                BeginMode2D(cam);
+
+                    
+                    drawPiso(PISO, n_pisoTextures);
+                    drawParedes(PAREDES, n_paredes);
+                    DrawTextureRec(portalTexture, frameRecPortal, (Vector2){1500, -150}, BLUE);
+
+
+                    for(int i = 0; i < n_inimigos; i++)
+                    {
+                        DrawCircleV(inimigo[i].posicao, 10, (Color){150,150,255,120});
+                    }
+
+                    DrawCircle(0,0,2,WHITE);
+                    DrawCircleV(xala.posicao,10,BLUE);
+                    for (int i = 0; i < xala.quantidadeFlechas; i++)
+                    {
+                        DrawCircleV(bala[i].posicao,5,GREEN);
+
+                        DrawTexturePro(bala[i].textura,
+                        (Rectangle){0,28,64,8},
+                        (Rectangle){
+                            bala[i].posicao.x,
+                            bala[i].posicao.y,
+                            64, 6},
+                        (Vector2){48,2},
+                        bala[i].angulo,WHITE);
+                    }
+
+                    DrawCircle(
+                        (GetMouseX() -cam.offset.x),
+                        (GetMouseY() -cam.offset.y),
+                        5,PURPLE);
+                    DrawCircleV(c,10,BROWN); //Temporario visualização do hitbox do inimigo
+                
+                    
+
+                EndMode2D();
+
+                // DrawText(FormatText("xala.posicao %.2f %.2f",xala.posicao.x, xala.posicao.y),10,10,20,YELLOW);
+                // DrawText(FormatText("target %.2f %.2f",cam.target.x, cam.target.y),10,30,20,YELLOW);
+                // DrawText(FormatText("offset %.2f %.2f",cam.offset.x, cam.offset.y),10,50,20,YELLOW);
+                // DrawText(FormatText("vel %.2f %.2f",xala.velocidade.x, xala.velocidade.y),10,70,20,YELLOW);
+                // DrawText(FormatText("zoom %.2f",cam.zoom),10,90,20,YELLOW);
+                // DrawText(FormatText("Projetil atual %i",projetil_atual),10,130,20,YELLOW);
+                DrawText(FormatText("invuneravel: %i",xala.invulneravel),10,200,20,YELLOW);
+                // DrawText(FormatText("contador: %i",inimigo[0].acao.contador),10,240,20,YELLOW);
+
+                drawHUD(xala.vida, xala.quantidadeFlechas);
+                
+                // DrawText(FormatText("nPAREDESs %i",n_pisoTextures),10,350,20,YELLOW);
+            EndDrawing();
+        }
+        if(isRestarting) 
+        {
+            isRestarting = false;
+            break;
+        }
     }
-    telaAtual = 0;
+    
 }

@@ -2,13 +2,13 @@
 #include "../lib/botoes.h"
 #include "../lib/som.h"
 
-void telaPausa(bool* isPaused, bool* isRestarting);
+void telaPausa();
 void drawtelaPausa(Texture2D background, Rectangle botoes[]);
-void logicatelaPausa(bool* isPaused, bool* isRestarting, Rectangle botoes[]);
+void logicatelaPausa(Rectangle botoes[]);
 
 Shader shader;
 
-void telaPausa(bool* isPaused, bool* isRestarting) {
+void telaPausa() {
     
     //pathImageBackgroundAnterior = pathImageBackground;
     Image image = GetScreenData();
@@ -17,16 +17,16 @@ void telaPausa(bool* isPaused, bool* isRestarting) {
     setImageBackground(image);
     setShader("resources/shaders/blur.fs");
     
-    while(*isPaused) {
+    while(isPaused) {
         
         drawtelaPausa(background, getBotoesPausa());
-        logicatelaPausa(isPaused, isRestarting, getBotoesPausa());
+        logicatelaPausa(getBotoesPausa());
 
         while (telaAtual == TELA_CONFIG)
         {
             if(IsKeyPressed(KEY_P)) {
                 telaAtual = telaAnterior;
-                *isPaused = !(*isPaused);
+                isPaused = false;
             }
             telaConfiguracao();
         }
@@ -52,14 +52,17 @@ void drawtelaPausa(Texture2D background, Rectangle botoes[]) {
     EndDrawing();
 }
 
-void logicatelaPausa(bool *isPaused, bool* isRestarting, Rectangle botoes[]){
+void logicatelaPausa(Rectangle botoes[]){
     //VOLTAR PARA O JOGO
     if (CheckCollisionPointRec(GetMousePosition(), botoes[0]))
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
             PlaySound(somBotao);
-            *isPaused = !(*isPaused);
+            setPathImageBackground("resources/images/wallpaper.png");
+            updateBackground();
+            isPaused = !isPaused;
+            
         }
     }
 
@@ -69,8 +72,10 @@ void logicatelaPausa(bool *isPaused, bool* isRestarting, Rectangle botoes[]){
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
             PlaySound(somBotao);
-            *isRestarting = true;
-            *isPaused = !(*isPaused);
+            setPathImageBackground("resources/images/wallpaper.png");
+            updateBackground();
+            isRestarting = true;
+            isPaused = !isPaused;
         }
     }
 
@@ -94,11 +99,11 @@ void logicatelaPausa(bool *isPaused, bool* isRestarting, Rectangle botoes[]){
             updateBackground();
             PlaySound(somBotao);
             telaAtual = TELA_MENU;
-            *isPaused = !*isPaused;   
+            isPaused = !isPaused;   
         }
     }
 
     if(IsKeyPressed(KEY_P)) {
-        *isPaused = !(*isPaused);
+        isPaused = !isPaused;
     }
 }
