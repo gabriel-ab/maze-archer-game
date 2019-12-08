@@ -11,12 +11,10 @@ void drawXala(Personagem* xala, int contador) {
     }
 }
 
-//Função responsável por incluir as paredes da Fase 3
+//Função responsável por desenhar as paredes da Fase
 void drawParedes(Rectangle PAREDES[], int tamanho) {
     for(int i = 0; i < tamanho; i++){
                 
-        DrawRectangleRec(PAREDES[i],RED);
-        
         DrawTexturePro(parede,
             (Rectangle){0,0,PAREDES[i].width,PAREDES[i].height},
             PAREDES[i],
@@ -27,15 +25,15 @@ void drawParedes(Rectangle PAREDES[], int tamanho) {
     }
 }
 
-//Função responsável por incluir os pisos da Fase 3
-void drawPiso(Rectangle PISO[], int tamanho, Rectangle frameRec) {     
+//Função responsável por desenhar os pisos da Fase
+void drawPiso(Rectangle PISO[], int tamanho) {     
     for(int i = 0; i < tamanho; i++){
 
         for (int x = 0; x < PISO[i].width; x+=32)
         {
             for (int y = 0; y < PISO[i].height; y+=32)
             {
-                DrawTextureRec(piso, frameRec, (Vector2) { PISO[i].x + x , PISO[i].y + y }, WHITE);
+                DrawTextureEx(piso, (Vector2){ PISO[i].x + x, PISO[i].y + y }, 0, 1,WHITE);
             }
                
         }
@@ -43,8 +41,24 @@ void drawPiso(Rectangle PISO[], int tamanho, Rectangle frameRec) {
     }
 }
 
-//Função responsável por incluir as armadilhas da Fase 3
-void drawArmadilhas(Rectangle ARMADILHAS[], int tamanho, Rectangle frameRec) {
+//Função responsável por desenhar as armadilhas da Fase
+void drawArmadilhas(Rectangle ARMADILHAS[], int tamanho) {
+    for(int i = 0; i < tamanho; i++){
+
+        for (int x = 0; x < ARMADILHAS[i].width; x+=32)
+        {
+            for (int y = 0; y < ARMADILHAS[i].height; y+=32)
+            {
+                DrawTextureEx(armadilha, (Vector2) { ARMADILHAS[i].x + x , ARMADILHAS[i].y + y }, 0, 1,WHITE);
+            }
+               
+        }
+         
+    }
+}
+
+//Função responsável por desenhar as armadilhas da Fase com animação
+void drawArmadilhasRec(Rectangle ARMADILHAS[], int tamanho, Rectangle frameRec) {
     for(int i = 0; i < tamanho; i++){
 
         for (int x = 0; x < ARMADILHAS[i].width; x+=32)

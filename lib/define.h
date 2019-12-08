@@ -14,7 +14,8 @@ bool isRestarting;
 #define TAM_MAPA1 30 //temporario
 
 int tempo_invunerabilidade = TEMPO_MAX_INVULNERAVEL;
-int vida_maxima = 3;
+int vida_maxima_xala = 3;
+int quantidade_maxima_flechas = 2;
 
 
 #endif

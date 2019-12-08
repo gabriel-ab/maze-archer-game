@@ -10,7 +10,8 @@ int frameCount = 0;
 
 void drawXala(Personagem* xala, int contador);
 void drawParedes(Rectangle PAREDES[], int tamanho);
-void drawPiso(Rectangle PISO[], int tamanho, Rectangle frameRec);
-void drawArmadilhas(Rectangle ARMADILHAS[], int tamanho, Rectangle frameRec);
+void drawPiso(Rectangle PISO[], int tamanho);
+void drawArmadilhas(Rectangle ARMADILHAS[], int tamanho);
+void drawArmadilhasRec(Rectangle ARMADILHAS[], int tamanho, Rectangle frameRec);
 
 #endif

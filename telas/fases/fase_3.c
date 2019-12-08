@@ -16,19 +16,16 @@ void draw_fase_3(Personagem* xala,Rectangle PAREDES[], Rectangle PISO[], Rectang
 void logica_fase_3(Personagem* xala, Rectangle PAREDES[], Rectangle ARMADILHA[]);
 
 
-//----- TEMPORÁRIO ----//
-Rectangle frameRec;
+Rectangle frameRecArmadilha;
 Rectangle frameRecPortal;
 Rectangle portalCollision;
-// ------------------ //
-bool isUpgradeNotGetted;
-Rectangle vidaUpgrade = (Rectangle) {20, 20, 16, 16};
-//Rectangle vidaUpgrade = (Rectangle) {950, 990, 16, 16};
+
+bool isUpgradeGetted;
+Rectangle vidaUpgrade;
 
 //Função responsável por representar a Fase 3
 void fase_3()
 {
-
     Rectangle PAREDES[] = {
         -128, -160, 256, 32,
         -128, 128, 256, 32,
@@ -155,24 +152,29 @@ void fase_3()
     setTexture(&portal, "resources/images/portal.png",260, 160);
     //--------------------------------------------------//
 
-
-    frameRec = (Rectangle) {0 ,0 ,30, 30};
+    frameRecArmadilha = (Rectangle) {0 ,0 ,30, 30};
     frameRecPortal = (Rectangle) {0 ,0 , portal.width/4, 160};
 
+    ///Retangulo responsável por representar a parte
+    ///que o personagem colide para passar de fase
     portalCollision = (Rectangle) {2740, -1145, 30, 60 };
+
+    ///Retangulo responsável por representar o item que
+    /// aumenta a vida máxima de xala
+    vidaUpgrade = (Rectangle) {950, 990, 16, 16};
 
     Personagem xala;
     xala = personagemConstructor();
-    xala.posicao = (Vector2){0, 0 /*2700, -1184*/};
+    xala.posicao = (Vector2){0, 0};
     xala.altura = 20;
     xala.largura = 20;
 
-    setTargetCamera(&xala);
-
-    isUpgradeNotGetted = true;
+    isUpgradeGetted = false;
     isPaused = false;
     isRestarting = false;
 
+    setTargetCamera(&xala);
+    
     while(telaAtual == TELA_FASE_3) {
         
         if(isPaused) 
@@ -187,6 +189,9 @@ void fase_3()
 
         if(isRestarting) 
         {
+            if(isUpgradeGetted) {
+                vida_maxima_xala--;
+            }
             break;
         }
     }
@@ -201,12 +206,12 @@ void draw_fase_3(Personagem* xala, Rectangle PAREDES[], Rectangle PISO[], Rectan
 
             ClearBackground(BLACK);
 
-            drawPiso(PISO, TAM_PISO_3, frameRec);
-            drawArmadilhas(ARMADILHAS, TAM_ARMADILHAS_3, frameRec);
+            drawPiso(PISO, TAM_PISO_3);
+            drawArmadilhasRec(ARMADILHAS, TAM_ARMADILHAS_3, frameRecArmadilha);
             drawParedes(PAREDES, TAM_MAPA_3);
             DrawTextureRec(portal, frameRecPortal, (Vector2){2720, -1184}, RED);
             
-            if(isUpgradeNotGetted) {
+            if(!isUpgradeGetted) {
                 DrawTexture(vida, vidaUpgrade.x, vidaUpgrade.y,  WHITE);
             }
             
@@ -223,15 +228,6 @@ void draw_fase_3(Personagem* xala, Rectangle PAREDES[], Rectangle PISO[], Rectan
 //Função responsável pela lógica da Fase 3
 void logica_fase_3(Personagem* xala, Rectangle PAREDES[], Rectangle ARMADILHA[]) {
     
-    // ----------- TEMPORARIO -------------- //
-    if(IsKeyDown(KEY_PAGE_UP)) cam.zoom += 0.01;    
-    if(IsKeyDown(KEY_PAGE_DOWN)) cam.zoom -= 0.01;
-    if(IsKeyDown(KEY_Z)) {
-        telaAtual = 100;
-        jogo_rodando = false;
-    } 
-    // ------------------------------------ //
-
     if(IsKeyPressed(KEY_P)) {
         isPaused = !isPaused;
     }
@@ -241,22 +237,28 @@ void logica_fase_3(Personagem* xala, Rectangle PAREDES[], Rectangle ARMADILHA[])
         telaAtual = TELA_FRACASSO;
     }
 
-    if(CheckCollisionPointRec(xala->posicao, vidaUpgrade) && isUpgradeNotGetted) {
-        vida_maxima++;
-        xala->vida = vida_maxima;
-        isUpgradeNotGetted = false;
+    if(CheckCollisionPointRec(xala->posicao, vidaUpgrade) && !isUpgradeGetted) {
+        vida_maxima_xala++;
+        xala->vida = vida_maxima_xala;
+        isUpgradeGetted = true;
     }
 
     if(CheckCollisionPointRec(xala->posicao, portalCollision)) {
-        save(TELA_FASE_4);
         telaAtual = TELA_FASE_4;
+        save(telaAtual, vida_maxima_xala, quantidade_maxima_flechas);
     }
     
+
+
+    // ----------- ATUALIZAÇÃO DE XALA -------------//
     movimentar(xala);
     colisaoPersonagem(xala, PAREDES, TAM_MAPA_3);
-    cam.target = xala->posicao;
+    atualizarCamera(&cam, xala->posicao);
+    // ---------------------------------------------------//
 
-    //------------Logica do INVULNERABILIDADE--------------
+
+
+    // ------------Logica do INVULNERABILIDADE-------------- //
     for (int i = 0; i < TAM_ARMADILHAS_3; i++)
     {
         if(CheckCollisionPointRec(xala->posicao, ARMADILHA[i]) && !(xala->invulneravel)) {
@@ -277,10 +279,11 @@ void logica_fase_3(Personagem* xala, Rectangle PAREDES[], Rectangle ARMADILHA[])
         xala->invulneravel = !(xala->invulneravel);
         tempo_invunerabilidade = TEMPO_MAX_INVULNERAVEL;
     }
-    //---------------------------------------------------
+    // ---------------------------------------------------//
 
 
-    //--------Logica do ANIMAÇÃO SPRITE LAVA----------
+
+    // -------- Logica do ANIMAÇÃO SPRITE LAVA & PORTAL ---------- //
     frameCount++;
     if (frameCount >= (20))
     {
@@ -289,10 +292,10 @@ void logica_fase_3(Personagem* xala, Rectangle PAREDES[], Rectangle ARMADILHA[])
 
         if (currentFrame > 4) currentFrame = 0;
         
-        frameRec.x = (float)currentFrame * (float)armadilha.width/4;
+        frameRecArmadilha.x = (float)currentFrame * (float)armadilha.width/4;
         frameRecPortal.x = (float)currentFrame * (float)portal.width/4;
     }
-    //-------------------------------------------
+    // ------------------------------------------------------------//
 
 }
 

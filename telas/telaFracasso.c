@@ -16,6 +16,8 @@ void telaFracasso() {
         drawTelaFracasso(getBotoesFracasso());
         logicaTelaFracasso(getBotoesFracasso());
     }
+    
+    UnloadFont(font);
 }
 
 void drawTelaFracasso( Rectangle botoes[]) {

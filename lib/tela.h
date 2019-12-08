@@ -4,8 +4,8 @@
 #include <raylib.h>
 #include "personagem.h"
 
-#define LARGURA_TELA 800
-#define ALTURA_TELA 500
+#define LARGURA_TELA 1366
+#define ALTURA_TELA 768
 
 Rectangle tela = {100, 100, LARGURA_TELA, ALTURA_TELA};
 int larguraAnterior = 800;
@@ -14,7 +14,7 @@ int alturaAnterior = 500;
 int telaAtual = 0;
 int telaAnterior = 0;
 
-typedef enum{
+typedef enum TELAS {
     TELA_FRACASSO = -2,
     TELA_CONFIG = -1,
     TELA_MENU = 0,
@@ -22,7 +22,7 @@ typedef enum{
     //TELA_FASE_2 = 2, SO VOU ATIVAR QUANDO TIVER UM PADRÃO DE FASE
     TELA_FASE_3 = 3,
     TELA_FASE_4 = 4
-};
+}TELAS;
 
 bool is_fullscreen = false; 
 
