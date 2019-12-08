@@ -7,17 +7,16 @@
 
 #define TAM_MAPA_4 4
 #define TAM_PISO_4 1
-#define TAM_ARMADILHAS_4 0
+#define TAM_ARMADILHAS_4 1
 
 void fase_4();
 void draw_fase_4(Personagem* xala,Rectangle PAREDES[], Rectangle PISO[], Rectangle ARMADILHAS[]);
 void logica_fase_4(Personagem* xala, Rectangle PAREDES[], Rectangle ARMADILHA[]);
 
-//----- TEMPORÁRIO ----//
-Rectangle frameRec;
 Rectangle frameRecPortal;
 Rectangle portalCollision;
-// ------------------ //
+
+Projetil dardo;
 
 //Função responsável por representar a Fase 3
 void fase_4() {
@@ -34,20 +33,23 @@ void fase_4() {
     };
 
     Rectangle ARMADILHAS[] = {
+        -96, 128, 32, 32,
     };
 
     // ----------------- TEXTURE CENÁRIO --------------- //
-    setTextureCropped(&piso, "resources/images/full.png", (Rectangle){960,64,32,32 });
-    setTextureCropped(&parede, "resources/images/floortileset.png", (Rectangle){32,128,32,32 });
-    setTextureCropped(&armadilha, "resources/images/full.png", (Rectangle){1920,160,128,32 });
+    setTextureCropped(&piso, "resources/images/full.png", (Rectangle){32*17,32*4,32,32 });
+    setTextureCropped(&parede, "resources/images/full.png", (Rectangle){32*23,32*14,32,32 });
+    setTextureCropped(&armadilha, "resources/images/dardo_inativo.png", (Rectangle){0, 0, 32, 32});
     setTexture(&portal, "resources/images/portal.png",260, 160);
     //--------------------------------------------------//
 
 
-    frameRec = (Rectangle) {0 ,0 ,30, 30};
-    frameRecPortal = (Rectangle) {0 ,0 , portal.width/4, 160};
-
     portalCollision = (Rectangle) {2740, -1145, 30, 60 };
+    frameRecPortal = (Rectangle) {0 ,0 , portal.width/4, 160};
+    
+    dardo.ativa = false;
+    dardo.posicao = (Vector2) {-96, 128, 32, 32,};
+    setTextureCropped(&dardo.textura, "resources/images/full.png", (Rectangle) {32*7, 32*25, 32, 32});
 
     Personagem xala;
     xala = personagemConstructor();
@@ -85,9 +87,13 @@ void draw_fase_4(Personagem* xala, Rectangle PAREDES[], Rectangle PISO[], Rectan
             ClearBackground(BLACK);
 
             drawPiso(PISO, TAM_PISO_4);
-            drawArmadilhas(ARMADILHAS, TAM_ARMADILHAS_4, frameRec);
             drawParedes(PAREDES, TAM_MAPA_4);
-            DrawTextureRec(portal, frameRecPortal, (Vector2){2720, -1184}, RED);
+            drawArmadilhas(ARMADILHAS, TAM_ARMADILHAS_4);
+
+            if(dardo.ativa) {
+                DrawTextureEx(dardo.textura, dardo.posicao, 0, 1, WHITE);
+            }
+            DrawTextureRec(portal, frameRecPortal, (Vector2){32, -64}, GREEN);
             drawXala(xala, count);
 
         EndMode2D();
@@ -150,18 +156,51 @@ void logica_fase_4(Personagem* xala, Rectangle PAREDES[], Rectangle ARMADILHA[])
     //---------------------------------------------------
 
 
-    //--------Logica do ANIMAÇÃO SPRITE LAVA----------
+    // -------- Logica do ANIMAÇÃO SPRITE DARDO E PORTAL ---------- //
     frameCount++;
-    if (frameCount >= (20))
-    {
+    if(frameCount >=60*6) {
         frameCount = 0;
+    }
+    
+    if (frameCount % 20 == 0)
+    {
         currentFrame++;
 
-        if (currentFrame > 4) currentFrame = 0;
-        
-        frameRec.x = (float)currentFrame * (float)armadilha.width/4;
+        if (currentFrame > 4) 
+        {
+             currentFrame = 0;
+        }
+
         frameRecPortal.x = (float)currentFrame * (float)portal.width/4;
     }
-    //-------------------------------------------
 
+    if(frameCount == 0) {
+        setTextureCropped(&armadilha, "resources/images/dardo_inativo.png", (Rectangle){0, 0, 32, 32});
+    }
+
+    if(frameCount == 180) {
+        setTextureCropped(&armadilha, "resources/images/dardo_ativo.png", (Rectangle){0, 0, 32, 32});
+    }
+    
+
+    if(frameCount == 240) {
+        dardo.ativa = true;
+    }
+
+
+    if(dardo.ativa) {
+        dardo.posicao.y -= 5;
+    }
+
+    for(int i = 0; i < TAM_MAPA_4; i++) {
+        bool isColindindo = CheckCollisionPointRec(dardo.posicao, PAREDES[i]);
+        bool isColindindoParedeAtual =  !CheckCollisionPointRec(dardo.posicao, (Rectangle){-96, 128, 32, 32});
+        if(isColindindo && isColindindoParedeAtual) {
+            dardo.ativa = false;
+            dardo.posicao = (Vector2) {-96, 128};
+        }
+    }
+
+    if(CheckCollision(dardo.posicao, ))
+    // ------------------------------------------------------------ //
 }

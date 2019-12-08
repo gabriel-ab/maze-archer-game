@@ -51,6 +51,8 @@ int main(){
 
     telaAtual = TELA_MENU;
 
+    telaAtual = TELA_FASE_4; //TEMPORÁRIO
+
     while (jogo_rodando) 
     {
         while(telaAtual == TELA_MENU && jogo_rodando) {
