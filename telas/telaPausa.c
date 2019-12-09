@@ -24,7 +24,7 @@ void telaPausa() {
 
         while (telaAtual == TELA_CONFIG)
         {
-            if(IsKeyPressed(KEY_P)) {
+            if(IsKeyPressed(KEY_ESCAPE)) {
                 telaAtual = telaAnterior;
                 isPaused = false;
             }
@@ -106,7 +106,7 @@ void logicatelaPausa(Rectangle botoes[]){
         }
     }
 
-    if(IsKeyPressed(KEY_P)) {
+    if(IsKeyPressed(KEY_ESCAPE)) {
         isPaused = !isPaused;
     }
 }

@@ -455,7 +455,7 @@ void logica_boss_fight(Personagem* xala, Personagem* boss, Projetil flecha[], Re
             }
             setLinhaColisaoPedra(&pedras[i]);
         }
-        // ---------------------------------------------------------------------- //
+        // -----------------------------------  //
 
         
     }

@@ -47,8 +47,9 @@ int main(){
     setTexture(&arrowTexture, "resources/images/Arrow.png", 30, 20);
     
     SetTargetFPS(60);
+    SetExitKey(0);
 
-    telaAtual = BOSS_FIGHT;
+    telaAtual = TELA_FASE_3;
 
     while (jogo_rodando) 
     {

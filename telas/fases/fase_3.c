@@ -266,17 +266,10 @@ void draw_fase_3(Personagem* xala, Personagem inimigos[], Projetil flechas[], Re
             drawFlecha(flechas, xala->quantidadeFlechas);
 
 
-            // "Mira" do mouse
-            DrawCircle(
-                (GetMouseX() -cam.offset.x),
-                (GetMouseY() -cam.offset.y),
-                5,PURPLE
-            );
-
-
         EndMode2D();
 
-        DrawText(FormatText("xala.posicao %.2f %.2f",xala->posicao.x, xala->posicao.y),10,10,20,YELLOW);
+        // "Mira" do mouse
+        DrawCircleV(GetMousePosition(), 5, PURPLE);
 
         drawHUD(xala->vida, projetil_atual+1);
 
@@ -289,7 +282,7 @@ void logica_fase_3(Personagem* xala, Personagem inimigo[], Projetil flecha[], Re
     playMusic(2);
     HideCursor();
 
-    if(IsKeyPressed(KEY_P)) {
+    if(IsKeyPressed(KEY_ESCAPE)) {
         isPaused = !isPaused;
     }
 
