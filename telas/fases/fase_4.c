@@ -115,7 +115,7 @@ void logica_fase_4(Personagem* xala, Rectangle PAREDES[], Rectangle ARMADILHA[])
     } 
     // ------------------------------------ //
 
-    if(IsKeyPressed(KEY_P)) {
+    if(IsKeyPressed(KEY_ESCAPE)) {
         isPaused = !isPaused;
     }
 

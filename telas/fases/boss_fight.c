@@ -215,7 +215,7 @@ void logica_boss_fight(Personagem* xala, Personagem* boss, Projetil flecha[], Re
     HideCursor();
     contador++;
 
-    if(IsKeyPressed(KEY_P)) {
+    if(IsKeyPressed(KEY_ESCAPE)) {
         isPaused = !isPaused;
     }
 

@@ -20,8 +20,6 @@ void drawXala(Personagem* xala, int contador) {
 void drawFlecha(Projetil flecha[], int quantidade) {
     for (int i = 0; i < quantidade; i++)
     {
-        DrawCircleV(flecha[i].posicao,5,GREEN);
-
         DrawTexturePro(flecha[i].textura,
         (Rectangle){0,28,64,8},
         (Rectangle){

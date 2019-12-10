@@ -342,7 +342,7 @@ void logica_fase_3(Personagem* xala, Personagem inimigo[], Projetil flecha[], Re
     for( int i = 0; i < QTD_INIMIGO_3; i++)
     {
         if(inimigo[i].vida > 0) {
-            logicaInimigo(&inimigo[i],&xala);
+            logicaInimigo(&inimigo[i], xala);
             colisaoPersonagem(&inimigo[i], PAREDES, TAM_MAPA_3);
             atualizarPersonagem(&inimigo[i]);
         }
@@ -360,14 +360,14 @@ void logica_fase_3(Personagem* xala, Personagem inimigo[], Projetil flecha[], Re
     {
         if(IsMouseButtonDown(MOUSE_LEFT_BUTTON))
         {
-            mira(*xala,&flecha[projetil_atual],cam);
+            mira(*xala, &flecha[projetil_atual], cam);
         }
 
         if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
         {
             flecha[projetil_atual].ativa = true;
 
-            atira( *xala, &flecha[projetil_atual] );
+            atira(*xala, &flecha[projetil_atual]);
 
             projetil_atual--;
         }
