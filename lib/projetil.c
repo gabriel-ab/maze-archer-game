@@ -1,6 +1,7 @@
 #include <math.h>
 #include "projetil.h"
 #include "define.h"
+#include "som.h"
 
 void mira(Personagem fulano, Projetil *bala, Camera2D cam)
 {
@@ -20,6 +21,7 @@ void atira(Personagem fulano, Projetil *bala)
 {
     bala->velocidade.y = sin(bala->angulo*DEG2RAD)*VELOCIDADE_Projetil;
     bala->velocidade.x = cos(bala->angulo*DEG2RAD)*VELOCIDADE_Projetil;
+    
 }
 
 //Reduz a velocidade fornecida conforme a taxa de atrito 
@@ -62,9 +64,11 @@ int colisaoProjetil_inimigo(Projetil *bala, Personagem *inimigo, int n_inimigos)
     {
         if( CheckCollisionCircles(inimigo[i].posicao, 5, bala->posicao, 10))
         {
+            
             bala->velocidade = inimigo->velocidade;
             inimigo[i].vida--;
-            bala->ativa = false;
+            bala->ativa = 0;
+            playFx(5);
             return i;
         }
     }
