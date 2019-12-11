@@ -95,7 +95,7 @@ void fase_2()
         if(isPaused) {
             telaPausa();
         } else {
-            if(IsKeyPressed(KEY_P)) {
+            if(IsKeyPressed(KEY_ESCAPE)) {
                 isPaused = true;
             }
 

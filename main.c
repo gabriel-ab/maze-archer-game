@@ -8,10 +8,13 @@
 #include "lib/personagem.c"
 #include "lib/projetil.c"
 #include "lib/movimenta.c"
+#include "lib/data.c"
+#include "lib/textura.c"
+#include "lib/draw.c"
 
 #include "telas/menu/menu.c"
 #include "telas/menu/configuracao.c"
-#include "telas/fases/fase1.c"
+#include "telas/fases/fase_1.c"
 #include "telas/fases/fase_2.c"
 #include "telas/fases/fase_3.c"
 #include "telas/fases/fase_4.c"
@@ -49,7 +52,7 @@ int main(){
     SetTargetFPS(60);
     SetExitKey(0);
 
-    telaAtual = TELA_FASE_3;
+    telaAtual = TELA_MENU;
 
     while (jogo_rodando) 
     {

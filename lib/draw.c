@@ -68,14 +68,12 @@ void drawParedes(Rectangle PAREDES[], int tamanho) {
 void drawPiso(Rectangle PISO[], int tamanho) {     
     for(int i = 0; i < tamanho; i++){
 
-        for (int x = 0; x < PISO[i].width; x+=32)
-        {
-            for (int y = 0; y < PISO[i].height; y+=32)
-            {
-                DrawTextureEx(pisoTexture, (Vector2){ PISO[i].x + x, PISO[i].y + y }, 0, 1,WHITE);
-            }
-               
-        }
+        DrawTexturePro(pisoTexture,
+            (Rectangle){0,0,PISO[i].width,PISO[i].height},
+            PISO[i],
+            (Vector2){0,0},
+            0,WHITE
+        );
          
     }
 }
