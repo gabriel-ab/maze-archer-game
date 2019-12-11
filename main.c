@@ -35,11 +35,14 @@ int main(){
     
     //AUDIO
     InitAudioDevice();
-    setMusic("resources/soundtrack/epic.ogg", "resources/soundtrack/cave_loop.ogg");
-    setSomBotao("resources/fx/setting click.wav");
+    setMusic("resources/soundtrack/epic.ogg");
+    setMusicBg("resources/soundtrack/cave_loop.ogg", "resources/soundtrack/winter_loop.ogg", "resources/soundtrack/forest_loop.ogg");
+    setFx("resources/fx/setting click.wav", "resources/fx/you_died.wav");
     setTiroFx("resources/fx/arrow.wav", "resources/fx/arco.wav");
-    PlayMusicStream(caveBG);
-    PlayMusicStream(music);
+    setFootStep("resources/fx/footstep_dirty.wav");
+    setHitFx("resources/fx/hit.wav");
+    setTrapFx("resources/fx/trap.wav", "resources/fx/burn.wav" );
+    initMusic();
     
 
     //HUD
@@ -49,7 +52,7 @@ int main(){
     SetTargetFPS(60);
     SetExitKey(0);
 
-    telaAtual = TELA_FASE_2;
+    telaAtual = TELA_MENU;
 
     while (jogo_rodando) 
     {
@@ -88,9 +91,7 @@ int main(){
     
     UnloadTexture(background);
     
-    UnloadSound(somBotao);
-    UnloadMusicStream(music);
-    UnloadMusicStream(caveBG);
+    unloadAllSound();
     
     CloseAudioDevice();
     CloseWindow(); 

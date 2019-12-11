@@ -11,22 +11,27 @@ void logicaTelaFracasso( Rectangle botoes[]);
 void telaFracasso() {
 
     setFont("resources/font/custom_alagard.png");
-
+    
+    playFx(7);
     while(telaAtual == TELA_FRACASSO) {
+        
         drawTelaFracasso(getBotoesFracasso());
         logicaTelaFracasso(getBotoesFracasso());
+        
     }
     
     UnloadFont(font);
 }
 
 void drawTelaFracasso( Rectangle botoes[]) {
-
+    
+    
     BeginDrawing();
             
         ClearBackground(BLACK);
 
         DrawTextEx(font, "YOU DIED", (Vector2){tela.width/2 - 375, tela.height/2 - 50}, 150,0, RED);
+        
 
         for (int i = 0; i < 2; i++)
         {
