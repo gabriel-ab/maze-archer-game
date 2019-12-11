@@ -4,7 +4,7 @@
 
 #define MAX_RETANGULOS 100
 #define MAX_VIDAS 20
-#define MAX_ITENS 20
+#define MAX_INIMIGOS 50
 
 #define paredeH3 (Rectangle) { 0, 0, 32, 128 }
 #define paredeV3 (Rectangle) { 0, 0, 128, 32 }
@@ -24,7 +24,7 @@ typedef enum
 {
     PAREDE = 1,
     PISO = 2,
-    // TEXTURA = 3
+    INIMIGO = 3
 } TipoDeRetangulo;
 
 typedef enum
@@ -32,7 +32,7 @@ typedef enum
     OPCAO_INICIO = 0,
     OPCAO_FIM,
     OPCAO_VIDA,
-    OPCAO_ITEM
+    OPCAO_INIMIGO
 } Opcoes;
 
 void desenhaGrid(void);
@@ -58,8 +58,8 @@ int main()
     Vector2 vida[20];
     int vida_atual = 0;
 
-    Vector2 item[20];
-    int item_atual = 0;
+    Vector2 inimigo[20];
+    int inimigo_atual = 0;
 
     //zerando valores
     for (int i = 0; i < MAX_RETANGULOS; i++)
@@ -93,7 +93,7 @@ int main()
         tela.width = GetScreenWidth();
         tela.height = GetScreenHeight();
 
-        if (IsKeyDown(KEY_PAGE_UP))camera.zoom += 0.001;
+        if (IsKeyDown(KEY_PAGE_UP)) camera.zoom += 0.001;
         if (IsKeyDown(KEY_PAGE_DOWN) && camera.zoom > 0)camera.zoom -= 0.001;
 
         bufferPosicao.x = retangulo.x;
@@ -175,7 +175,19 @@ int main()
             case PISO:
                 piso[piso_atual++] = retangulo;
                 break;
+            case INIMIGO:
+                inimigo[inimigo_atual].x = (GetMouseX() - camera.offset.x) / camera.zoom;
+                inimigo[inimigo_atual].y = (GetMouseY() - camera.offset.y) / camera.zoom;
+                inimigo_atual++;
+                break;
+                
             }
+        }
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            inimigo[inimigo_atual].x = (GetMouseX() - camera.offset.x) / camera.zoom;
+            inimigo[inimigo_atual].y = (GetMouseY() - camera.offset.y) / camera.zoom;
+            inimigo_atual++;
         }
 
         //-----------------TELA DE OPÇÕES----------------//
@@ -197,10 +209,6 @@ int main()
 
                 case OPCAO_VIDA:
                     vida[vida_atual++] = mousePos;
-                    break;
-
-                case OPCAO_ITEM:
-                    item[item_atual++] = mousePos;
                     break;
             }
         }
@@ -224,6 +232,12 @@ int main()
                     piso[--piso_atual] = (Rectangle){0, 0, 0, 0};
                 }
                 break;
+            case INIMIGO:
+                if (inimigo_atual > 0)
+                {
+                    inimigo[--inimigo_atual] = (Vector2){0, 0};
+                }
+                break;
             }
         }
 
@@ -234,19 +248,22 @@ int main()
 
                 desenhaGrid();
 
-                for (int i = 0; i < MAX_RETANGULOS; i++)
+                for (int i = 0; i < parede_atual; i++)
                 {
                     DrawRectangleRec(parede[i], BLACK);
                     DrawRectangleLinesEx(parede[i], 1, (Color){100, 240, 100, 255});
                     if (parede[i].width == 0 && parede[i].height == 0)
                         break;
                 }
-                for (int i = 0; i < MAX_RETANGULOS; i++)
+                for (int i = 0; i < piso_atual; i++)
                 {
                     DrawRectangleRec(piso[i], BLACK);
                     DrawRectangleLinesEx(piso[i], 1, (Color){100, 100, 200, 255});
-                    if (piso[i].width == 0 && piso[i].height == 0)
-                        break;
+                }
+                for (int i = 0; i < inimigo_atual; i++)
+                {
+                    DrawCircleV(inimigo[i], 8, RED);
+                    DrawCircleV(inimigo[i], 4, PURPLE);
                 }
 
                 DrawRectangleRec(retangulo, BLACK);
@@ -264,10 +281,11 @@ int main()
 
             EndMode2D();
 
-            DrawText(FormatText("Numero de paredes: %i", parede_atual), 10, 10, 20, YELLOW);
-            DrawText(FormatText("Numero de pisos: %i", piso_atual), 10, 30, 20, YELLOW);
+            DrawText(FormatText("Numero de paredes: %i", parede_atual), 10, 10, 20, tipo == PAREDE ? GREEN :DARKGREEN);
+            DrawText(FormatText("Numero de pisos: %i", piso_atual), 10, 30, 20, tipo == PISO ? GREEN :DARKGREEN);
+            DrawText(FormatText("Numero de inimigos: %i", inimigo_atual), 10, 50, 20, tipo == INIMIGO ? GREEN :DARKGREEN);
 
-            DrawText((FormatText("Zoom: %.2f", camera.zoom)), 10, 50, 20, YELLOW);
+            DrawText((FormatText("Zoom: %.2f", camera.zoom)), 10, 70, 20, YELLOW);
 
             if (IsKeyDown(KEY_F1))
             {
@@ -289,20 +307,30 @@ int main()
         fprintf(arquivo, "\nFim do Jogo = (Vector2){%.f,%.f}", fimFase.x, fimFase.y);
 
         fprintf(arquivo, "\n\n//------------PAREDES----------//");
-        for (int i = 0; i < 100; i++)
+        fprintf(arquivo, "\nRectangle parede = {");
+        for (int i = 0; i < parede_atual; i++)
         {
-            if (parede[i].width == 0 && parede[i].height == 0)
-                break;
-            fprintf(arquivo, "\n    %.f, %.f, %.f, %.f,", parede[i].x, parede[i].y, parede[i].width, parede[i].height);
+            fprintf(arquivo, "\n%.f, %.f, %.f, %.f,", parede[i].x, parede[i].y, parede[i].width, parede[i].height);
         }
+        fprintf(arquivo, "\n}");
 
         fprintf(arquivo, "\n\n//-------------PISOS-----------//");
-        for (int i = 0; i < 100; i++)
+        fprintf(arquivo, "\nRectangle piso = {");
+        for (int i = 0; i < piso_atual; i++)
         {
-            if (piso[i].width == 0 && piso[i].height == 0)
-                break;
-            fprintf(arquivo, "\n    %.f, %.f, %.f, %.f,", piso[i].x, piso[i].y, piso[i].width, piso[i].height);
+            fprintf(arquivo, "\n%.f, %.f, %.f, %.f,", piso[i].x, piso[i].y, piso[i].width, piso[i].height);
         }
+        fprintf(arquivo, "\n}");
+
+
+        fprintf(arquivo, "\n\n//-----------INIMIGOS----------//");
+        fprintf(arquivo, "\nVector2 inimigos = {");
+        for (int i = 0; i < inimigo_atual; i++)
+        {
+            fprintf(arquivo, "\n%.f, %.f,", inimigo[i].x, inimigo[i].y);
+        }
+        fprintf(arquivo, "\n}");
+
         fclose(arquivo);
     }
     CloseWindow();
@@ -331,7 +359,7 @@ void selecionarTipo(int *tipo)
     int opcao = 1;
     Texture2D fundo = LoadTextureFromImage(GetScreenData());
 
-    Rectangle botao[2] = {
+    Rectangle botao[3] = {
         tela.width / 2 - MeasureText("PAREDE", 20) / 2,
         tela.height / 2 + 30,
         MeasureText("PAREDE", 20),
@@ -340,6 +368,10 @@ void selecionarTipo(int *tipo)
         tela.height / 2 + 50,
         MeasureText("PISO", 20),
         20,
+        tela.width / 2 - MeasureText("INIMIGO", 20) / 2,
+        tela.height / 2 + 70,
+        MeasureText("INIMIGO", 20),
+        20
     };
 
     while (!confirma)
@@ -347,22 +379,24 @@ void selecionarTipo(int *tipo)
         BeginDrawing();
             ClearBackground(BLACK);
             DrawTexture(fundo, 0,0, (Color){255,255,255,100});
-            DrawText("SELECIONE O TIPO DE RETANGULO:", tela.width / 2 - MeasureText("SELECIONE O TIPO DE RETANGULO:", 20) / 2, tela.height / 2, 20, RED);
+            DrawText("SELECIONE O TIPO DE RETANGULO:", tela.width / 2 - MeasureText("SELECIONE O TIPO DE RETANGULO:", 25) / 2, tela.height / 2, 25, RED);
             DrawText(opcao == 1 ? "PAREDE" : "parede", tela.width / 2 - MeasureText("PAREDE", 20) / 2, tela.height / 2 + 30, 20, RED);
             DrawText(opcao == 2 ? "PISO" : "piso", tela.width / 2 - MeasureText("PISO", 20) / 2, tela.height / 2 + 50, 20, RED);
+            DrawText(opcao == 3 ? "INIMIGO" : "inimigo", tela.width / 2 - MeasureText("INIMIGO", 20) / 2, tela.height / 2 + 70, 20, RED);
         EndDrawing();
 
-        if (IsKeyPressed(KEY_UP)) opcao = 1;
-        if (IsKeyPressed(KEY_DOWN)) opcao = 2;
+        if (IsKeyPressed(KEY_UP) && opcao >= 2) opcao--;
+        if (IsKeyPressed(KEY_DOWN) && opcao <= 2) opcao++;
         if (IsKeyPressed(KEY_ENTER)) confirma = 1;
-
-        if (CheckCollisionPointRec(GetMousePosition(), botao[0])) opcao = 1;
-        if (CheckCollisionPointRec(GetMousePosition(), botao[1])) opcao = 2;
+        for( int i = 0; i < 3; i++){
+            if (CheckCollisionPointRec(GetMousePosition(), botao[i])) opcao = i + 1;    
+        }
 
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) confirma = 1;
 
         if (confirma && opcao == 1) *tipo = PAREDE;
         if (confirma && opcao == 2) *tipo = PISO;
+        if (confirma && opcao == 3) *tipo = INIMIGO;
     }
 }
 
@@ -371,7 +405,7 @@ void desenhaTelaAjuda(void)
     #ifndef TEXTO_AJUDA
         #define TEXTO_AJUDA
         #define AJUDA_0 "1,2,3,4,5,6 = Retangulos Predefinidos de Paredes e Pisos"
-        #define AJUDA_1 "TAB = Parede / Pisos"
+        #define AJUDA_1 "TAB = Parede / Piso / Inimigo"
         #define AJUDA_2 "Setas = Movimenta Os Objetos"
         #define AJUDA_3 "Shift + Setas = Edição de tamanho do Objeto"
         #define AJUDA_4 "Clique Esquerdo = Retangulo Personalizado"
