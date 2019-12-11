@@ -199,7 +199,7 @@ void fase_3()
 
 
 
-    // ------------FLECHA ------------ //
+    // ------------ FLECHA ------------ //
     Projetil flechas[quantidade_maxima_flechas];
 
     // indice da flecha
@@ -213,9 +213,7 @@ void fase_3()
     // -------------------------------- //
 
 
-
     setTargetCamera(&xala);
-
 
 
     while(telaAtual == TELA_FASE_3) {
@@ -298,7 +296,7 @@ void logica_fase_3(Personagem* xala, Personagem inimigo[], Projetil flecha[], Re
     }
 
     if(CheckCollisionPointRec(xala->posicao, portalCollision)) {
-        telaAtual = TELA_FASE_4;
+        telaAtual = BOSS_FIGHT;
         save();
     }
     

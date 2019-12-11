@@ -49,7 +49,7 @@ int main(){
     SetTargetFPS(60);
     SetExitKey(0);
 
-    telaAtual = TELA_FASE_3;
+    telaAtual = TELA_FASE_2;
 
     while (jogo_rodando) 
     {
@@ -79,10 +79,6 @@ int main(){
 
         while(telaAtual == TELA_FASE_3) {
             fase_3();
-        }
-
-        while(telaAtual == TELA_FASE_4) {
-            fase_4();
         }
 
         while(telaAtual == BOSS_FIGHT) {

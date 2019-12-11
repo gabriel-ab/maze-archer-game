@@ -67,16 +67,35 @@ void fase_2()
         2592, 576, 544, 160,  
     };
     
-    //TEXTURA DO CENARIO
+    // ------------------- TEXTURA DO CENARIO ------------------- //
     setTextureCropped(&pisoTexture, "resources/images/full.png", (Rectangle){32*17,32*4,32,32 });
     setTextureCropped(&paredeTexture, "resources/images/full.png", (Rectangle){32*23,32*14,32,32 });
+    setTexture(&portalTexture, "resources/images/portal.png",260, 160);
+    setTextureCropped(&flechasTexture, "resources/images/Flechas.png", (Rectangle){0,0,64,64});
     //----------------------------------------------------------//
     
 
+    // ------------ XALA ------------ //
     Personagem xala;
     xala = personagemConstructor();
+    xala.posicao = (Vector2){0, 0};
     xala.altura = 20;
     xala.largura = 20;
+    // ----------------------------- //
+
+
+    // ------------ FLECHA ------------ //
+    Projetil flechas[quantidade_maxima_flechas];
+
+    // indice da flecha
+    int projetil_atual = xala.quantidadeFlechas -1;
+
+    // Inicializando as flechas
+    for(int i = 0; i < quantidade_maxima_flechas; i++){
+        flechas[i].ativa = false;
+        flechas[i].textura = flechasTexture;
+    }
+    // -------------------------------- //
 
     setTargetCamera(&xala);
 
@@ -85,16 +104,20 @@ void fase_2()
     ///que o personagem colide para passar de fase
     int currentFrame = 0;
     int frameCount = 0;
-    setTexture(&portalTexture, "resources/images/portal.png",260, 160);
     Rectangle portalCollision = (Rectangle) {0, 50, 30, 60 };
     Rectangle frameRecPortal = (Rectangle) {0 ,0 , portalTexture.width/4, 160};
     // -------------------------------- //
+
+
     
     while(telaAtual == TELA_FASE_2){ 
 
         if(isPaused) {
             telaPausa();
         } else {
+
+            HideCursor();
+
             if(IsKeyPressed(KEY_ESCAPE)) {
                 isPaused = true;
             }
@@ -122,6 +145,48 @@ void fase_2()
             }
             // -----------------------------------------------------//
 
+            // ----------------------- LÓGICA DO PROJÉTIL ------------------------ //
+    
+            checkClickBow(projetil_atual);
+
+            if(projetil_atual > -1)
+            {
+                if(IsMouseButtonDown(MOUSE_LEFT_BUTTON))
+                {
+                    mira(xala, &flechas[projetil_atual], cam);
+                }
+
+                if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
+                {
+                    flechas[projetil_atual].ativa = true;
+
+                    atira(xala, &flechas[projetil_atual]);
+
+                    projetil_atual--;
+                }
+            }
+            
+            for(int i = 0; i < xala.quantidadeFlechas; i++)
+            {   
+                if(flechas[i].ativa)
+                {
+                    aplicarInerciaV(&flechas[i].posicao, flechas[i].velocidade);
+                    aplicarAtritoProjetil(&flechas[i],0.5);
+                    colisaoProjetil_mapa(&flechas[i], PAREDE, TAM_MAPA_2);
+                    // colisaoProjetil_inimigo(&flechas[i], inimigo, QTD_INIMIGO_3);
+                }
+            }
+            
+            if(flechas[projetil_atual].velocidade.x == 0 && flechas[projetil_atual].velocidade.y == 0 && flechas[projetil_atual].ativa)
+            {
+                flechas[projetil_atual].ativa = false;
+            }
+            
+            // RAFAEL PARTE DE PEGAR OBJETO (flechas)
+            if(projetil_atual +1 < xala.quantidadeFlechas && IsKeyPressed(KEY_SPACE)) projetil_atual++; //temporario
+
+            // -------------------------------------------------------- //
+
 
             movimentar(&xala);
             colisaoPersonagem(&xala, PAREDE, TAM_MAPA_2);
@@ -137,9 +202,14 @@ void fase_2()
                     drawPiso(PISO, TAM_PISO_2);
                     DrawTextureRec(portalTexture, frameRecPortal, (Vector2){0, 0}, GREEN);
                     drawXala(&xala, 0);
-                    
+                    drawFlecha(flechas, xala.quantidadeFlechas);
 
                 EndMode2D();
+
+                // "Mira" do mouse
+                DrawCircleV(GetMousePosition(), 5, PURPLE);
+
+                drawHUD(xala.vida, projetil_atual+1);
 
             EndDrawing();
         }
