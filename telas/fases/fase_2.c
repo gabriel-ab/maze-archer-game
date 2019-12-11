@@ -9,7 +9,7 @@
     #include "../../lib/som.h"
 #endif
 
-#define TAM_MAPA_2 31 
+#define TAM_MAPA_2 32 
 #define TAM_PISO_2 13
 
 void fase_2();
@@ -49,6 +49,7 @@ void fase_2()
         2624, 544, 512, 32,
         2176, -352, 448, 32,
         2432, 96, 160, 32,
+        3136, 544, 32, 224,
     };
     
     Rectangle PISO[] = {
@@ -90,11 +91,17 @@ void fase_2()
     Rectangle frameRecPortal = (Rectangle) {0 ,0 , portalTexture.width/4, 160};
     // -------------------------------- //
     
+    
     while(telaAtual == TELA_FASE_2){ 
-
-        if(isPaused) {
+        
+        //FUNCAO PARA TOCAR O SOM DE FUNDO
+        playMusic(3);
+        if(isPaused) 
+        {
             telaPausa();
-        } else {
+
+        }else 
+        {
             if(IsKeyPressed(KEY_P)) {
                 isPaused = true;
             }

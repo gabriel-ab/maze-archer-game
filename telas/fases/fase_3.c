@@ -6,6 +6,7 @@
 #include "../../lib/define.h"
 #include "../../lib/draw.c"
 #include "../../lib/data.c"
+#include "../../lib/som.h"
 
 #define TAM_MAPA_3 76
 #define TAM_PISO_3 19
@@ -176,7 +177,7 @@ void fase_3()
     setTargetCamera(&xala);
     
     while(telaAtual == TELA_FASE_3) {
-        
+        playMusic(2);
         if(isPaused) 
         {
             telaPausa();
@@ -263,6 +264,7 @@ void logica_fase_3(Personagem* xala, Rectangle PAREDES[], Rectangle ARMADILHA[])
     for (int i = 0; i < TAM_ARMADILHAS_3; i++)
     {
         if(CheckCollisionPointRec(xala->posicao, ARMADILHA[i]) && !(xala->invulneravel)) {
+            playFx(8);
             xala->vida--;
             xala->invulneravel = !(xala->invulneravel);
         }

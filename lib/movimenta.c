@@ -17,22 +17,34 @@ void movimentar(Personagem *fulano){
     
     if(fulano->velocidade.y > -VELOCIDADE_XALA)
     {
-        if(IsKeyDown(KEY_W)) fulano->velocidade.y += -ACELERACAO;
+        if(IsKeyDown(KEY_W)){ 
+            fulano->velocidade.y += -ACELERACAO;
+            footStep();
+        }     
     }
 
     if(fulano->velocidade.y < VELOCIDADE_XALA)
     {
-        if(IsKeyDown(KEY_S)) fulano->velocidade.y += ACELERACAO;
+        if(IsKeyDown(KEY_S)){
+            fulano->velocidade.y += ACELERACAO;
+            footStep();
+        }
     }
 
     if(fulano->velocidade.x > -VELOCIDADE_XALA)
     {
-        if(IsKeyDown(KEY_A)) fulano->velocidade.x += -ACELERACAO;
+        if(IsKeyDown(KEY_A)){
+            fulano->velocidade.x += -ACELERACAO;
+            footStep();
+        }
     }
 
     if(fulano->velocidade.x < VELOCIDADE_XALA)
     {
-        if(IsKeyDown(KEY_D)) fulano->velocidade.x += ACELERACAO;
+        if(IsKeyDown(KEY_D)){
+            fulano->velocidade.x += ACELERACAO;
+            footStep();
+        }
     }
 
     aplicarAtrito(fulano,TAXA_ATRITO);

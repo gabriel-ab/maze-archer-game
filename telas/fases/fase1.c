@@ -114,6 +114,8 @@ void fase_1()
     
     while(telaAtual == TELA_FASE_1){ 
         
+        playMusic(2);
+        
         if(isPaused) {
             telaPausa();
         } else {
@@ -145,7 +147,7 @@ void fase_1()
             }
             // -----------------------------------------------------//
 
-            playMusic(2);
+            
        
             movimentar(&xala);
             colisaoPersonagem(&xala, PAREDES, n_paredes);
@@ -165,13 +167,7 @@ void fase_1()
 
             //------------Logica do Projetil--------------
 
-            /*if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && projetil_atual > -1){
-                playFx(4);
-            }
-            if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && projetil_atual > -1){
-                StopSound(arco);
-                playFx(3);
-            }*/
+            
             checkClickBow(projetil_atual);
             if(projetil_atual > -1)
             {
