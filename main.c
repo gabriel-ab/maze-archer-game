@@ -17,7 +17,6 @@
 #include "telas/fases/fase_1.c"
 #include "telas/fases/fase_2.c"
 #include "telas/fases/fase_3.c"
-#include "telas/fases/fase_4.c"
 #include "telas/fases/boss_fight.c"
 #include "telas/telaFracasso.c"
 #include "telas/telaPausa.c"

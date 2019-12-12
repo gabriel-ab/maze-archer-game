@@ -4,8 +4,6 @@
 #include "../../lib/movimenta.h"
 #include "../../lib/tela.h"
 #include "../../lib/define.h"
-#include "../../lib/draw.c"
-#include "../../lib/data.c"
 #include "../../lib/som.h"
 
 #define TAM_MAPA_3 76
