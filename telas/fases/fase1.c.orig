@@ -167,7 +167,10 @@ void fase_1()
 
             //------------Logica do Projetil--------------
 
+<<<<<<< HEAD
+=======
             
+>>>>>>> e762eafa2eff919fbc96dd5db67fe77b8e0afa51
             checkClickBow(projetil_atual);
             if(projetil_atual > -1)
             {

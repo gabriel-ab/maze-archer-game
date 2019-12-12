@@ -11,7 +11,7 @@
 
 #include "telas/menu/menu.c"
 #include "telas/menu/configuracao.c"
-#include "telas/fases/fase1.c"
+#include "telas/fases/fase_1.c"
 #include "telas/fases/fase_2.c"
 #include "telas/fases/fase_3.c"
 #include "telas/fases/fase_4.c"
