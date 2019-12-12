@@ -9,6 +9,7 @@ void logicaBotoesConfiguracao(Rectangle botoes[]);
 //TELA DE CONFIGURAÇÃO
 void telaConfiguracao() {
     
+    playMusic(1);
     drawTelaConfiguracao(background, getBotoesConfiguracao());
     logicaBotoesConfiguracao(getBotoesConfiguracao());
 

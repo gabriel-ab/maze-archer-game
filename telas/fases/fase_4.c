@@ -4,6 +4,7 @@
 #include "../../lib/movimenta.h"
 #include "../../lib/tela.h"
 #include "../../lib/define.h"
+#include "../../lib/som.h"
 
 #define TAM_MAPA_4 4
 #define TAM_PISO_4 1
@@ -67,6 +68,7 @@ void fase_4() {
         if(isPaused) {
             telaPausa();
         } else {
+            playMusic(2);
             draw_fase_4(&xala, PAREDES, PISO, ARMADILHAS);
             logica_fase_4(&xala, PAREDES, ARMADILHAS); 
         }
@@ -184,6 +186,7 @@ void logica_fase_4(Personagem* xala, Rectangle PAREDES[], Rectangle ARMADILHA[])
     
 
     if(frameCount == 240) {
+        playFx(6);
         dardo.ativa = true;
     }
 

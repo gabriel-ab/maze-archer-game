@@ -66,8 +66,12 @@ int colisaoProjetil_inimigo(Projetil *bala, Personagem *inimigo, int n_inimigos)
             
             bala->velocidade = inimigo->velocidade;
             inimigo[i].vida--;
+<<<<<<< HEAD
             bala->ativa = false;
-	    playFx(5);
+=======
+            bala->ativa = 0;
+            playFx(5);
+>>>>>>> 4dd87000393f1fda4e290157a419fa4612f55f4b
             return i;
         }
     }

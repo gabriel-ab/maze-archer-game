@@ -10,6 +10,11 @@ void logicaBotoesMenu(Rectangle botoes[]);
 
 //TELA DE MENU
 void telaMenu() {
+    
+    setFont("resources/font/custom_alagard.png");
+    
+    playMusic(1);
+    
     drawTelaMenu(background, getBotoesMenu());
     logicaBotoesMenu(getBotoesMenu());
 
@@ -17,12 +22,21 @@ void telaMenu() {
 }
 
 void drawTelaMenu(Texture2D background, Rectangle botoes[]) {
+    
+    char titulo[50] = "UNTITLED\n\t\t\tDUNGEON\n\t\t\t\t\t\t\t\t\tGAME";
+    
+    static int framescounter = 0;
+    
+    framescounter++;
+    
     BeginDrawing();
             
         ClearBackground(BLACK);
 
         DrawTexture(background, 0, 0, WHITE);
-
+        
+        DrawTextEx(font, TextSubtext(titulo, 0, framescounter/6), (Vector2){101,108}, 60, 0, GOLD);
+        DrawTextEx(font, TextSubtext(titulo, 0, framescounter/6), (Vector2){100,100}, 60, 0, RED);
         
         for (int i = 0; i < 4; i++)
         {
@@ -43,9 +57,8 @@ void logicaBotoesMenu(Rectangle botoes[]) {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
             PlaySound(somBotao);
-            telaAtual = TELA_FASE_1;
-            StopMusicStream(music);
-            
+            telaAtual = TELA_FASE_3;
+                        
         }
     }
 

@@ -61,7 +61,6 @@ void playFx(int fxNumber){
         PlaySound(somBotao);
         while(IsSoundPlaying(somBotao)){}
     }
-    
     //SOM DA FLECHA
     if(fxNumber == 3){
         SetSoundVolume(flecha, 0.8);
@@ -103,7 +102,6 @@ void playFx(int fxNumber){
 void playMusic(int musicNumber){
     //MUSICA MENU
     if(musicNumber == 1){
-        PlayMusicStream(music);
         UpdateMusicStream(music);
     }
     //SOM DE FUNDO CAVERNA
@@ -123,6 +121,11 @@ void playMusic(int musicNumber){
     }
 }
 
+<<<<<<< HEAD
+void checkClickBow(int quantidadeFlechas){
+        
+        if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && quantidadeFlechas > 0){
+=======
 //FUNÇÃO PARA OS PASSOS DA PERSONAGEM... TALVEZ AINDA FALTA UNS AJUSTES VOU ALMOÇAR
 void footStep(){
     SetSoundVolume(passo, 0.3);
@@ -135,9 +138,10 @@ void footStep(){
 void checkClickBow(int projetil_atual){
         
         if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
+>>>>>>> 4dd87000393f1fda4e290157a419fa4612f55f4b
             playFx(4);
         }
-        if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && projetil_atual > -1){
+        if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && quantidadeFlechas > 0){
             StopSound(arco);
             playFx(3);
             

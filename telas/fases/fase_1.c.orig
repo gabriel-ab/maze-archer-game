@@ -198,6 +198,8 @@ void fase_1()
     
     while(telaAtual == TELA_FASE_1){ 
         
+        playMusic(2);
+        
         if(isPaused) {
             telaPausa();
         } else {
@@ -229,7 +231,7 @@ void fase_1()
             }
             // -----------------------------------------------------//
 
-            playMusic(2);
+            
        
             movimentar(&xala);
             colisaoPersonagem(&xala, PAREDES, n_paredes);
@@ -249,7 +251,10 @@ void fase_1()
 
             //------------Logica do Projetil--------------
 
-         
+<<<<<<< HEAD:telas/fases/fase_1.c
+=======
+            
+>>>>>>> 4dd87000393f1fda4e290157a419fa4612f55f4b:telas/fases/fase1.c
             checkClickBow(projetil_atual);
             if(projetil_atual > -1)
             {
@@ -292,7 +297,6 @@ void fase_1()
             for( int i = 0; i < n_inimigos; i++)
             {
                 logicaInimigo(&inimigo[i],&xala);
-
                 colisaoPersonagem(&inimigo[i], PAREDES, n_paredes);
                 atualizarPersonagem(&inimigo[i]);
             }
@@ -314,7 +318,6 @@ void fase_1()
 
                 BeginMode2D(cam);
 
-                    
                     drawPiso(PISO, n_pisoTextures);
                     drawParedes(PAREDES, n_paredes);
                     DrawTextureRec(portalTexture, frameRecPortal, (Vector2){-400, -400}, BLUE);
@@ -325,7 +328,6 @@ void fase_1()
                         DrawCircleV(inimigo[i].posicao, 10, (Color){255,150,255,255});
                     }
 
-                    DrawCircle(0,0,2,WHITE);
                     DrawCircleV(xala.posicao,10,BLUE);
 
                     for (int i = 0; i < xala.quantidadeFlechas; i++)
