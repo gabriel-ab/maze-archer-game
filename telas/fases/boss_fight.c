@@ -40,8 +40,11 @@ Texture2D pedraTexture;
 int pedrasCount = 0;
 
 int projetil_atual;
-int dano;
+int vidaBoss;
 int contador;
+
+Rectangle end1;
+Rectangle end2;
 
 //Função responsável por representar a Fase final
 void boss_fight()
@@ -86,7 +89,7 @@ void boss_fight()
     // ----------------------------- //
 
 
-    dano = barraVidaBoss.width/boss.vida;
+    vidaBoss = barraVidaBoss.width/boss.vida;
 
 
     // ----------------- TEXTURE CENÁRIO --------------- //
@@ -113,6 +116,8 @@ void boss_fight()
     }
     // -------------------------------- //
 
+    end1 = (Rectangle) {0 - GetScreenWidth(),0, GetScreenWidth(), GetScreenHeight()};
+    end2 = (Rectangle) {GetScreenWidth(),0, GetScreenWidth(), GetScreenHeight()};
 
     setTargetCamera(&xala);
 
@@ -203,8 +208,16 @@ void draw_boss_fight(Personagem* xala, Personagem* boss, Projetil flechas[], Rec
             // ------------------------------------------ //
         }
 
+        drawHUD(xala->vida, projetil_atual+1);
 
-        drawHUD(boss->vida, 0);
+        if(boss->vida <= 0) {
+            DrawRectangleRec(end1, BLACK);
+            DrawRectangleRec(end2, BLACK);
+        }
+
+        if((CheckCollisionRecs(end1, end2))) {
+            DrawText("CONTINUA . . .", GetScreenWidth()/2 - (20*6), GetScreenHeight()/2, 30, RED);
+        }
 
     EndDrawing();
 }
@@ -215,7 +228,7 @@ void logica_boss_fight(Personagem* xala, Personagem* boss, Projetil flecha[], Re
     HideCursor();
     contador++;
 
-    if(IsKeyPressed(KEY_P)) {
+    if(IsKeyPressed(KEY_ESCAPE)) {
         isPaused = !isPaused;
     }
 
@@ -235,24 +248,6 @@ void logica_boss_fight(Personagem* xala, Personagem* boss, Projetil flecha[], Re
     colisaoPersonagem(xala, PAREDES, 4);
     atualizarCamera(&cam, xala->posicao);
     // --------------------------------------------------- //
-
-
-    // -------------- COLISÃO XALA PEDRA ------------ //
-    for (int i = 0; i < pedrasCount; i++)
-    {
-        bool estaColidindo = CheckCollisionPointRec(xala->posicao, pedras[i].linhaColisaoCima) ||
-            CheckCollisionPointRec(xala->posicao, pedras[i].linhaColisaoBaixo) ||
-            CheckCollisionPointRec(xala->posicao, pedras[i].linhaColisaoEsquerda) ||
-            CheckCollisionPointRec(xala->posicao, pedras[i].linhaColisaoDireita);
-
-        if(estaColidindo && pedras[i].ativa)  {
-            xala->vida--;
-            xala->invulneravel = !(xala->invulneravel);
-            pedras[i].ativa = false;
-            pedrasCount--;   
-        }
-    }
-    // ------------------------------------------------ //
 
 
 
@@ -297,36 +292,6 @@ void logica_boss_fight(Personagem* xala, Personagem* boss, Projetil flecha[], Re
     
 
 
-    // ----------------- COLISÃO FLECHA E GOLEM --------------- //
-    for(int i = 0; i < xala->quantidadeFlechas; i++)
-    {   
-        if(flecha[i].ativa)
-        {
-            aplicarInerciaV(&flecha[i].posicao, flecha[i].velocidade);
-            aplicarAtritoProjetil(&flecha[i],0.5);
-            colisaoProjetil_mapa(&flecha[i], PAREDES, 4);
-            
-            
-            if(
-                CheckCollisionCircleRec(flecha[i].posicao, 5, boss->linhaColisaoCima) ||
-                CheckCollisionCircleRec(flecha[i].posicao, 5, boss->linhaColisaoBaixo) ||
-                CheckCollisionCircleRec(flecha[i].posicao, 5, boss->linhaColisaoEsquerda) ||
-                CheckCollisionCircleRec(flecha[i].posicao, 5, boss->linhaColisaoDireita)
-            )
-            {
-                flecha[i].velocidade = boss->velocidade;
-                boss[i].vida--;
-                flecha[i].ativa = false;
-                barraVidaBoss.width -= dano;
-            }
-
-            
-        }
-    }
-    // ------------------------------------------------------------- //
-    
-
-
     // ------------ LÓGICA DESATIVAR FLECHA ----------------- //
     if(flecha[projetil_atual].velocidade.x == 0 && flecha[projetil_atual].velocidade.y == 0 && flecha[projetil_atual].ativa)
     {
@@ -342,21 +307,68 @@ void logica_boss_fight(Personagem* xala, Personagem* boss, Projetil flecha[], Re
 
 
 
-    // -------- LÓGICA DA ANIMAÇÃO: GOLEM ---------- //
-    frameCount++;
-    if (frameCount % 10 == 0)
-    {
-        currentFrame++;
-
-        if (currentFrame > 7) currentFrame = 0;
-        frameRecPersonagem.x = (float)currentFrame * (float)boss->sprite.width/7;
-    }
-    // --------------------------------------------- //
-
-
-
     if(boss->vida > 0) {
+
+        // ----------------- COLISÃO FLECHA E GOLEM --------------- //
+        for(int i = 0; i < xala->quantidadeFlechas; i++)
+        {   
+            if(flecha[i].ativa)
+            {
+                aplicarInerciaV(&flecha[i].posicao, flecha[i].velocidade);
+                aplicarAtritoProjetil(&flecha[i],0.5);
+                colisaoProjetil_mapa(&flecha[i], PAREDES, 4);
+                
+                
+                if(
+                    CheckCollisionCircleRec(flecha[i].posicao, 5, boss->linhaColisaoCima) ||
+                    CheckCollisionCircleRec(flecha[i].posicao, 5, boss->linhaColisaoBaixo) ||
+                    CheckCollisionCircleRec(flecha[i].posicao, 5, boss->linhaColisaoEsquerda) ||
+                    CheckCollisionCircleRec(flecha[i].posicao, 5, boss->linhaColisaoDireita)
+                )
+                {
+                    flecha[i].velocidade = boss->velocidade;
+                    boss[i].vida--;
+                    flecha[i].ativa = false;
+                    barraVidaBoss.width = vidaBoss*(boss->vida);
+                }
+
+                
+            }
+        }
+        // ------------------------------------------------------------- //
+
+        // -------------- COLISÃO XALA PEDRA ------------ //
+        for (int i = 0; i < pedrasCount; i++)
+        {
+            bool estaColidindo = CheckCollisionPointRec(xala->posicao, pedras[i].linhaColisaoCima) ||
+                CheckCollisionPointRec(xala->posicao, pedras[i].linhaColisaoBaixo) ||
+                CheckCollisionPointRec(xala->posicao, pedras[i].linhaColisaoEsquerda) ||
+                CheckCollisionPointRec(xala->posicao, pedras[i].linhaColisaoDireita);
+
+            if(estaColidindo && pedras[i].ativa)  {
+                xala->vida--;
+                xala->invulneravel = !(xala->invulneravel);
+                pedras[i].ativa = false;
+                pedrasCount--;   
+            }
+        }
+        // ------------------------------------------------ //
         
+
+
+        // -------- LÓGICA DA ANIMAÇÃO: GOLEM ---------- //
+        frameCount++;
+        if (frameCount % 10 == 0)
+        {
+            currentFrame++;
+
+            if (currentFrame > 7) currentFrame = 0;
+            frameRecPersonagem.x = (float)currentFrame * (float)boss->sprite.width/7;
+        }
+        // --------------------------------------------- //
+
+
+
         // ----------- ATUALIZAÇÃO DO BOSS -------------//
         if(!CheckCollisionPointCircle(
             xala->posicao, 
@@ -460,7 +472,19 @@ void logica_boss_fight(Personagem* xala, Personagem* boss, Projetil flecha[], Re
         
     }
 
-    
+    if(boss->vida <= 0 && !(CheckCollisionRecs(end1, end2))) {
+        end1.x+=5;
+        end2.x-=5;
+        
+    }
+
+    if((CheckCollisionRecs(end1, end2))) {
+        if(contador % 180 == 0) {
+            telaAtual = TELA_MENU;
+            ShowCursor();
+            save();
+        }
+    }
 }
 
 void movimentacaoBoss(Vector2 alvo) {

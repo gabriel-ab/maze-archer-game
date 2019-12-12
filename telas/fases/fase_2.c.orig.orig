@@ -145,7 +145,6 @@ void fase_2()
     Rectangle frameRecPortal = (Rectangle) {0 ,0 , portalTexture.width/4, 160};
     // -------------------------------- //
     
-<<<<<<< HEAD
 
 
     int contadorPortal = 0;
@@ -155,9 +154,6 @@ void fase_2()
 
 
 
-=======
-    
->>>>>>> e762eafa2eff919fbc96dd5db67fe77b8e0afa51
     while(telaAtual == TELA_FASE_2){ 
         
         //FUNCAO PARA TOCAR O SOM DE FUNDO
@@ -166,9 +162,12 @@ void fase_2()
         {
             telaPausa();
         } else {
+<<<<<<< HEAD
+=======
 
             HideCursor();
 
+>>>>>>> bf4958d07e9529c4c7e74e6cfd43a4b37a7b45cb
             if(IsKeyPressed(KEY_ESCAPE)) {
                 isPaused = true;
             }
@@ -241,6 +240,7 @@ void fase_2()
 
 
             // ----------------------- LÓGICA DO PROJÉTIL ------------------------ //
+    
             checkClickBow(projetil_atual);
 
             if(projetil_atual > -1)

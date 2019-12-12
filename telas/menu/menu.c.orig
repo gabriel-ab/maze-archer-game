@@ -13,8 +13,11 @@ void telaMenu() {
     
     setFont("resources/font/custom_alagard.png");
     
+<<<<<<< HEAD
     playMusic(1);
     
+=======
+>>>>>>> bf4958d07e9529c4c7e74e6cfd43a4b37a7b45cb
     drawTelaMenu(background, getBotoesMenu());
     logicaBotoesMenu(getBotoesMenu());
 
@@ -57,7 +60,11 @@ void logicaBotoesMenu(Rectangle botoes[]) {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
             PlaySound(somBotao);
+<<<<<<< HEAD
+            telaAtual = TELA_FASE_3;
+=======
             telaAtual = TELA_FASE_1;
+>>>>>>> bf4958d07e9529c4c7e74e6cfd43a4b37a7b45cb
                         
         }
     }

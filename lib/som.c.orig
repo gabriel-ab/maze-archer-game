@@ -4,25 +4,42 @@ void setMusic(char* musicPath) {
     music = LoadMusicStream(musicPath);
 }
 //MUSICAS DE FUNDO DOS MAPAS
+<<<<<<< HEAD
 void setMusicBg(char* cave, char* winter, char* lava){
     caveBG = LoadMusicStream(cave);
     winterBG = LoadMusicStream(winter);
     lavaBG = LoadMusicStream(lava);
+=======
+void setMusicBg(char* cave, char* winter, char* forest){
+    caveBG = LoadMusicStream(cave);
+    winterBG = LoadMusicStream(winter);
+    forestBG = LoadMusicStream(forest);
+>>>>>>> bf4958d07e9529c4c7e74e6cfd43a4b37a7b45cb
 }
 
 //FUNÇÃO QUE INICIALIZA AS MUSICAS DO JOGO
 void initMusic(){
     PlayMusicStream(caveBG);
     PlayMusicStream(winterBG);
+<<<<<<< HEAD
     PlayMusicStream(lavaBG);
+=======
+    PlayMusicStream(forestBG);
+>>>>>>> bf4958d07e9529c4c7e74e6cfd43a4b37a7b45cb
     PlayMusicStream(music);
 }
 
 //FUNÇAO PRA ADICIONAR SFX DIVERSOS
+<<<<<<< HEAD
 void setFx(char* somBotaoPath, char* gameOver, char* pickup) {
     somBotao = LoadSound(somBotaoPath);
     gameover = LoadSound(gameOver);
     item = LoadSound(pickup);
+=======
+void setFx(char* somBotaoPath, char* gameOver) {
+    somBotao = LoadSound(somBotaoPath);
+    gameover = LoadSound(gameOver);
+>>>>>>> bf4958d07e9529c4c7e74e6cfd43a4b37a7b45cb
 }
 
 // FUNÇAO PRA ADICIONAR O SOM DO ARCO E FLECHA
@@ -92,10 +109,13 @@ void playFx(int fxNumber){
         PlaySound(queima);
     }
     
+<<<<<<< HEAD
     if(fxNumber == 9){
         PlaySound(item);
     }
     
+=======
+>>>>>>> bf4958d07e9529c4c7e74e6cfd43a4b37a7b45cb
     
 }
 //FAZER A MUSICA DE FUNDO TOCAR
@@ -114,18 +134,20 @@ void playMusic(int musicNumber){
         SetMusicVolume(winterBG, 0.5);
         UpdateMusicStream(winterBG);
     }
+<<<<<<< HEAD
     //SOM DE FUNDO LAVA
     if(musicNumber == 4){
         SetMusicVolume(lavaBG, 0.7);
         UpdateMusicStream(lavaBG);
+=======
+    //SOM DE FUNDO FLORESTA
+    if(musicNumber == 4){
+        SetMusicVolume(forestBG, 0.5);
+        UpdateMusicStream(forestBG);
+>>>>>>> bf4958d07e9529c4c7e74e6cfd43a4b37a7b45cb
     }
 }
 
-<<<<<<< HEAD
-void checkClickBow(int quantidadeFlechas){
-        
-        if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && quantidadeFlechas > 0){
-=======
 //FUNÇÃO PARA OS PASSOS DA PERSONAGEM... TALVEZ AINDA FALTA UNS AJUSTES VOU ALMOÇAR
 void footStep(){
     SetSoundVolume(passo, 0.3);
@@ -138,10 +160,9 @@ void footStep(){
 void checkClickBow(int projetil_atual){
         
         if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
->>>>>>> 4dd87000393f1fda4e290157a419fa4612f55f4b
             playFx(4);
         }
-        if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && quantidadeFlechas > 0){
+        if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && projetil_atual > -1){
             StopSound(arco);
             playFx(3);
             
@@ -163,6 +184,10 @@ void unloadAllSound(){
     UnloadMusicStream(music);
     UnloadMusicStream(caveBG);
     UnloadMusicStream(winterBG);
+<<<<<<< HEAD
     UnloadMusicStream(lavaBG);
+=======
+    UnloadMusicStream(forestBG);
+>>>>>>> bf4958d07e9529c4c7e74e6cfd43a4b37a7b45cb
     
 }

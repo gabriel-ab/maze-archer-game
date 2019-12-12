@@ -10,6 +10,7 @@ Shader shader;
 
 void telaPausa() {
     
+    sleep(1);
     //pathImageBackgroundAnterior = pathImageBackground;
     Image image = GetScreenData();
     ImageColorContrast(&image, -40);
@@ -102,7 +103,7 @@ void logicatelaPausa(Rectangle botoes[]){
             updateBackground();
             PlaySound(somBotao);
             telaAtual = TELA_MENU;
-            isPaused = !isPaused;   
+            isPaused = !isPaused;
         }
     }
 

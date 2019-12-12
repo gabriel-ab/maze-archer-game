@@ -16,6 +16,7 @@ void mira(Personagem fulano, Projetil *bala, Camera2D cam)
     bala->angulo = atan2(deltaY,deltaX)*RAD2DEG;
     
 }
+
 void atira(Personagem fulano, Projetil *bala)
 {
     bala->velocidade.y = sin(bala->angulo*DEG2RAD)*VELOCIDADE_Projetil;
@@ -66,8 +67,8 @@ int colisaoProjetil_inimigo(Projetil *bala, Personagem *inimigo, int n_inimigos)
             
             bala->velocidade = inimigo->velocidade;
             inimigo[i].vida--;
-            bala->ativa = false;
-	    playFx(5);
+            bala->ativa = 0;
+            playFx(5);
             return i;
         }
     }

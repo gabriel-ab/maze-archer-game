@@ -4,7 +4,9 @@
 #include "../../lib/movimenta.h"
 #include "../../lib/tela.h"
 #include "../../lib/define.h"
-
+#include "../../lib/draw.c"
+#include "../../lib/data.c"
+#include "../../lib/som.h"
 
 #define TAM_MAPA_3 76
 #define TAM_PISO_3 19
@@ -14,7 +16,7 @@
 void fase_3();
 void draw_fase_3(Personagem* xala, Personagem inimigos[], Projetil flechas[], Rectangle PAREDES[], Rectangle PISO[], Rectangle ARMADILHAS[]);
 void logica_fase_3(Personagem* xala, Personagem inimigo[], Projetil flecha[], Rectangle PAREDES[], Rectangle ARMADILHA[]);
-void set_posicao_inimigos(Personagem inimigos[]);
+void set_posicao_inimigos_3(Personagem inimigos[]);
 
 Rectangle frameRecArmadilha;
 Rectangle frameRecPortal;
@@ -192,13 +194,13 @@ void fase_3()
     {
         inimigos[i] = inimigoContructor();
     }
-    set_posicao_inimigos(inimigos);
+    set_posicao_inimigos_3(inimigos);
 
     // -------------------------------- //
 
 
 
-    // ------------FLECHA ------------ //
+    // ------------ FLECHA ------------ //
     Projetil flechas[quantidade_maxima_flechas];
 
     // indice da flecha
@@ -212,13 +214,11 @@ void fase_3()
     // -------------------------------- //
 
 
-
     setTargetCamera(&xala);
 
 
-
     while(telaAtual == TELA_FASE_3) {
-        
+        playMusic(2);
         if(isPaused) 
         {
             telaPausa();
@@ -297,7 +297,7 @@ void logica_fase_3(Personagem* xala, Personagem inimigo[], Projetil flecha[], Re
     }
 
     if(CheckCollisionPointRec(xala->posicao, portalCollision)) {
-        telaAtual = TELA_FASE_4;
+        telaAtual = BOSS_FIGHT;
         save();
     }
     
@@ -315,6 +315,7 @@ void logica_fase_3(Personagem* xala, Personagem inimigo[], Projetil flecha[], Re
     for (int i = 0; i < TAM_ARMADILHAS_3; i++)
     {
         if(CheckCollisionPointRec(xala->posicao, ARMADILHA[i]) && !(xala->invulneravel)) {
+            playFx(8);
             xala->vida--;
             xala->invulneravel = !(xala->invulneravel);
         }
@@ -341,7 +342,7 @@ void logica_fase_3(Personagem* xala, Personagem inimigo[], Projetil flecha[], Re
     for( int i = 0; i < QTD_INIMIGO_3; i++)
     {
         if(inimigo[i].vida > 0) {
-            logicaInimigo(&inimigo[i],&xala);
+            logicaInimigo(&inimigo[i], xala);
             colisaoPersonagem(&inimigo[i], PAREDES, TAM_MAPA_3);
             atualizarPersonagem(&inimigo[i]);
         }
@@ -359,14 +360,14 @@ void logica_fase_3(Personagem* xala, Personagem inimigo[], Projetil flecha[], Re
     {
         if(IsMouseButtonDown(MOUSE_LEFT_BUTTON))
         {
-            mira(*xala,&flecha[projetil_atual],cam);
+            mira(*xala, &flecha[projetil_atual], cam);
         }
 
         if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
         {
             flecha[projetil_atual].ativa = true;
 
-            atira( *xala, &flecha[projetil_atual] );
+            atira(*xala, &flecha[projetil_atual]);
 
             projetil_atual--;
         }
@@ -411,7 +412,7 @@ void logica_fase_3(Personagem* xala, Personagem inimigo[], Projetil flecha[], Re
 
 }
 
-void set_posicao_inimigos(Personagem inimigos[]) {
+void set_posicao_inimigos_3(Personagem inimigos[]) {
     inimigos[0].posicao = (Vector2){666, -99};
     inimigos[1].posicao = (Vector2){666, 130};
     inimigos[2].posicao = (Vector2){833, 132};

@@ -6,7 +6,11 @@
 Music music;
 Music caveBG;
 Music winterBG;
+<<<<<<< HEAD
 Music lavaBG;
+=======
+Music forestBG;
+>>>>>>> bf4958d07e9529c4c7e74e6cfd43a4b37a7b45cb
 Sound queima;
 Sound gameover;
 Sound acerto;
@@ -15,12 +19,20 @@ Sound somBotao;
 Sound flecha;
 Sound arco;
 Sound lanca;
+<<<<<<< HEAD
 Sound item;
 
 void setMusic(char* musicPath);
 void setMusicBg(char* cave, char* winter, char* lava);
 void initMusic();
 void setFx(char* somBotaoPath, char* gameOver, char* pickup);
+=======
+
+void setMusic(char* musicPath);
+void setMusicBg(char* cave, char* winter, char* forest);
+void initMusic();
+void setFx(char* somBotaoPath, char* gameOver);
+>>>>>>> bf4958d07e9529c4c7e74e6cfd43a4b37a7b45cb
 void playFx(int fxNumber);
 void playMusic(int musicNumber);
 void setTiroFx(char* flechaPath, char* arcoPath);
