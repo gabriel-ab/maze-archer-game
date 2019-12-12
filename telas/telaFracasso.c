@@ -16,6 +16,9 @@ void telaFracasso() {
     while(telaAtual == TELA_FRACASSO) {
         
         drawTelaFracasso(getBotoesFracasso());
+        //IRIA DEIXAR ESSA FUNÇÃO PRA SÓ DEIXAR A INTERAÇÃO COM OS BOTÕES
+        //FUNCIONAR QUANDO A MUSICA ACABAR
+        //while(IsSoundPlaying(gameover)){}
         logicaTelaFracasso(getBotoesFracasso());
         
     }

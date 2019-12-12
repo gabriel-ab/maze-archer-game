@@ -177,7 +177,7 @@ void fase_3()
     setTargetCamera(&xala);
     
     while(telaAtual == TELA_FASE_3) {
-        playMusic(2);
+        playMusic(4);
         if(isPaused) 
         {
             telaPausa();
@@ -243,6 +243,7 @@ void logica_fase_3(Personagem* xala, Rectangle PAREDES[], Rectangle ARMADILHA[])
         vida_maxima_xala++;
         xala->vida = vida_maxima_xala;
         isUpgradeGetted = true;
+        playFx(9);
     }
 
     if(CheckCollisionPointRec(xala->posicao, portalCollision)) {

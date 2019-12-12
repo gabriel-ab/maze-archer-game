@@ -34,8 +34,8 @@ int main(){
     //AUDIO
     InitAudioDevice();
     setMusic("resources/soundtrack/epic.ogg");
-    setMusicBg("resources/soundtrack/cave_loop.ogg", "resources/soundtrack/winter_loop.ogg", "resources/soundtrack/forest_loop.ogg");
-    setFx("resources/fx/setting click.wav", "resources/fx/you_died.wav");
+    setMusicBg("resources/soundtrack/cave_loop.ogg", "resources/soundtrack/winter_loop.ogg", "resources/soundtrack/lava_loop.ogg");
+    setFx("resources/fx/setting click.wav", "resources/fx/you_died.wav", "resources/fx/pickup.wav");
     setTiroFx("resources/fx/arrow.wav", "resources/fx/arco.wav");
     setFootStep("resources/fx/footstep_dirty.wav");
     setHitFx("resources/fx/hit.wav");
@@ -56,13 +56,11 @@ int main(){
         
         while(telaAtual == TELA_MENU && jogo_rodando) {
             telaMenu();
-            playMusic(1);
         }
 
         while(telaAtual == TELA_CONFIG) 
         {
             telaConfiguracao();
-            playMusic(1);
         }
 
         if(telaAtual == TELA_FRACASSO) {

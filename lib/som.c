@@ -4,24 +4,25 @@ void setMusic(char* musicPath) {
     music = LoadMusicStream(musicPath);
 }
 //MUSICAS DE FUNDO DOS MAPAS
-void setMusicBg(char* cave, char* winter, char* forest){
+void setMusicBg(char* cave, char* winter, char* lava){
     caveBG = LoadMusicStream(cave);
     winterBG = LoadMusicStream(winter);
-    forestBG = LoadMusicStream(forest);
+    lavaBG = LoadMusicStream(lava);
 }
 
 //FUNÇÃO QUE INICIALIZA AS MUSICAS DO JOGO
 void initMusic(){
     PlayMusicStream(caveBG);
     PlayMusicStream(winterBG);
-    PlayMusicStream(forestBG);
+    PlayMusicStream(lavaBG);
     PlayMusicStream(music);
 }
 
 //FUNÇAO PRA ADICIONAR SFX DIVERSOS
-void setFx(char* somBotaoPath, char* gameOver) {
+void setFx(char* somBotaoPath, char* gameOver, char* pickup) {
     somBotao = LoadSound(somBotaoPath);
     gameover = LoadSound(gameOver);
+    item = LoadSound(pickup);
 }
 
 // FUNÇAO PRA ADICIONAR O SOM DO ARCO E FLECHA
@@ -51,6 +52,7 @@ void setFootStep(char* footstepFx){
 void playFx(int fxNumber){
     //AQUI O SOM E O BOTÃO É ACIONADO AO MESMO TEMPO, INDEPENDENTE SE ELE ACABOU DE TOCAR
     if(fxNumber == 1){
+        SetSoundVolume(somBotao, 0.2);
         PlaySound(somBotao);
     }
     
@@ -90,6 +92,10 @@ void playFx(int fxNumber){
         PlaySound(queima);
     }
     
+    if(fxNumber == 9){
+        PlaySound(item);
+    }
+    
     
 }
 //FAZER A MUSICA DE FUNDO TOCAR
@@ -108,10 +114,10 @@ void playMusic(int musicNumber){
         SetMusicVolume(winterBG, 0.5);
         UpdateMusicStream(winterBG);
     }
-    //SOM DE FUNDO FLORESTA
+    //SOM DE FUNDO LAVA
     if(musicNumber == 4){
-        SetMusicVolume(forestBG, 0.5);
-        UpdateMusicStream(forestBG);
+        SetMusicVolume(lavaBG, 0.7);
+        UpdateMusicStream(lavaBG);
     }
 }
 
@@ -151,6 +157,6 @@ void unloadAllSound(){
     UnloadMusicStream(music);
     UnloadMusicStream(caveBG);
     UnloadMusicStream(winterBG);
-    UnloadMusicStream(forestBG);
+    UnloadMusicStream(lavaBG);
     
 }

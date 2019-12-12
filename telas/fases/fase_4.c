@@ -68,7 +68,7 @@ void fase_4() {
         if(isPaused) {
             telaPausa();
         } else {
-            playMusic(4);
+            playMusic(2);
             draw_fase_4(&xala, PAREDES, PISO, ARMADILHAS);
             logica_fase_4(&xala, PAREDES, ARMADILHAS); 
         }

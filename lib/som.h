@@ -6,7 +6,7 @@
 Music music;
 Music caveBG;
 Music winterBG;
-Music forestBG;
+Music lavaBG;
 Sound queima;
 Sound gameover;
 Sound acerto;
@@ -15,11 +15,12 @@ Sound somBotao;
 Sound flecha;
 Sound arco;
 Sound lanca;
+Sound item;
 
 void setMusic(char* musicPath);
-void setMusicBg(char* cave, char* winter, char* forest);
+void setMusicBg(char* cave, char* winter, char* lava);
 void initMusic();
-void setFx(char* somBotaoPath, char* gameOver);
+void setFx(char* somBotaoPath, char* gameOver, char* pickup);
 void playFx(int fxNumber);
 void playMusic(int musicNumber);
 void setTiroFx(char* flechaPath, char* arcoPath);

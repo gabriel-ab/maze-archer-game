@@ -13,6 +13,8 @@ void telaMenu() {
     
     setFont("resources/font/custom_alagard.png");
     
+    playMusic(1);
+    
     drawTelaMenu(background, getBotoesMenu());
     logicaBotoesMenu(getBotoesMenu());
 
