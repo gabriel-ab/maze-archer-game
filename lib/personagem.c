@@ -126,6 +126,7 @@ void logicaInimigo(Personagem *inimigo, Personagem *fulano)
                     {
                         fulano->vida--;
                         fulano->invulneravel = 1;
+                        fulano->tempoInvulneravel = GetTime();
                     }
                 }
             }

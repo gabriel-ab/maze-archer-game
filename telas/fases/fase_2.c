@@ -287,6 +287,14 @@ void fase_2()
                     atualizarPersonagem(&inimigos[i]);
                 }
             }
+            // ----------------INVUNERABILIDADE---------------- //
+            if(xala.invulneravel)
+            {
+                if(GetTime() -xala.tempoInvulneravel > 2)
+                {
+                    xala.invulneravel = 0;
+                }
+            }
             // ------------------------------------------------ //
 
 

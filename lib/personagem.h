@@ -33,6 +33,7 @@ typedef struct Personagem
     Rectangle linhaColisaoBaixo;
     Rectangle linhaColisaoDireita;
     bool invulneravel;
+    double tempoInvulneravel;
     int vida;
     int quantidadeFlechas;
     IA acao;

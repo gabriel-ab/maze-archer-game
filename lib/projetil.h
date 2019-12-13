@@ -6,6 +6,12 @@
 
     #define VELOCIDADE_Projetil 20;
 
+    typedef enum Projetil_status{
+        MIRANDO = 0,
+        ATIVO,
+        RESGATAVEL,
+        INATIVA
+    }Projetil_status;
     typedef struct projetil
     {
         Texture2D textura;
@@ -13,6 +19,7 @@
         Vector2 velocidade;
         float angulo;
         int ativa;
+        double tempoParaResgatar;
     }Projetil;
 
     void mira(Personagem fulano, Projetil *bala, Camera2D cam);

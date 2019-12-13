@@ -11,13 +11,12 @@ bool isRestarting;
 
 #define ACELERACAO 0.5
 #define TAXA_ATRITO 0.05
-#define N_MAX_PROJETEIS 5 //NUMERO MAXIMO DE PROJETEIS POSSIVEIS NO JOGO
 #define TEMPO_MAX_INVULNERAVEL 2
-#define TAM_MAPA1 30 //temporario
 
 int tempo_invunerabilidade = TEMPO_MAX_INVULNERAVEL;
 int vida_maxima_xala = 3;
 int quantidade_maxima_flechas = 2;
 
+int temp_vida_inimigo = 0; //temporario
 
 #endif

@@ -13,8 +13,7 @@ void mira(Personagem fulano, Projetil *bala, Camera2D cam)
     int deltaY = posMouseY -fulano.posicao.y;
     int deltaX = posMouseX -fulano.posicao.x;
 
-    bala->angulo = atan2(deltaY,deltaX)*RAD2DEG;
-    
+    bala->angulo = atan2(deltaY,deltaX)*RAD2DEG;    
 }
 
 void atira(Personagem fulano, Projetil *bala)
@@ -62,12 +61,13 @@ int colisaoProjetil_inimigo(Projetil *bala, Personagem *inimigo, int n_inimigos)
 {
     for( int i = 0; i < n_inimigos; i++)
     {
-        if( CheckCollisionCircles(inimigo[i].posicao, 5, bala->posicao, 10))
+        if(inimigo[i].vida > 0 && CheckCollisionCircles(inimigo[i].posicao, 5, bala->posicao, 10))
         {
             
             bala->velocidade = inimigo->velocidade;
             inimigo[i].vida--;
-            bala->ativa = 0;
+            temp_vida_inimigo = inimigo[i].vida; //temporario
+            bala->ativa = false;
             playFx(5);
             return i;
         }

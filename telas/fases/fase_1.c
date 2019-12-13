@@ -182,7 +182,7 @@ void fase_1()
     setTargetCamera(&xala);
     cam.zoom = 1.6;
     // SetTargetFPS(60);
-    double contadorInvulneravel =0;
+
 
 
     // ------------ PORTAL ------------- //
@@ -304,9 +304,8 @@ void fase_1()
             //--------------INVUNERABILIDADE---------------
             if(xala.invulneravel)
             {
-                if(GetTime() -contadorInvulneravel > 2)
+                if(GetTime() -xala.tempoInvulneravel > 2)
                 {
-                    contadorInvulneravel =  GetTime();
                     xala.invulneravel = 0;
                 }
             }
@@ -324,25 +323,28 @@ void fase_1()
                     drawInimigos(inimigo, n_inimigos);
 
                     DrawCircle(0,0,2,WHITE);
-                    DrawCircleV(xala.posicao,10,BLUE);
+                    DrawCircleV(xala.posicao,10,xala.invulneravel ? GRAY : BLUE);
 
                     for (int i = 0; i < xala.quantidadeFlechas; i++)
                     {
-                        DrawTexturePro(bala[i].textura,
-                        (Rectangle){0,28,64,8},
-                        (Rectangle){
-                            bala[i].posicao.x,
-                            bala[i].posicao.y,
-                            64, 6},
-                        (Vector2){48,2},
-                        bala[i].angulo,WHITE);
+                        
+                        if(i > projetil_atual){
+                            DrawTexturePro(bala[i].textura,
+                                (Rectangle){0,28,64,8},
+                                (Rectangle){
+                                    bala[i].posicao.x,
+                                    bala[i].posicao.y,
+                                    64, 6},
+                                (Vector2){48,2},
+                                bala[i].angulo,WHITE);
+                        }
                     }
 
                 EndMode2D();
                 
                 DrawCircleV(GetMousePosition(),5,PURPLE);
-
-                drawHUD(xala.vida, xala.quantidadeFlechas);
+                DrawText(TextFormat("Vida do inimigo: %i", temp_vida_inimigo),10,100,20,YELLOW);
+                drawHUD(xala.vida, projetil_atual +1);
                 
             EndDrawing();
         }

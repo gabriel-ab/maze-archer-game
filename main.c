@@ -49,8 +49,8 @@ int main(){
     
 
     //HUD
-    setTexture(&vidaTexture, "resources/images/hud_vida.png", 30, 30);
-    setTexture(&arrowTexture, "resources/images/hud_flecha.png", 30, 20);
+    setTexture(&vidaTexture, "resources/images/hud_vida.png", 50, 50);
+    setTexture(&arrowTexture, "resources/images/hud_flecha.png", 50, 50);
     
     SetTargetFPS(60);
     SetExitKey(0);
