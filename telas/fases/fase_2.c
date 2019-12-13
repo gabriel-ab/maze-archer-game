@@ -152,7 +152,7 @@ void fase_2()
     bool isUpgradeGetted = false;
     bool estaColidindo = false;
 
-
+    HideCursor();
 
     while(telaAtual == TELA_FASE_2){ 
         
@@ -162,8 +162,6 @@ void fase_2()
         {
             telaPausa();
         } else {
-
-            HideCursor();
 
             if(IsKeyPressed(KEY_ESCAPE)) {
                 isPaused = true;
@@ -335,8 +333,6 @@ void fase_2()
                     drawFlecha(flechas, xala.quantidadeFlechas);
 
                 EndMode2D();
-
-                DrawText(FormatText("%.2f %.2f",xala.posicao.x, xala.posicao.y),10,100,20,YELLOW);
 
                 // "Mira" do mouse
                 DrawCircleV(GetMousePosition(), 5, PURPLE);

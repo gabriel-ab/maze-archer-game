@@ -479,7 +479,7 @@ void logica_boss_fight(Personagem* xala, Personagem* boss, Projetil flecha[], Re
     }
 
     if((CheckCollisionRecs(end1, end2))) {
-        if(contador % 180 == 0) {
+        if(contador % 240 == 0) {
             telaAtual = TELA_MENU;
             ShowCursor();
             save();

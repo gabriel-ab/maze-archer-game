@@ -190,7 +190,7 @@ void fase_1()
     int currentFrame = 0;
     int frameCount = 0;
     setTexture(&portalTexture, "resources/images/portal.png",260, 160);
-    Rectangle portalCollision = (Rectangle) {-400, -400, 30, 60 };
+    Rectangle portalCollision = (Rectangle) {-400, 1500, 30, 60 };
     Rectangle frameRecPortal = (Rectangle) {0 ,0 , portalTexture.width/4, 160};
     // -------------------------------- //
 
@@ -291,10 +291,11 @@ void fase_1()
             //----------Atualização dos inimigos-----------
             for( int i = 0; i < n_inimigos; i++)
             {
-                logicaInimigo(&inimigo[i],&xala);
-
-                colisaoPersonagem(&inimigo[i], PAREDES, n_paredes);
-                atualizarPersonagem(&inimigo[i]);
+                if(inimigo[i].vida > 0) {
+                    logicaInimigo(&inimigo[i], &xala);
+                    colisaoPersonagem(&inimigo[i], PAREDES, n_paredes);
+                    atualizarPersonagem(&inimigo[i]);
+                }
             }
 
 
@@ -317,21 +318,15 @@ void fase_1()
                     
                     drawPiso(PISO, n_pisoTextures);
                     drawParedes(PAREDES, n_paredes);
-                    DrawTextureRec(portalTexture, frameRecPortal, (Vector2){-400, -400}, BLUE);
-
-
-                    for(int i = 0; i < n_inimigos; i++)
-                    {
-                        DrawCircleV(inimigo[i].posicao, 10, (Color){255,150,255,255});
-                    }
+                    DrawTextureRec(portalTexture, frameRecPortal, (Vector2){-400, 1500}, BLUE);
+                    
+                    drawInimigos(inimigo, n_inimigos);
 
                     DrawCircle(0,0,2,WHITE);
                     DrawCircleV(xala.posicao,10,BLUE);
 
                     for (int i = 0; i < xala.quantidadeFlechas; i++)
                     {
-                        DrawCircleV(bala[i].posicao,5,GREEN);
-
                         DrawTexturePro(bala[i].textura,
                         (Rectangle){0,28,64,8},
                         (Rectangle){
@@ -341,7 +336,6 @@ void fase_1()
                         (Vector2){48,2},
                         bala[i].angulo,WHITE);
                     }
-                    DrawCircleV(c,10,BROWN); //Temporario visualização do hitbox do inimigo
 
                 EndMode2D();
                 

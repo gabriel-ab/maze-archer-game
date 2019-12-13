@@ -38,7 +38,7 @@ void drawInimigos(Personagem inimigos[], int quantidade) {
     for(int i = 0; i < quantidade; i++){
         
         if(inimigos[i].vida > 0) {
-            DrawCircleV(inimigos[i].posicao, 10, (Color){150,150,255,120});
+            DrawCircleV(inimigos[i].posicao, 10, (Color){150,150,255,255});
         }
         
     }

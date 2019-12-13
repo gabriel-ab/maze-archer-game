@@ -122,8 +122,6 @@ void logicaInimigo(Personagem *inimigo, Personagem *fulano)
                 {
                     Vector2 pontoDeAtaque = {inimigo->posicao.x + cos(angulo)*32, inimigo->posicao.y + sin(angulo)*32};
 
-                    c = pontoDeAtaque; //Temporario , para desenhar no programa
-
                     if (CheckCollisionCircles(pontoDeAtaque, 5, fulano->posicao, 16))
                     {
                         fulano->vida--;
@@ -138,7 +136,6 @@ void logicaInimigo(Personagem *inimigo, Personagem *fulano)
             break;
         //==========================================================================================
         case INIMIGO_AI_PAI_PARA:   
-        
             if (distancia < 150)
             {
                 inimigo->velocidade.y = -sin(angulo) * VELOCIDADE_INIMIGO;

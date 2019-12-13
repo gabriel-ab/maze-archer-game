@@ -10,7 +10,6 @@ Shader shader;
 
 void telaPausa() {
     
-    sleep(1);
     //pathImageBackgroundAnterior = pathImageBackground;
     Image image = GetScreenData();
     ImageColorContrast(&image, -40);
