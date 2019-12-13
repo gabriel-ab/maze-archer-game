@@ -25,6 +25,7 @@
 int main(){
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+    SetConfigFlags(FLAG_MSAA_4X_HINT);    
     
     InitWindow(tela.width, tela.height, "Untitle Dungeon Game");
     SetWindowMinSize(800,500);
@@ -48,8 +49,8 @@ int main(){
     
 
     //HUD
-    setTexture(&vidaTexture, "resources/images/heart pixel art 254x254.png", 30, 30);
-    setTexture(&arrowTexture, "resources/images/Arrow.png", 30, 20);
+    setTexture(&vidaTexture, "resources/images/hud_vida.png", 30, 30);
+    setTexture(&arrowTexture, "resources/images/hud_flecha.png", 30, 20);
     
     SetTargetFPS(60);
     SetExitKey(0);

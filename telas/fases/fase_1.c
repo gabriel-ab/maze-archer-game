@@ -158,10 +158,11 @@ void fase_1()
     for(int i = 0; i < quantidade_maxima_flechas; i++){
         bala[i].ativa = false;
     }
-
-    pisoTexture = LoadTexture("resources/images/chao_cav.png");
-    setTextureCropped(&pisoTexture, "resources/images/full.png", (Rectangle){50*32,22*32,3*32,32});
-    setTextureCropped(&paredeTexture, "resources/images/full.png", (Rectangle){52*32,14*32,3*32,32});
+    Image temp = LoadImage("resources/images/marmore.png");
+    ImageColorTint(&temp,(Color){50,50,150,255});
+    pisoTexture = LoadTextureFromImage(temp);
+    UnloadImage(temp);
+    paredeTexture = LoadTexture("resources/images/pedra_brilhante.png");
     setTextureCropped(&flechasTexture, "resources/images/flechas.png", (Rectangle){0,0,64,64});
 
     for( int i = 0; i < quantidade_maxima_flechas; i++) {
@@ -189,9 +190,9 @@ void fase_1()
     ///que o personagem colide para passar de fase
     int currentFrame = 0;
     int frameCount = 0;
-    setTexture(&portalTexture, "resources/images/portal.png",260, 160);
-    Rectangle portalCollision = (Rectangle) {-400, 1500, 30, 60 };
-    Rectangle frameRecPortal = (Rectangle) {0 ,0 , portalTexture.width/4, 160};
+    portalTexture =  LoadTexture("resources/images/portal.png");
+    Rectangle portalCollision = (Rectangle) {-400, 1500, 32, 64 };
+    Rectangle frameRecPortal = (Rectangle) {0 ,0 , portalTexture.width/4, portalTexture.height};
     // -------------------------------- //
 
     HideCursor();
@@ -318,7 +319,7 @@ void fase_1()
                     
                     drawPiso(PISO, n_pisoTextures);
                     drawParedes(PAREDES, n_paredes);
-                    DrawTextureRec(portalTexture, frameRecPortal, (Vector2){-400, 1500}, BLUE);
+                    DrawTextureRec(portalTexture, frameRecPortal, (Vector2){-400, 1500}, WHITE);
                     
                     drawInimigos(inimigo, n_inimigos);
 

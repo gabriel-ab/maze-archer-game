@@ -96,9 +96,9 @@ void boss_fight()
     setTexture(&portalTexture, "resources/images/portal.png",260, 160);
     setTextureCropped(&boss.sprite, "resources/images/golem-walk.png", (Rectangle){0,128,448,64});
     setTextureCropped(&flechasTexture, "resources/images/Flechas.png", (Rectangle){0,0,64,64});
-    pisoTexture = LoadTexture("resources/images/chao_cav.png");
+    pisoTexture = LoadTexture("resources/images/cave_floor.png");
     paredeTexture = LoadTexture("resources/images/pedra.png");
-    pedraTexture = LoadTexture("resources/images/pedra.png");
+    pedraTexture = LoadTexture("resources/images/piso5.png");
     //--------------------------------------------------//
 
 
