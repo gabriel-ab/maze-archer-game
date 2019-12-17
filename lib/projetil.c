@@ -63,10 +63,14 @@ int colisaoProjetil_inimigo(Projetil *bala, Personagem *inimigo, int n_inimigos)
     {
         if(inimigo[i].vida > 0 && CheckCollisionCircles(inimigo[i].posicao, 5, bala->posicao, 10))
         {
-            
-            bala->velocidade = inimigo->velocidade;
+            //Empurra o inimigo para tras
+            inimigo[i].acao.atual = INIMIGO_ATORDOADO;
+            inimigo[i].velocidade.x = bala->velocidade.x / 5;
+            inimigo[i].velocidade.y = bala->velocidade.y / 5;
+            inimigo[i].acao.contador = GetTime();
+            inimigo[i].acao.duracao = GetRandomValue(50,100) / 50; // Tempo entre 1 e 2 segundos de recuperação da flechada
+            //
             inimigo[i].vida--;
-            temp_vida_inimigo = inimigo[i].vida; //temporario
             bala->ativa = false;
             playFx(5);
             return i;

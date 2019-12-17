@@ -89,19 +89,23 @@ void logicaInimigo(Personagem *inimigo, Personagem *fulano)
     float angulo = atan2(deltaY, deltaX);
     float distancia = sqrt(deltaY * deltaY + deltaX * deltaX);
 
-    if(inimigo->vida <= 2) inimigo->acao.atual = INIMIGO_AI_PAI_PARA;
-    else if(distancia >= 300) inimigo->acao.atual = INIMIGO_DE_BOA;
-    else inimigo->acao.atual = INIMIGO_PISTOLA;
-
+    if(inimigo->acao.atual != INIMIGO_ATORDOADO)
+    {
+        if(inimigo->vida < 2) inimigo->acao.atual = INIMIGO_AI_PAI_PARA;
+        else if(distancia >= 300) inimigo->acao.atual = INIMIGO_DE_BOA;
+        else inimigo->acao.atual = INIMIGO_PISTOLA;
+    }
+    
     switch (inimigo->acao.atual)
     {
-        //==========================================================================================
-        case INIMIGO_DE_BOA:
-
-            if(distancia < 400)
+        case INIMIGO_ATORDOADO:
+            if(GetTime() - inimigo->acao.contador > inimigo->acao.duracao)
             {
                 inimigo->acao.atual = INIMIGO_PISTOLA;
             }
+            break;
+        //==========================================================================================
+        case INIMIGO_DE_BOA:
 
             if (GetTime() - inimigo->acao.contador > inimigo->acao.duracao)
             {

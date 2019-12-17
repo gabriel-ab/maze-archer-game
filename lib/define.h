@@ -17,6 +17,4 @@ int tempo_invunerabilidade = TEMPO_MAX_INVULNERAVEL;
 int vida_maxima_xala = 3;
 int quantidade_maxima_flechas = 2;
 
-int temp_vida_inimigo = 0; //temporario
-
 #endif

@@ -343,7 +343,6 @@ void fase_1()
                 EndMode2D();
                 
                 DrawCircleV(GetMousePosition(),5,PURPLE);
-                DrawText(TextFormat("Vida do inimigo: %i", temp_vida_inimigo),10,100,20,YELLOW);
                 drawHUD(xala.vida, projetil_atual +1);
                 
             EndDrawing();

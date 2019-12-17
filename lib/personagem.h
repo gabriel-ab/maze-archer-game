@@ -6,10 +6,11 @@
 
 #include <raylib.h>
 
-typedef enum{
+typedef enum AtitudesInimigas{
     INIMIGO_DE_BOA = 0,
     INIMIGO_PISTOLA,
-    INIMIGO_AI_PAI_PARA
+    INIMIGO_AI_PAI_PARA,
+    INIMIGO_ATORDOADO
 };
 
 Vector2 c;
