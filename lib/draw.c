@@ -111,3 +111,7 @@ void drawArmadilhasRec(Rectangle ARMADILHAS[], int tamanho, Rectangle frameRec) 
          
     }
 }
+
+void drawSprite(Sprite sprite, Vector2 posicao){
+    DrawTexturePro(sprite.textura, sprite.recorte, (Rectangle){posicao.x, posicao.y, 2*sprite.textura.width / sprite.colunas, sprite.textura.height*2},(Vector2){0,0},0,WHITE);
+}
