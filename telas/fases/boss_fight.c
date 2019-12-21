@@ -160,7 +160,7 @@ void draw_boss_fight(Personagem* xala, Personagem* boss, Projetil flechas[], Rec
 
                 //BOSS
                 DrawTextureRec(
-                    boss->sprite, 
+                    boss->sprite.textura, 
                     frameRecPersonagem, 
                     boss->posicao, 
                     WHITE);
@@ -363,7 +363,7 @@ void logica_boss_fight(Personagem* xala, Personagem* boss, Projetil flecha[], Re
             currentFrame++;
 
             if (currentFrame > 7) currentFrame = 0;
-            frameRecPersonagem.x = (float)currentFrame * (float)boss->sprite.width/7;
+            frameRecPersonagem.x = (float)currentFrame * (float)boss->sprite.textura.width/7;
         }
         // --------------------------------------------- //
 
@@ -373,8 +373,8 @@ void logica_boss_fight(Personagem* xala, Personagem* boss, Projetil flecha[], Re
         if(!CheckCollisionPointCircle(
             xala->posicao, 
             (Vector2) {
-                boss->posicao.x + boss->sprite.height/2, 
-                boss->posicao.y + boss->sprite.height/2,
+                boss->posicao.x + boss->sprite.textura.height/2, 
+                boss->posicao.y + boss->sprite.textura.height/2,
             }, 256) 
             || pedrasCount >= MAX_PEDRAS)
         {

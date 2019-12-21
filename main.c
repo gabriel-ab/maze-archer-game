@@ -1,6 +1,6 @@
 #include <string.h>
 #include <raylib.h>
-#include<stdio.h>
+#include <stdio.h>
 
 #include "lib/define.h"
 #include "lib/som.c"

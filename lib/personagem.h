@@ -5,6 +5,7 @@
 #define VELOCIDADE_INIMIGO 1.5
 
 #include <raylib.h>
+#include "textura.h"
 
 typedef enum AtitudesInimigas{
     INIMIGO_DE_BOA = 0,
@@ -24,7 +25,7 @@ typedef struct IA{
 
 typedef struct Personagem
 {
-    Texture2D sprite;
+    Sprite sprite;
     Vector2 posicao;
     Vector2 velocidade;
     int largura;

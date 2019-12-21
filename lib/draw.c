@@ -1,5 +1,6 @@
 #include "draw.h"
 #include "tela.h"
+#include "textura.h"
 
 //Função responsável por desenhar a personagem principal
 void drawXala(Personagem* xala, int contador) {
@@ -113,5 +114,5 @@ void drawArmadilhasRec(Rectangle ARMADILHAS[], int tamanho, Rectangle frameRec) 
 }
 
 void drawSprite(Sprite sprite, Vector2 posicao){
-    DrawTexturePro(sprite.textura, sprite.recorte, (Rectangle){posicao.x, posicao.y, 2*sprite.textura.width / sprite.colunas, sprite.textura.height*2},(Vector2){0,0},0,WHITE);
+    DrawTexturePro(sprite.textura, sprite.recorte, (Rectangle){posicao.x, posicao.y, sprite.recorte.width, sprite.recorte.width},(Vector2){0,0},0,WHITE);
 }

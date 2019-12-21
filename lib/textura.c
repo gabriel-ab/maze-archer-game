@@ -14,7 +14,7 @@ Sprite spriteConstructor(const char *endereco, int largura_frame, int altura_fra
 
     return sprite;
 }
-//anima continuamente um sprite linhas
+//Anima de forma continua um sprite linha
 void animaSpriteLinha(Sprite *sprite){
     if(!sprite->fps) sprite->fps = 1;
     
@@ -31,4 +31,23 @@ void animaSpriteLinha(Sprite *sprite){
     if(sprite->frameAtual >= sprite->colunas) sprite->frameAtual = 0;
 }
 
+// Animação geral para sprite dentro de um spritesheet  vide textura.h
+void animaSprite(Sprite *sprite, Segmento segmento[]){
+    if(!sprite->fps) sprite->fps = 1;
 
+    if(sprite->frameAtual < segmento[sprite->n_segmento].inicio) {
+        sprite->frameAtual = segmento[sprite->n_segmento].inicio;
+    }
+
+    if(GetTime() -sprite->timer > 1/sprite->fps){
+        sprite->timer = GetTime();
+        sprite->frameAtual++;
+
+        sprite->recorte.x = sprite->frameAtual * sprite->recorte.width;
+        sprite->recorte.y = segmento[sprite->n_segmento].linha * sprite->recorte.height;
+
+    }
+    if(sprite->frameAtual >= segmento[sprite->n_segmento].fim){
+        sprite->frameAtual = segmento[sprite->n_segmento].inicio;
+    }
+}
