@@ -3,32 +3,38 @@
 #include "textura.h"
 
 //Função responsável por desenhar a personagem principal
-void drawXala(Personagem* xala, int contador) {
-
+void drawXala(Personagem* xala) {
+    static double contador = 0;
     //Se Xala está invunerável ela começa a piscar
     if(xala->invulneravel) {
-        if(contador%10 == 0) {
-            DrawCircleV(xala->posicao,10,BLUE);
-        } 
+        if(TEMPO -contador > 0.10){
+            contador = TEMPO;
+        }else{
+            drawSprite(xala->sprite,(Vector2){xala->posicao.x - xala->largura/2, xala->posicao.y - xala->altura/2}, (Vector2){0,0},0,RED);
+        }
     } else {
-        DrawCircleV(xala->posicao,10,BLUE);
+        drawSprite(xala->sprite,(Vector2){xala->posicao.x - xala->largura/2, xala->posicao.y - xala->altura/2}, (Vector2){0,0},0,WHITE);
     }
 }
 
 
 
 //Função responsável por desenhar a personagem principal
-void drawFlecha(Projetil flecha[], int quantidade) {
-    for (int i = 0; i < quantidade; i++)
+void drawFlecha(Projetil flecha[], Personagem fulano) {
+    for (int i = 0; i < fulano.quantidadeFlechas; i++)
     {
-        DrawTexturePro(flecha[i].textura,
-        (Rectangle){0,28,64,8},
-        (Rectangle){
-            flecha[i].posicao.x,
-            flecha[i].posicao.y,
-            64, 6},
-        (Vector2){48,2},
-        flecha[i].angulo,WHITE);
+        if(i >= projetil_atual){
+            if(i != projetil_atual || mirando ){
+            DrawTexturePro(flecha[i].textura,
+                (Rectangle){0,28,64,8},
+                (Rectangle){
+                    flecha[i].posicao.x,
+                    flecha[i].posicao.y,
+                    64, 6},
+                (Vector2){48,2},
+                flecha[i].angulo,WHITE);
+            }
+        }
     }
 }
 
@@ -113,6 +119,6 @@ void drawArmadilhasRec(Rectangle ARMADILHAS[], int tamanho, Rectangle frameRec) 
     }
 }
 
-void drawSprite(Sprite sprite, Vector2 posicao){
-    DrawTexturePro(sprite.textura, sprite.recorte, (Rectangle){posicao.x, posicao.y, sprite.recorte.width, sprite.recorte.width},(Vector2){0,0},0,WHITE);
+void drawSprite(Sprite sprite, Vector2 posicao, Vector2 origem, float rotacao, Color cor){
+    DrawTexturePro(sprite.textura, sprite.recorte, (Rectangle){posicao.x, posicao.y, sprite.recorte.width, sprite.recorte.width},origem,rotacao,cor);
 }

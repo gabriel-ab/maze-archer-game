@@ -67,7 +67,7 @@ int colisaoProjetil_inimigo(Projetil *bala, Personagem *inimigo, int n_inimigos)
             inimigo[i].acao.atual = INIMIGO_ATORDOADO;
             inimigo[i].velocidade.x = bala->velocidade.x / 5;
             inimigo[i].velocidade.y = bala->velocidade.y / 5;
-            inimigo[i].acao.contador = GetTime();
+            inimigo[i].acao.contador = TEMPO;
             inimigo[i].acao.duracao = GetRandomValue(50,100) / 50; // Tempo entre 1 e 2 segundos de recuperação da flechada
             //
             inimigo[i].vida--;

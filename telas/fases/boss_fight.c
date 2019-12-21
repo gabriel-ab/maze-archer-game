@@ -39,7 +39,6 @@ Pedra *pedras;
 Texture2D pedraTexture;
 int pedrasCount = 0;
 
-int projetil_atual;
 int vidaBoss;
 int contador;
 
@@ -67,8 +66,9 @@ void boss_fight()
     Personagem xala;
     xala = personagemConstructor();
     xala.posicao = (Vector2){50, 50};
-    xala.altura = 20;
-    xala.largura = 20;
+    xala.altura = 48;
+    xala.largura = 48;
+    xala.sprite = spriteConstructor("resources/images/personagem.png",48,48,15);
     // ----------------------------- //
 
 
@@ -107,7 +107,8 @@ void boss_fight()
     Projetil flechas[quantidade_maxima_flechas];
 
     // indice da flecha
-    int projetil_atual = xala.quantidadeFlechas -1;
+    projetil_atual = xala.quantidadeFlechas -1;
+    
 
     // Inicializando as flechas
     for(int i = 0; i < quantidade_maxima_flechas; i++){
@@ -123,7 +124,7 @@ void boss_fight()
 
     
     while(telaAtual == BOSS_FIGHT) {
-        
+        TEMPO = GetTime();
         if(isPaused) 
         {
             telaPausa();
@@ -165,10 +166,8 @@ void draw_boss_fight(Personagem* xala, Personagem* boss, Projetil flechas[], Rec
                     boss->posicao, 
                     WHITE);
             }
-            
-            drawFlecha(flechas, xala->quantidadeFlechas);
-
-            drawXala(xala, count);
+            drawXala(xala);
+            drawFlecha(flechas, *xala);
 
             // ------------------ PEDRAS ----------------- //
             if(boss->vida > 0) {
@@ -180,14 +179,10 @@ void draw_boss_fight(Personagem* xala, Personagem* boss, Projetil flechas[], Rec
             }
             // -------------------------------------------- //
 
-            // "Mira" do mouse
-            DrawCircle(
-                (GetMouseX() -cam.offset.x),
-                (GetMouseY() -cam.offset.y),
-                5,PURPLE
-            );
             
         EndMode2D();
+        // "Mira" do mouse
+        DrawCircleV(GetMousePosition(),5,PURPLE);
 
         if(boss->vida > 0) {
             // ----------- BARRA DE VIDA ---------------- //
@@ -250,37 +245,30 @@ void logica_boss_fight(Personagem* xala, Personagem* boss, Projetil flecha[], Re
     // --------------------------------------------------- //
 
 
-
-    // ------------ LÓGICA DA INVULNERABILIDADE -------------- //
-
-    if(xala->invulneravel){
-        count++;
-        if(count > 60) {
-            tempo_invunerabilidade--;
-            count = 0;
+    //--------------INVUNERABILIDADE---------------
+    if(xala->invulneravel)
+    {
+        if(TEMPO -xala->tempoInvulneravel > 2)
+        {
+            xala->invulneravel = 0;
         }
     }
 
-    if(tempo_invunerabilidade < 1) {
-        xala->invulneravel = !(xala->invulneravel);
-        tempo_invunerabilidade = TEMPO_MAX_INVULNERAVEL;
-    }
-    // -------------------------------------------------------- //
-
-
 
     // ------------- LÓGICA: MIRA & DISPARO DA FLECHA ------------------- //
-    checkClickBow(projetil_atual);
+    checkClickBow();
 
     if(projetil_atual > -1)
     {
         if(IsMouseButtonDown(MOUSE_LEFT_BUTTON))
         {
+            mirando = true;
             mira(*xala,&flecha[projetil_atual],cam);
         }
 
         if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
         {
+            mirando = false;
             flecha[projetil_atual].ativa = true;
 
             atira( *xala, &flecha[projetil_atual] );
@@ -319,20 +307,13 @@ void logica_boss_fight(Personagem* xala, Personagem* boss, Projetil flecha[], Re
                 colisaoProjetil_mapa(&flecha[i], PAREDES, 4);
                 
                 
-                if(
-                    CheckCollisionCircleRec(flecha[i].posicao, 5, boss->linhaColisaoCima) ||
-                    CheckCollisionCircleRec(flecha[i].posicao, 5, boss->linhaColisaoBaixo) ||
-                    CheckCollisionCircleRec(flecha[i].posicao, 5, boss->linhaColisaoEsquerda) ||
-                    CheckCollisionCircleRec(flecha[i].posicao, 5, boss->linhaColisaoDireita)
-                )
+                if(CheckCollisionCircleRec(flecha[i].posicao, 5, (Rectangle){boss->posicao.x, boss->posicao.y, boss->largura, boss->altura }))
                 {
                     flecha[i].velocidade = boss->velocidade;
                     boss[i].vida--;
                     flecha[i].ativa = false;
                     barraVidaBoss.width = vidaBoss*(boss->vida);
                 }
-
-                
             }
         }
         // ------------------------------------------------------------- //
@@ -340,14 +321,13 @@ void logica_boss_fight(Personagem* xala, Personagem* boss, Projetil flecha[], Re
         // -------------- COLISÃO XALA PEDRA ------------ //
         for (int i = 0; i < pedrasCount; i++)
         {
-            bool estaColidindo = CheckCollisionPointRec(xala->posicao, pedras[i].linhaColisaoCima) ||
-                CheckCollisionPointRec(xala->posicao, pedras[i].linhaColisaoBaixo) ||
-                CheckCollisionPointRec(xala->posicao, pedras[i].linhaColisaoEsquerda) ||
-                CheckCollisionPointRec(xala->posicao, pedras[i].linhaColisaoDireita);
+            bool estaColidindo = CheckCollisionCircles(xala->posicao, 16, (Vector2){pedras[i].posicao.x + 16, pedras[i].posicao.y + 16}, 16);
 
-            if(estaColidindo && pedras[i].ativa)  {
+
+            if(estaColidindo && pedras[i].ativa && !(xala->invulneravel))  {
                 xala->vida--;
                 xala->invulneravel = !(xala->invulneravel);
+                xala->tempoInvulneravel = TEMPO;
                 pedras[i].ativa = false;
                 pedrasCount--;   
             }
@@ -366,7 +346,20 @@ void logica_boss_fight(Personagem* xala, Personagem* boss, Projetil flecha[], Re
             frameRecPersonagem.x = (float)currentFrame * (float)boss->sprite.textura.width/7;
         }
         // --------------------------------------------- //
+        //----------Atualização dos sprites------------
+        if(IsKeyDown(KEY_A)) {
+            xala->sprite.n_segmento = 0;
+            animaSprite(&xala->sprite, segmentos_xala);
+        }
+        if(IsKeyDown(KEY_D)) {
+            xala->sprite.n_segmento = 1;
+            animaSprite(&xala->sprite, segmentos_xala);
+        }
+        if(IsKeyDown(KEY_W) || IsKeyDown(KEY_S)){
+            animaSprite(&xala->sprite, segmentos_xala);
+        }
 
+        //---------------------------------------------
 
 
         // ----------- ATUALIZAÇÃO DO BOSS -------------//

@@ -18,8 +18,8 @@ Sprite spriteConstructor(const char *endereco, int largura_frame, int altura_fra
 void animaSpriteLinha(Sprite *sprite){
     if(!sprite->fps) sprite->fps = 1;
     
-    if(GetTime() - sprite->timer > 1/sprite->fps){
-        sprite->timer = GetTime();
+    if(TEMPO - sprite->timer > 1/sprite->fps){
+        sprite->timer = TEMPO;
         sprite->frameAtual++;
         sprite->recorte = (Rectangle){
             sprite->frameAtual * sprite->textura.width/sprite->colunas , 
@@ -39,8 +39,8 @@ void animaSprite(Sprite *sprite, Segmento segmento[]){
         sprite->frameAtual = segmento[sprite->n_segmento].inicio;
     }
 
-    if(GetTime() -sprite->timer > 1/sprite->fps){
-        sprite->timer = GetTime();
+    if(TEMPO -sprite->timer > 1/sprite->fps){
+        sprite->timer = TEMPO;
         sprite->frameAtual++;
 
         sprite->recorte.x = sprite->frameAtual * sprite->recorte.width;

@@ -99,7 +99,7 @@ void logicaInimigo(Personagem *inimigo, Personagem *fulano)
     switch (inimigo->acao.atual)
     {
         case INIMIGO_ATORDOADO:
-            if(GetTime() - inimigo->acao.contador > inimigo->acao.duracao)
+            if(TEMPO - inimigo->acao.contador > inimigo->acao.duracao)
             {
                 inimigo->acao.atual = INIMIGO_PISTOLA;
             }
@@ -107,9 +107,9 @@ void logicaInimigo(Personagem *inimigo, Personagem *fulano)
         //==========================================================================================
         case INIMIGO_DE_BOA:
 
-            if (GetTime() - inimigo->acao.contador > inimigo->acao.duracao)
+            if (TEMPO - inimigo->acao.contador > inimigo->acao.duracao)
             {
-                inimigo->acao.contador = GetTime();
+                inimigo->acao.contador = TEMPO;
                 inimigo->acao.duracao = GetRandomValue(5,10)/10;
                 angulo = GetRandomValue(0,360);
                 inimigo->acao.direcao.y = sin(angulo) * VELOCIDADE_INIMIGO;
@@ -130,7 +130,7 @@ void logicaInimigo(Personagem *inimigo, Personagem *fulano)
                     {
                         fulano->vida--;
                         fulano->invulneravel = 1;
-                        fulano->tempoInvulneravel = GetTime();
+                        fulano->tempoInvulneravel = TEMPO;
                     }
                 }
             }

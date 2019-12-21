@@ -171,15 +171,14 @@ void fase_3()
     /// aumenta a vida máxima de xala
     vidaUpgrade = (Rectangle) {950, 990, 16, 16};
     isUpgradeGetted = false;
-
-
     
     // ------------ XALA ------------ //
     Personagem xala;
     xala = personagemConstructor();
     xala.posicao = (Vector2){0, 0};
-    xala.altura = 20;
-    xala.largura = 20;
+    xala.altura = 48;
+    xala.largura = 48;
+    xala.sprite = spriteConstructor("resources/images/personagem.png",48,48,15);
     // ----------------------------- //
 
 
@@ -202,7 +201,7 @@ void fase_3()
     Projetil flechas[quantidade_maxima_flechas];
 
     // indice da flecha
-    int projetil_atual = xala.quantidadeFlechas -1;
+    projetil_atual = xala.quantidadeFlechas -1;
 
     // Inicializando as flechas
     for(int i = 0; i < quantidade_maxima_flechas; i++){
@@ -216,6 +215,7 @@ void fase_3()
 
 
     while(telaAtual == TELA_FASE_3) {
+        TEMPO = GetTime();
         playMusic(2);
         if(isPaused) 
         {
@@ -259,8 +259,8 @@ void draw_fase_3(Personagem* xala, Personagem inimigos[], Projetil flechas[], Re
             }
             
 
-            drawXala(xala, count);
-            drawFlecha(flechas, xala->quantidadeFlechas);
+            drawXala(xala);
+            drawFlecha(flechas,*xala);
 
 
         EndMode2D();
@@ -305,7 +305,22 @@ void logica_fase_3(Personagem* xala, Personagem inimigo[], Projetil flecha[], Re
     movimentar(xala);
     colisaoPersonagem(xala, PAREDES, TAM_MAPA_3);
     atualizarCamera(&cam, xala->posicao);
+
     // --------------------------------------------------- //
+
+    // ----------Atualização dos sprites------------
+    if(IsKeyDown(KEY_A)) {
+        xala->sprite.n_segmento = 0;
+        animaSprite(&xala->sprite, segmentos_xala);
+    }
+    if(IsKeyDown(KEY_D)) {
+        xala->sprite.n_segmento = 1;
+        animaSprite(&xala->sprite, segmentos_xala);
+    }
+    if(IsKeyDown(KEY_W) || IsKeyDown(KEY_S)){
+        animaSprite(&xala->sprite, segmentos_xala);
+    }
+    // ---------------------------------------------
 
 
 
@@ -316,20 +331,17 @@ void logica_fase_3(Personagem* xala, Personagem inimigo[], Projetil flecha[], Re
             playFx(8);
             xala->vida--;
             xala->invulneravel = !(xala->invulneravel);
+            xala->tempoInvulneravel = TEMPO;
         }
     }
 
-    if(xala->invulneravel){
-        count++;
-        if(count > 60) {
-            tempo_invunerabilidade--;
-            count = 0;
+    //--------------INVUNERABILIDADE---------------
+    if(xala->invulneravel)
+    {
+        if(TEMPO -xala->tempoInvulneravel > 2)
+        {
+            xala->invulneravel = 0;
         }
-    }
-
-    if(tempo_invunerabilidade < 1) {
-        xala->invulneravel = !(xala->invulneravel);
-        tempo_invunerabilidade = TEMPO_MAX_INVULNERAVEL;
     }
     // -------------------------------------------------------- //
 

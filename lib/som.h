@@ -24,7 +24,7 @@ void setFx(char* somBotaoPath, char* gameOver, char* pickup);
 void playFx(int fxNumber);
 void playMusic(int musicNumber);
 void setTiroFx(char* flechaPath, char* arcoPath);
-void checkClickBow(int projetil_atual);
+void checkClickBow();
 void setFootStep(char* footstepFx);
 void footStep();
 void setHitFx();

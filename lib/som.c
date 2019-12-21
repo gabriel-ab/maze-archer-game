@@ -132,7 +132,7 @@ void footStep(){
 }
 
 //FUNÇÃO QUE CHECA SE TEM FLECHAS AINDA PARA SEREM ATIRADAS, SE SIM ELE ATIVA O SOM AO CLIQUE DO MOUSE
-void checkClickBow(int projetil_atual){
+void checkClickBow(){
         
         if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
             playFx(4);

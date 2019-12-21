@@ -94,11 +94,13 @@ void fase_2()
     Personagem xala;
     xala = personagemConstructor();
     xala.posicao = (Vector2){0, 0};
-    xala.altura = 20;
-    xala.largura = 20;
+    xala.altura = 48;
+    xala.largura = 48;
+    xala.sprite = spriteConstructor("resources/images/personagem.png",48,48,15);
+    
     // ----------------------------- //
-
-
+    
+    
 
     // ------------ INIMIGO ----------- //
     Personagem inimigos[QTD_INIMIGO_2];
@@ -118,7 +120,8 @@ void fase_2()
     Projetil flechas[quantidade_maxima_flechas];
 
     // indice da flecha
-    int projetil_atual = xala.quantidadeFlechas -1;
+    projetil_atual = xala.quantidadeFlechas -1;
+    
 
     // Inicializando as flechas
     for(int i = 0; i < quantidade_maxima_flechas; i++){
@@ -155,7 +158,7 @@ void fase_2()
     HideCursor();
 
     while(telaAtual == TELA_FASE_2){ 
-        
+        TEMPO = GetTime();
         //FUNCAO PARA TOCAR O SOM DE FUNDO
         playMusic(3);
         if(isPaused) 
@@ -236,17 +239,19 @@ void fase_2()
 
             // ----------------------- LÓGICA DO PROJÉTIL ------------------------ //
     
-            checkClickBow(projetil_atual);
+            checkClickBow();
 
             if(projetil_atual > -1)
             {
                 if(IsMouseButtonDown(MOUSE_LEFT_BUTTON))
                 {
                     mira(xala, &flechas[projetil_atual], cam);
+                    mirando = true;
                 }
 
                 if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
                 {
+                    mirando = false;
                     flechas[projetil_atual].ativa = true;
 
                     atira(xala, &flechas[projetil_atual]);
@@ -275,7 +280,20 @@ void fase_2()
             if(projetil_atual +1 < xala.quantidadeFlechas && IsKeyPressed(KEY_SPACE)) projetil_atual++; //temporario
 
             // -------------------------------------------------------- //
-
+            
+            // ----------Atualização dos sprites------------
+            if(IsKeyDown(KEY_A)) {
+                xala.sprite.n_segmento = 0;
+                animaSprite(&xala.sprite, segmentos_xala);
+            }
+            if(IsKeyDown(KEY_D)) {
+                xala.sprite.n_segmento = 1;
+                animaSprite(&xala.sprite, segmentos_xala);
+            }
+            if(IsKeyDown(KEY_W) || IsKeyDown(KEY_S)){
+                animaSprite(&xala.sprite, segmentos_xala);
+            }
+            // ---------------------------------------------
 
 
             // ---------- ATUALIZAÇÃO DOS INIMIGOS ----------- //
@@ -290,7 +308,7 @@ void fase_2()
             // ----------------INVUNERABILIDADE---------------- //
             if(xala.invulneravel)
             {
-                if(GetTime() -xala.tempoInvulneravel > 2)
+                if(TEMPO -xala.tempoInvulneravel > 2)
                 {
                     xala.invulneravel = 0;
                 }
@@ -337,8 +355,8 @@ void fase_2()
                     DrawTexture(marca_3, 2240, -234, WHITE);
                     
                     drawInimigos(inimigos, QTD_INIMIGO_2);
-                    drawXala(&xala, 0);
-                    drawFlecha(flechas, xala.quantidadeFlechas);
+                    drawXala(&xala);
+                    drawFlecha(flechas, xala);
 
                 EndMode2D();
 

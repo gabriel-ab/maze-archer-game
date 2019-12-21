@@ -112,7 +112,7 @@ void setFont(char* fontPath) {
 
 void setTargetCamera(Personagem *target)
 {
-    cam.zoom = 1.5;
+    cam.zoom = 3;
     cam.rotation = 0;
     cam.target = target->posicao;
     cam.offset = (Vector2){0,0};

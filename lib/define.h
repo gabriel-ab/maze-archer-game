@@ -17,4 +17,8 @@ int tempo_invunerabilidade = TEMPO_MAX_INVULNERAVEL;
 int vida_maxima_xala = 3;
 int quantidade_maxima_flechas = 2;
 
+double TEMPO; //tempo geral
+bool mirando;
+int projetil_atual = 0;
+
 #endif
