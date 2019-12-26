@@ -1,3 +1,6 @@
+#ifndef TELA_H
+#define TELA_H
+
 //********CONFIGURAÇÔES DE TELA*********
 #define larguraTela 800
 #define alturaTela 500
@@ -32,3 +35,4 @@ void atualizaCamera(Camera2D *camera){
     tela.height = GetScreenHeight();
     camera->offset = (Vector2){camera->target.x + tela.width/2,camera->target.y + tela.height/2};
 }
+#endif
