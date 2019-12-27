@@ -19,7 +19,7 @@ void desenhaGrid(void)
 void selecionarTipo(int *tipo)
 {
     int confirma = 0;
-    int opcao = 1;
+    int opcao = 0;
     Texture2D fundo = LoadTextureFromImage(GetScreenData());
 
     Rectangle botao[3] = {
@@ -37,29 +37,41 @@ void selecionarTipo(int *tipo)
         20
     };
 
-    while (!confirma)
+    while (!confirma && IsKeyUp(KEY_ESCAPE))
     {
         BeginDrawing();
             ClearBackground(BLACK);
             DrawTexture(fundo, 0,0, (Color){255,255,255,100});
             DrawText("SELECIONE O TIPO DE RETANGULO:", tela.width / 2 - MeasureText("SELECIONE O TIPO DE RETANGULO:", 25) / 2, tela.height / 2, 25, RED);
-            DrawText(opcao == 1 ? "PAREDE" : "parede", tela.width / 2 - MeasureText("PAREDE", 20) / 2, tela.height / 2 + 30, 20, RED);
-            DrawText(opcao == 2 ? "PISO" : "piso", tela.width / 2 - MeasureText("PISO", 20) / 2, tela.height / 2 + 50, 20, RED);
-            DrawText(opcao == 3 ? "INIMIGO" : "inimigo", tela.width / 2 - MeasureText("INIMIGO", 20) / 2, tela.height / 2 + 70, 20, RED);
+            DrawText("PAREDE", botao[0].x, botao[0].y, 20, RED);
+            DrawText("PISO", botao[1].x, botao[1].y, 20, RED);
+            DrawText("INIMIGO", botao[2].x, botao[2].y, 20, RED);
+            DrawRectangleLines(tela.width / 2 -100, tela.height/2 +30 +opcao*20, 200, 20, WHITE);
+
+            DrawText("Arraste arquivos aqui para carrega-los e sobrescrever o mapa atual (Salve antes)", tela.width/2 - MeasureText("Arraste arquivos aqui para carrega-los e sobrescrever o mapa atual (Salve antes)",20)/2, tela.height - 100,20, WHITE);
         EndDrawing();
 
-        if (IsKeyPressed(KEY_UP) && opcao >= 2) opcao--;
-        if (IsKeyPressed(KEY_DOWN) && opcao <= 2) opcao++;
+        if (IsKeyPressed(KEY_UP) && opcao > 0) opcao--;
+        if (IsKeyPressed(KEY_DOWN) && opcao < 2) opcao++;
         if (IsKeyPressed(KEY_ENTER)) confirma = 1;
-        for( int i = 0; i < 3; i++){
-            if (CheckCollisionPointRec(GetMousePosition(), botao[i])) opcao = i + 1;    
+        if (IsKeyPressed(KEY_ESCAPE)) break;
+
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
+            confirma = 1;
+            for( int i = 0; i < 3; i++){
+                if (CheckCollisionPointRec(GetMousePosition(), botao[i])) opcao = i + 1;
+                else opcao = -1;
+            }
         }
 
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) confirma = 1;
-
-        if (confirma && opcao == 1) *tipo = PAREDE;
-        if (confirma && opcao == 2) *tipo = PISO;
-        if (confirma && opcao == 3) *tipo = INIMIGO;
+        if(confirma){
+            switch(opcao){
+                case 0: *tipo = PAREDE; break;
+                case 1: *tipo = PISO; break;
+                case 2: *tipo = INIMIGO; break;
+            }
+            GetKeyPressed();
+        }
     }
 }
 
@@ -124,7 +136,7 @@ int telaSair(Mapa fase)
         20
     };
 
-    int confirma = 0;
+    bool confirma = 0;
     int opcao = 0;
     while (!confirma)
     {
@@ -148,7 +160,13 @@ int telaSair(Mapa fase)
             if (CheckCollisionPointRec(GetMousePosition(), botao[i])) opcao = i;
         }
 
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) confirma = 1;
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
+            confirma = true;
+        }
+        else if(IsKeyPressed(KEY_ESCAPE)){
+            confirma = true;
+            opcao = -1;
+        }
     }
     switch (opcao)
     {

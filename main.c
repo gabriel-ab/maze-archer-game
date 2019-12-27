@@ -56,6 +56,7 @@ int main()
     Vector2 bufferPosicao;
     int opcaoPonto;
     double tempoAnt = 0;
+    SetTargetFPS(120);
 
     SetExitKey(0);
 
@@ -65,8 +66,8 @@ int main()
         tela.width = GetScreenWidth();
         tela.height = GetScreenHeight();
 
-        if (IsKeyDown(KEY_PAGE_UP)) camera.zoom += 0.001;
-        if (IsKeyDown(KEY_PAGE_DOWN) && camera.zoom > 0)camera.zoom -= 0.001;
+        if (IsKeyDown(KEY_PAGE_UP)) camera.zoom += 0.01;
+        if (IsKeyDown(KEY_PAGE_DOWN) && camera.zoom > 0)camera.zoom -= 0.01;
 
         if(GetKeyPressed() != -1)
         {
@@ -98,27 +99,15 @@ int main()
             retangulo.y = bufferPosicao.y;
         }
 
-        //-------------TROCAR TIPO DE RETANGULO--------------
-        if (IsKeyPressed(KEY_TAB))
-        {
-            selecionarTipo(&tipo);
-        }
-
-        if (IsKeyPressed(KEY_ESCAPE))
-        {
-            sair = telaSair(fase);
-            if (sair) break;
-        }
-
         //MOVIMENTAÇÃO DA CAMERA
-            if (IsKeyDown(KEY_W)) camera.offset.y += 2;
-            if (IsKeyDown(KEY_S)) camera.offset.y -= 2;
-            if (IsKeyDown(KEY_A)) camera.offset.x += 2;
-            if (IsKeyDown(KEY_D)) camera.offset.x -= 2;
+            if (IsKeyDown(KEY_W)) camera.offset.y += 10;
+            if (IsKeyDown(KEY_S)) camera.offset.y -= 10;
+            if (IsKeyDown(KEY_A)) camera.offset.x += 10;
+            if (IsKeyDown(KEY_D)) camera.offset.x -= 10;
         //
 
         //EDIÇÃO DO TAMANHO E MOVIMENTAÇÃO DO OBJETO
-        if (GetTime() - tempoAnt >= 0.1)
+        if (GetTime() - tempoAnt >= 0.05)
         {
             if (IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT))
             {
@@ -215,6 +204,19 @@ int main()
             }
         }
 
+        //-------------TROCAR TIPO DE RETANGULO--------------
+        if (IsKeyPressed(KEY_ESCAPE))
+        {
+            sair = telaSair(fase);
+            if (sair) break;
+        }
+        if (IsKeyPressed(KEY_TAB))
+        {
+            selecionarTipo(&tipo);
+        }
+
+        
+
         //---------------------Desenho da Tela-------------------
         BeginDrawing();
             ClearBackground((Color){50, 50, 50, 255});
@@ -269,12 +271,10 @@ int main()
             {
                 DrawText("Presione F1 para Ajuda", tela.width - 240, 10, 20, YELLOW);
             }
+            DrawFPS(10,tela.height - 40);
 
         EndDrawing();
     }
-
-    //Impressão do MAPA
-    
     CloseWindow();
 
     return 0;
