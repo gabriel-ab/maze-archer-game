@@ -16,7 +16,7 @@ void desenhaGrid(void)
     DrawLine(-2048, 1024, 2048, 1024, (Color){100, 100, 100, 255});
 }
 
-void selecionarTipo(int *tipo)
+void telaOpcoes(int *tipo, Mapa *fase)
 {
     int confirma = 0;
     int opcao = 0;
@@ -28,25 +28,33 @@ void selecionarTipo(int *tipo)
         MeasureText("PAREDE", 20),
         20,
         tela.width / 2 - MeasureText("PISO", 20) / 2,
-        tela.height / 2 + 50,
+        tela.height / 2 + 60,
         MeasureText("PISO", 20),
         20,
         tela.width / 2 - MeasureText("INIMIGO", 20) / 2,
-        tela.height / 2 + 70,
+        tela.height / 2 + 90,
         MeasureText("INIMIGO", 20),
         20
     };
 
+    int count = 0;
+    char **arquivosSoltos = {0};
+
     while (!confirma && IsKeyUp(KEY_ESCAPE))
     {
+        if(IsFileDropped()){
+            arquivosSoltos = GetDroppedFiles(&count);
+            carregar(arquivosSoltos[count -1], fase);
+        }
+
         BeginDrawing();
             ClearBackground(BLACK);
             DrawTexture(fundo, 0,0, (Color){255,255,255,100});
-            DrawText("SELECIONE O TIPO DE RETANGULO:", tela.width / 2 - MeasureText("SELECIONE O TIPO DE RETANGULO:", 25) / 2, tela.height / 2, 25, RED);
-            DrawText("PAREDE", botao[0].x, botao[0].y, 20, RED);
-            DrawText("PISO", botao[1].x, botao[1].y, 20, RED);
-            DrawText("INIMIGO", botao[2].x, botao[2].y, 20, RED);
-            DrawRectangleLines(tela.width / 2 -100, tela.height/2 +30 +opcao*20, 200, 20, WHITE);
+            DrawText("SELECIONE O TIPO DE RETANGULO:", tela.width / 2 - MeasureText("SELECIONE O TIPO DE RETANGULO:", 30) / 2, tela.height / 2.8, 30, GREEN);
+            DrawText("PAREDE", botao[0].x, botao[0].y, 20, DARKGREEN);
+            DrawText("PISO", botao[1].x, botao[1].y, 20, DARKGREEN);
+            DrawText("INIMIGO", botao[2].x, botao[2].y, 20, DARKGREEN);
+            DrawRectangleLines(tela.width / 2 -100, tela.height/2 +25 +opcao*30, 200, 30, WHITE);
 
             DrawText("Arraste arquivos aqui para carrega-los e sobrescrever o mapa atual (Salve antes)", tela.width/2 - MeasureText("Arraste arquivos aqui para carrega-los e sobrescrever o mapa atual (Salve antes)",20)/2, tela.height - 100,20, WHITE);
         EndDrawing();
@@ -144,11 +152,11 @@ int telaSair(Mapa fase)
         ClearBackground(BLACK);
             DrawTexture(fundo, 0, 0, (Color){255, 255, 255, 100});
 
-            DrawText("DESEJA SAIR?", tela.width / 2 - MeasureText("DESEJA SAIR?", 20) / 2, tela.height / 2, 20, RED);
-            DrawText(TEXT_B1, tela.width / 2 - MeasureText(TEXT_B1, 20) / 2, tela.height / 2 + 1*DIST_BOTOES, 20, RED);
-            DrawText(TEXT_B2, tela.width / 2 - MeasureText(TEXT_B2, 20) / 2, tela.height / 2 + 2*DIST_BOTOES, 20, RED);
-            DrawText(TEXT_B3, tela.width / 2 - MeasureText(TEXT_B3, 20) / 2, tela.height / 2 + 3*DIST_BOTOES, 20, RED);
-            DrawText(TEXT_B4, tela.width / 2 - MeasureText(TEXT_B4, 20) / 2, tela.height / 2 + 4*DIST_BOTOES, 20, RED);
+            DrawText("DESEJA SAIR?", tela.width / 2 - MeasureText("DESEJA SAIR?", 30) / 2, tela.height / 2.8, 30, RED);
+            DrawText(TEXT_B1, tela.width / 2 - MeasureText(TEXT_B1, 20) / 2, tela.height / 2 + 1*DIST_BOTOES, 20, (Color){255,80,80,255});
+            DrawText(TEXT_B2, tela.width / 2 - MeasureText(TEXT_B2, 20) / 2, tela.height / 2 + 2*DIST_BOTOES, 20, (Color){255,80,80,255});
+            DrawText(TEXT_B3, tela.width / 2 - MeasureText(TEXT_B3, 20) / 2, tela.height / 2 + 3*DIST_BOTOES, 20, (Color){255,80,80,255});
+            DrawText(TEXT_B4, tela.width / 2 - MeasureText(TEXT_B4, 20) / 2, tela.height / 2 + 4*DIST_BOTOES, 20, (Color){255,80,80,255});
             DrawRectangleLines(tela.width / 2 -120, tela.height/2 +(opcao +1)*DIST_BOTOES -5, 240, 30, WHITE);
         EndDrawing();
 
@@ -177,7 +185,7 @@ int telaSair(Mapa fase)
     return 0;
 }
 
-void telaOpcao(int *opcao)
+void telaBotaoDireito(int *opcao)
 {
 
     Texture2D fundo = LoadTextureFromImage(GetScreenData());

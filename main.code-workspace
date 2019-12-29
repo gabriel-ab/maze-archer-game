@@ -11,7 +11,8 @@
 			"blocks.h": "c",
 			"stdio.h": "c",
 			"*.m": "c",
-			"data.h": "c"
+			"data.h": "c",
+			"functions.h": "c"
 		}
 	}
 }

@@ -49,10 +49,8 @@ int main()
     camera.target = (Vector2){0, 0};
     camera.offset = (Vector2){tela.width / 2, tela.height / 2};
 
-    FILE *arquivo;
-
     // VARIAVEIS DE SUPORTE
-    int tipo = 1, sair = 0, salvar = 0;
+    int tipo = 1, sair = 0;
     Vector2 bufferPosicao;
     int opcaoPonto;
     double tempoAnt = 0;
@@ -63,8 +61,7 @@ int main()
     while (!WindowShouldClose())
     {
         //update
-        tela.width = GetScreenWidth();
-        tela.height = GetScreenHeight();
+        atualizaCamera(&camera);
 
         if (IsKeyDown(KEY_PAGE_UP)) camera.zoom += 0.01;
         if (IsKeyDown(KEY_PAGE_DOWN) && camera.zoom > 0)camera.zoom -= 0.01;
@@ -100,10 +97,10 @@ int main()
         }
 
         //MOVIMENTAÇÃO DA CAMERA
-            if (IsKeyDown(KEY_W)) camera.offset.y += 10;
-            if (IsKeyDown(KEY_S)) camera.offset.y -= 10;
-            if (IsKeyDown(KEY_A)) camera.offset.x += 10;
-            if (IsKeyDown(KEY_D)) camera.offset.x -= 10;
+            if (IsKeyDown(KEY_W)) camera.target.y += 10;
+            if (IsKeyDown(KEY_S)) camera.target.y -= 10;
+            if (IsKeyDown(KEY_A)) camera.target.x += 10;
+            if (IsKeyDown(KEY_D)) camera.target.x -= 10;
         //
 
         //EDIÇÃO DO TAMANHO E MOVIMENTAÇÃO DO OBJETO
@@ -159,7 +156,7 @@ int main()
             Vector2 mousePos = GetMousePosition();
             mousePos = (Vector2){(mousePos.x - camera.offset.x) / camera.zoom, (mousePos.y - camera.offset.y) / camera.zoom};
 
-            telaOpcao(&opcaoPonto);
+            telaBotaoDireito(&opcaoPonto);
             switch (opcaoPonto)
             {
                 case OPCAO_INICIO:
@@ -212,7 +209,7 @@ int main()
         }
         if (IsKeyPressed(KEY_TAB))
         {
-            selecionarTipo(&tipo);
+            telaOpcoes(&tipo, &fase);
         }
 
         

@@ -1,5 +1,55 @@
 #include "data.h"
 
+void carregar(const char *endereco, Mapa *fase){
+
+    //================ZERANDO VALORES====================
+    for (int i = 0; i < MAX_RETANGULOS; i++)
+    {
+        fase->parede[i] = (Rectangle){0, 0, 0, 0};
+        fase->piso[i] = (Rectangle){0, 0, 0, 0};
+    }
+    for (int i = 0; i < MAX_ITENS; i++){
+        fase->flecha[i] = (Vector2){0,0};
+        fase->vida[i] = (Vector2){0,0};
+    }
+    for (int i = 0; i < MAX_INIMIGOS; i++) fase->inimigo[i] = (Vector2){0,0};
+
+        fase->parede_atual = 0;
+        fase->piso_atual = 0; 
+        fase->vida_atual = 0;
+        fase->inimigo_atual = 0;
+        fase->flecha_atual = 0; 
+        fase->inicio = (Vector2){0,0};
+        fase->fim = (Vector2){0,0};
+    //======================================================
+    
+    FILE *arquivo = fopen(endereco,"r");
+
+    fscanf(arquivo,"inicio %f %f\n", &fase->inicio.x, &fase->inicio.y);
+    fscanf(arquivo,"fim %f %f\n", &fase->fim.x, &fase->fim.y);
+
+    fscanf(arquivo,"paredes %i\n", &fase->parede_atual);
+    for( int i = 0; i < fase->parede_atual; i++){
+        fscanf(arquivo,"%f %f %f %f\n", &fase->parede[i].x, &fase->parede[i].y, &fase->parede[i].width, &fase->parede[i].height);
+    }
+    fscanf(arquivo,"pisos %i\n", &fase->piso_atual);
+    for( int i = 0; i < fase->piso_atual; i++){
+        fscanf(arquivo,"%f %f %f %f\n", &fase->piso[i].x, &fase->piso[i].y, &fase->piso[i].width, &fase->piso[i].height);
+    }
+    fscanf(arquivo,"inimigos %i\n", &fase->inimigo_atual);
+    for( int i = 0; i < fase->inimigo_atual; i++){
+        fscanf(arquivo,"%f %f\n", &fase->inimigo[i].x, &fase->inimigo[i].y);
+    }
+    fscanf(arquivo,"vidas %i\n", &fase->vida_atual);
+    for( int i = 0; i < fase->vida_atual; i++){
+        fscanf(arquivo,"%f %f\n", &fase->vida[i].x, &fase->vida[i].y);
+    }
+    fscanf(arquivo,"flechas %i\n", &fase->flecha_atual);
+    for( int i = 0; i < fase->flecha_atual; i++){
+        fscanf(arquivo,"%f %f\n", &fase->flecha[i].x, &fase->flecha[i].y);
+    }
+    fclose(arquivo);
+}
 void salvar(Mapa fase){
     Texture fundo = LoadTextureFromImage(GetScreenData());
     FILE *arquivo;
@@ -40,37 +90,37 @@ void salvar(Mapa fase){
 
     if(salvar){
         arquivo = fopen(nome_arquivo, "a");
-        fprintf(arquivo, "%.f %.f\n", fase.inicio.x, fase.inicio.y);
-        fprintf(arquivo, "%.f %.f\n", fase.fim.x, fase.fim.y);
+        fprintf(arquivo, "inicio %.f %.f\n", fase.inicio.x, fase.inicio.y);
+        fprintf(arquivo, "fim %.f %.f\n", fase.fim.x, fase.fim.y);
         
-        fprintf(arquivo, "parede %i\n",fase.parede_atual);
+        fprintf(arquivo, "paredes %i\n",fase.parede_atual);
         for (int i = 0; i < fase.parede_atual; i++)
         {
             fprintf(arquivo, "%.f %.f %.f %.f\n", fase.parede[i].x, fase.parede[i].y, fase.parede[i].width, fase.parede[i].height);
         }
 
-        fprintf(arquivo, "piso %i\n",fase.piso_atual);
+        fprintf(arquivo, "pisos %i\n",fase.piso_atual);
         for (int i = 0; i < fase.piso_atual; i++)
         {
-            fprintf(arquivo, "\n    %.f, %.f, %.f, %.f,", fase.piso[i].x, fase.piso[i].y, fase.piso[i].width, fase.piso[i].height);
+            fprintf(arquivo, "%.f %.f %.f %.f\n", fase.piso[i].x, fase.piso[i].y, fase.piso[i].width, fase.piso[i].height);
         }
 
-        fprintf(arquivo, "inimigo %i\n",fase.inimigo_atual);
+        fprintf(arquivo, "inimigos %i\n",fase.inimigo_atual);
         for (int i = 0; i < fase.inimigo_atual; i++)
         {
-            fprintf(arquivo, "\n%.f, %.f,", fase.inimigo[i].x, fase.inimigo[i].y);
+            fprintf(arquivo, "%.f %.f\n", fase.inimigo[i].x, fase.inimigo[i].y);
         }
 
-        fprintf(arquivo, "vida %i\n",fase.vida_atual);
+        fprintf(arquivo, "vidas %i\n",fase.vida_atual);
         for (int i = 0; i < fase.vida_atual; i++)
         {
-            fprintf(arquivo, "\n%.f, %.f,", fase.vida[i].x, fase.vida[i].y);
+            fprintf(arquivo, "%.f %.f\n", fase.vida[i].x, fase.vida[i].y);
         }
 
-        fprintf(arquivo, "flecha %i\n",fase.flecha_atual);
+        fprintf(arquivo, "flechas %i\n",fase.flecha_atual);
         for (int i = 0; i < fase.flecha_atual; i++)
         {
-            fprintf(arquivo, "\n%.f, %.f,", fase.flecha[i].x, fase.flecha[i].y);
+            fprintf(arquivo, "%.f %.f\n", fase.flecha[i].x, fase.flecha[i].y);
         }
     }
 }

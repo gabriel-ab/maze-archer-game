@@ -34,8 +34,8 @@ typedef enum Opcoes
 
 void desenhaGrid(void);
 void desenhaTelaAjuda(void);
-void selecionarTipo(int *tipo);
-void telaOpcao(int *opcao);
+void telaOpcoes(int *tipo, Mapa *fase);
+void telaBotaoDireito(int *opcao);
 int telaSair(Mapa fase);
 
 #endif
