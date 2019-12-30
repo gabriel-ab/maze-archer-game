@@ -10,6 +10,7 @@ Rectangle telaAnterior = {larguraTela/3, alturaTela/3, larguraTela, alturaTela};
 
 // Para saber o estado atual
 int Is_Fullscreen = 0; 
+Vector2 posCam = {0,0}; // Melhor não mexer no camera.target
 
 //*********FUNÇÔES DE TELA***********
 
@@ -33,6 +34,6 @@ void telaCheia(void)
 void atualizaCamera(Camera2D *camera){
     tela.width = GetScreenWidth();
     tela.height = GetScreenHeight();
-    camera->offset = (Vector2){tela.width/2 -camera->target.x,tela.height/2 -camera->target.y};
+    camera->offset = (Vector2){tela.width/2 -posCam.x,tela.height/2 -posCam.y};
 }
 #endif

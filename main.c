@@ -50,10 +50,17 @@ int main()
     camera.offset = (Vector2){tela.width / 2, tela.height / 2};
 
     // VARIAVEIS DE SUPORTE
-    int tipo = 1, sair = 0;
+    int tipo = 0, sair = 0;
     Vector2 bufferPosicao;
     int opcaoPonto;
     double tempoAnt = 0;
+
+    // VARIAVEL DE SELEÇÃO
+    //{OBJETO, indice}
+    //ex: {PAREDE, 7}
+    Objeto selecionado = {-1,0};
+    // TO DO se o selecionado for deletado toda a sequencia move seu indice em -1
+
     SetTargetFPS(120);
 
     SetExitKey(0);
@@ -101,10 +108,10 @@ int main()
         }
 
         //MOVIMENTAÇÃO DA CAMERA
-            if (IsKeyDown(KEY_W)) camera.target.y -= 10;
-            if (IsKeyDown(KEY_S)) camera.target.y += 10;
-            if (IsKeyDown(KEY_A)) camera.target.x -= 10;
-            if (IsKeyDown(KEY_D)) camera.target.x += 10;
+            if (IsKeyDown(KEY_W)) posCam.y -= 10;
+            if (IsKeyDown(KEY_S)) posCam.y += 10;
+            if (IsKeyDown(KEY_A)) posCam.x -= 10;
+            if (IsKeyDown(KEY_D)) posCam.x += 10;
         //
 
         //EDIÇÃO DO TAMANHO E MOVIMENTAÇÃO DO OBJETO
@@ -149,9 +156,7 @@ int main()
         }
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
-            fase.inimigo[fase.inimigo_atual].x = (GetMouseX() - camera.offset.x) / camera.zoom;
-            fase.inimigo[fase.inimigo_atual].y = (GetMouseY() - camera.offset.y) / camera.zoom;
-            fase.inimigo_atual++;
+            selecionado = selecionarObjeto(fase, camera);
         }
 
         //-----------------TELA DE OPÇÕES----------------//
@@ -227,24 +232,53 @@ int main()
 
                 for (int i = 0; i < fase.parede_atual; i++)
                 {
-                    DrawRectangleRec(fase.parede[i], BLACK);
-                    DrawRectangleLinesEx(fase.parede[i], 1, (Color){100, 240, 100, 255});
-                    if (fase.parede[i].width == 0 && fase.parede[i].height == 0)
-                        break;
+                    DrawRectangleRec(fase.parede[i], (Color){0,0,30,255});
+                    DrawRectangleLinesEx(fase.parede[i], 2, (Color){80, 80, 200, 255});
                 }
                 for (int i = 0; i < fase.piso_atual; i++)
                 {
-                    DrawRectangleRec(fase.piso[i], BLACK);
-                    DrawRectangleLinesEx(fase.piso[i], 1, (Color){100, 100, 200, 255});
+                    DrawRectangleRec(fase.piso[i], (Color){0,30,0,255});
+                    DrawRectangleLinesEx(fase.piso[i], 2, (Color){80, 200, 80, 255});
                 }
                 for (int i = 0; i < fase.inimigo_atual; i++)
                 {
-                    DrawCircleV(fase.inimigo[i], 8, RED);
-                    DrawCircleV(fase.inimigo[i], 4, PURPLE);
+                    DrawCircleV(fase.inimigo[i], 8, PURPLE);
+                    DrawCircleV(fase.inimigo[i], 4, BLACK);
+                }
+                for (int i = 0; i < fase.vida_atual; i++)
+                {
+                    DrawCircleV(fase.vida[i], 8, RED);
+                    DrawCircleV(fase.vida[i], 4, WHITE);
+                }
+                for (int i = 0; i < fase.flecha_atual; i++)
+                {
+                    DrawCircleV(fase.flecha[i], 8, DARKGREEN);
+                    DrawCircleV(fase.flecha[i], 4, GREEN);
+                }
+                
+                switch (selecionado.tipo)
+                {
+                case PAREDE:
+                    DrawRectangleGradientEx(fase.parede[selecionado.indice], DARKBLUE, BLACK, BLACK, DARKBLUE);
+                    DrawRectangleLinesEx(fase.parede[selecionado.indice], 2, LIGHTGRAY);
+                    break;
+                case PISO:
+                    DrawRectangleGradientEx(fase.piso[selecionado.indice], DARKGREEN, BLACK, BLACK, DARKGREEN);
+                    DrawRectangleLinesEx(fase.piso[selecionado.indice], 2, LIGHTGRAY);
+                    break;
+                case INIMIGO:
+                    DrawCircleGradient(fase.inimigo[selecionado.indice].x, fase.inimigo[selecionado.indice].y, 12,PURPLE, BLACK);
+                    break;
+                case VIDA:
+                    DrawCircleGradient(fase.vida[selecionado.indice].x, fase.vida[selecionado.indice].y, 12,RED, BLACK);
+                    break;
+                case FLECHA:
+                    DrawCircleGradient(fase.flecha[selecionado.indice].x, fase.flecha[selecionado.indice].y, 12,GREEN, BLACK);
+                    break;
                 }
 
                 DrawRectangleRec(retangulo, BLACK);
-                DrawRectangleLinesEx(retangulo, 1, (Color){180, 240, 100, 255});
+                DrawRectangleLinesEx(retangulo, 2, (Color){180, 240, 100, 255});
 
                 DrawCircle(0, 0, 2, GREEN);
 
@@ -262,7 +296,8 @@ int main()
             DrawText(FormatText("Numero de pisos: %i", fase.piso_atual), 10, 30, 20, tipo == PISO ? GREEN :DARKGREEN);
             DrawText(FormatText("Numero de inimigos: %i", fase.inimigo_atual), 10, 50, 20, tipo == INIMIGO ? GREEN :DARKGREEN);
 
-            DrawText((FormatText("Zoom: %.2f", camera.zoom)), 10, 70, 20, YELLOW);
+            DrawText((FormatText("Zoom: %.2f", camera.zoom)), 10, 70, 20, LIGHTGRAY);
+            DrawText((FormatText("Selecionado: %i %i", selecionado.tipo, selecionado.indice)), 10, 100, 20, LIGHTGRAY);
 
             if (IsKeyDown(KEY_F1))
             {
@@ -270,7 +305,7 @@ int main()
             }
             if (IsKeyUp(KEY_F1))
             {
-                DrawText("Presione F1 para Ajuda", tela.width - 240, 10, 20, YELLOW);
+                DrawText("Presione F1 para Ajuda", tela.width - 240, 10, 20, LIGHTGRAY);
             }
             DrawFPS(10,tela.height - 40);
 

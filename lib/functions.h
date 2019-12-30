@@ -17,15 +17,16 @@
 #define piso16_6 (Rectangle) { 0, 0, 16 * 32, 6 * 32 }
 #define piso6_16 (Rectangle) { 0, 0, 6 * 32, 16 * 32 }
 
-typedef enum TipoDeRetangulo
-{
-    PAREDE = 1,
-    PISO = 2,
-    INIMIGO = 3
-} TipoDeRetangulo;
+typedef enum TiposObjetos{
+    NENHUM = -1,
+    PAREDE,
+    PISO,
+    INIMIGO,
+    VIDA,
+    FLECHA
+} TiposObjetos;
 
-typedef enum Opcoes
-{
+typedef enum Opcoes{
     OPCAO_INICIO = 0,
     OPCAO_FIM,
     OPCAO_VIDA,

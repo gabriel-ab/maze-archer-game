@@ -22,4 +22,8 @@ typedef struct Mapa
     Vector2 fim;
 }Mapa;
 
+typedef struct Objeto{
+    int tipo;
+    int indice;
+}Objeto;
 #endif
