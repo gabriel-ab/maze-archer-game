@@ -33,6 +33,6 @@ void telaCheia(void)
 void atualizaCamera(Camera2D *camera){
     tela.width = GetScreenWidth();
     tela.height = GetScreenHeight();
-    camera->offset = (Vector2){camera->target.x + tela.width/2,camera->target.y + tela.height/2};
+    camera->offset = (Vector2){tela.width/2 -camera->target.x,tela.height/2 -camera->target.y};
 }
 #endif

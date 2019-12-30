@@ -62,6 +62,10 @@ int main()
     {
         //update
         atualizaCamera(&camera);
+        
+        //AJUSTE DE ZOOM
+        if (GetMouseWheelMove() > 0 ) camera.zoom += 0.1; 
+        if (GetMouseWheelMove() < 0 && camera.zoom > 0.1 ) camera.zoom -= 0.1; 
 
         if (IsKeyDown(KEY_PAGE_UP)) camera.zoom += 0.01;
         if (IsKeyDown(KEY_PAGE_DOWN) && camera.zoom > 0)camera.zoom -= 0.01;
@@ -97,10 +101,10 @@ int main()
         }
 
         //MOVIMENTAÇÃO DA CAMERA
-            if (IsKeyDown(KEY_W)) camera.target.y += 10;
-            if (IsKeyDown(KEY_S)) camera.target.y -= 10;
-            if (IsKeyDown(KEY_A)) camera.target.x += 10;
-            if (IsKeyDown(KEY_D)) camera.target.x -= 10;
+            if (IsKeyDown(KEY_W)) camera.target.y -= 10;
+            if (IsKeyDown(KEY_S)) camera.target.y += 10;
+            if (IsKeyDown(KEY_A)) camera.target.x -= 10;
+            if (IsKeyDown(KEY_D)) camera.target.x += 10;
         //
 
         //EDIÇÃO DO TAMANHO E MOVIMENTAÇÃO DO OBJETO

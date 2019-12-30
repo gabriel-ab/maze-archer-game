@@ -89,7 +89,7 @@ void salvar(Mapa fase){
     }
 
     if(salvar){
-        arquivo = fopen(nome_arquivo, "a");
+        arquivo = fopen(nome_arquivo, "w");
         fprintf(arquivo, "inicio %.f %.f\n", fase.inicio.x, fase.inicio.y);
         fprintf(arquivo, "fim %.f %.f\n", fase.fim.x, fase.fim.y);
         
