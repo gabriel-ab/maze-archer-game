@@ -122,6 +122,7 @@ void salvar(Mapa fase){
         {
             fprintf(arquivo, "%.f %.f\n", fase.flecha[i].x, fase.flecha[i].y);
         }
+        fclose(arquivo);
     }
 }
 void exportar(Mapa fase){

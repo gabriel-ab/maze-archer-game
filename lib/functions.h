@@ -29,8 +29,6 @@ typedef enum TiposObjetos{
 typedef enum Opcoes{
     OPCAO_INICIO = 0,
     OPCAO_FIM,
-    OPCAO_VIDA,
-    OPCAO_INIMIGO
 } Opcoes;
 
 void desenhaGrid(void);
@@ -38,5 +36,6 @@ void desenhaTelaAjuda(void);
 void telaOpcoes(int *tipo, Mapa *fase);
 void telaBotaoDireito(int *opcao);
 int telaSair(Mapa fase);
+void CheckFileOnScreen(Mapa *fase);
 
 #endif

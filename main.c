@@ -1,6 +1,11 @@
 #include <raylib.h>
 #include <stdio.h>
 
+// ESPACAMENTOS DE TEXTO
+#define ESPACAMENTO_P1 20
+#define ESPACAMENTO_P2 30
+#define ESPACAMENTO_P3 40
+
 // CONFIGURAÇÕES DO PROGRAMA
 #define MAX_RETANGULOS 100
 #define MAX_ITENS 50
@@ -10,8 +15,6 @@
 #include "lib/tela.h"
 #include "lib/data.c"
 #include "lib/functions.c"
-
-
 
 int main()
 {
@@ -69,6 +72,7 @@ int main()
     {
         //update
         atualizaCamera(&camera);
+        
         
         //AJUSTE DE ZOOM
         if (GetMouseWheelMove() > 0 ) camera.zoom += 0.1; 
@@ -138,6 +142,8 @@ int main()
 
         if (IsKeyPressed(KEY_ENTER))
         {
+            Vector2 mousePos = GetMousePosition();
+            mousePos = (Vector2){(mousePos.x - camera.offset.x) / camera.zoom, (mousePos.y - camera.offset.y) / camera.zoom};
             switch (tipo)
             {
             case PAREDE:
@@ -147,16 +153,37 @@ int main()
                 fase.piso[fase.piso_atual++] = retangulo;
                 break;
             case INIMIGO:
-                fase.inimigo[fase.inimigo_atual].x = (GetMouseX() - camera.offset.x) / camera.zoom;
-                fase.inimigo[fase.inimigo_atual].y = (GetMouseY() - camera.offset.y) / camera.zoom;
-                fase.inimigo_atual++;
+                fase.inimigo[fase.inimigo_atual++] = mousePos;
                 break;
-                
+            case VIDA:
+                fase.vida[fase.vida_atual++] = mousePos;
+                break;
+            case FLECHA:
+                fase.flecha[fase.flecha_atual++] = mousePos;
+                break;
+
             }
         }
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
-            selecionado = selecionarObjeto(fase, camera);
+            if(IsKeyDown(KEY_LEFT_CONTROL)){
+                selecionado = selecionarObjeto(fase, camera);
+            }else{
+                Vector2 mousePos = GetMousePosition();
+                mousePos = (Vector2){(mousePos.x - camera.offset.x) / camera.zoom, (mousePos.y - camera.offset.y) / camera.zoom};
+                switch (tipo)
+                {
+                case INIMIGO:
+                    fase.inimigo[fase.inimigo_atual++] = mousePos;
+                    break;
+                case VIDA:
+                    fase.vida[fase.vida_atual++] = mousePos;
+                    break;
+                case FLECHA:
+                    fase.flecha[fase.flecha_atual++] = mousePos;
+                    break;
+                }
+            }
         }
 
         //-----------------TELA DE OPÇÕES----------------//
@@ -175,16 +202,12 @@ int main()
                 case OPCAO_FIM:
                     fase.fim = mousePos;
                     break;
-
-                case OPCAO_VIDA:
-                    fase.vida[fase.vida_atual++] = mousePos;
-                    break;
             }
         }
 
         if (IsKeyPressed(KEY_F)) telaCheia();
 
-        //CANCELA RETANGULO ATUAL OU APAGA ULTIMO RETANGULO
+        //APAGA ULTIMO RETANGULO
         if (IsKeyPressed(KEY_DELETE))
         {
             switch (tipo)
@@ -207,10 +230,22 @@ int main()
                     fase.inimigo[--fase.inimigo_atual] = (Vector2){0, 0};
                 }
                 break;
+            case VIDA:
+                if (fase.vida_atual > 0)
+                {
+                    fase.vida[--fase.vida_atual] = (Vector2){0, 0};
+                }
+                break;
+            case FLECHA:
+                if (fase.flecha_atual > 0)
+                {
+                    fase.flecha[--fase.flecha_atual] = (Vector2){0, 0};
+                }
+                break;
             }
         }
 
-        //-------------TROCAR TIPO DE RETANGULO--------------
+        //-------------------------------------------------------
         if (IsKeyPressed(KEY_ESCAPE))
         {
             sair = telaSair(fase);
@@ -221,7 +256,7 @@ int main()
             telaOpcoes(&tipo, &fase);
         }
 
-        
+        CheckFileOnScreen(&fase);
 
         //---------------------Desenho da Tela-------------------
         BeginDrawing();
@@ -230,15 +265,15 @@ int main()
 
                 desenhaGrid();
 
-                for (int i = 0; i < fase.parede_atual; i++)
-                {
-                    DrawRectangleRec(fase.parede[i], (Color){0,0,30,255});
-                    DrawRectangleLinesEx(fase.parede[i], 2, (Color){80, 80, 200, 255});
-                }
                 for (int i = 0; i < fase.piso_atual; i++)
                 {
                     DrawRectangleRec(fase.piso[i], (Color){0,30,0,255});
                     DrawRectangleLinesEx(fase.piso[i], 2, (Color){80, 200, 80, 255});
+                }
+                for (int i = 0; i < fase.parede_atual; i++)
+                {
+                    DrawRectangleRec(fase.parede[i], (Color){0,0,30,255});
+                    DrawRectangleLinesEx(fase.parede[i], 2, (Color){80, 80, 200, 255});
                 }
                 for (int i = 0; i < fase.inimigo_atual; i++)
                 {
@@ -247,11 +282,13 @@ int main()
                 }
                 for (int i = 0; i < fase.vida_atual; i++)
                 {
-                    DrawCircleV(fase.vida[i], 8, RED);
-                    DrawCircleV(fase.vida[i], 4, WHITE);
+                    DrawLineEx((Vector2){fase.vida[i].x, fase.vida[i].y -16}, (Vector2){fase.vida[i].x, fase.vida[i].y +16}, 8, RED);
+                    DrawLineEx((Vector2){fase.vida[i].x -16, fase.vida[i].y}, (Vector2){fase.vida[i].x +16, fase.vida[i].y}, 8, RED);
                 }
                 for (int i = 0; i < fase.flecha_atual; i++)
                 {
+                    DrawCircleSector((Vector2){fase.flecha[i].x,fase.flecha[i].y -24}, 8, 120, 240,3,GREEN);
+                    DrawRectangle(fase.flecha[i].x -2, fase.flecha[i].y -32,4,32,BROWN);
                     DrawCircleV(fase.flecha[i], 8, DARKGREEN);
                     DrawCircleV(fase.flecha[i], 4, GREEN);
                 }
@@ -277,7 +314,7 @@ int main()
                     break;
                 }
 
-                DrawRectangleRec(retangulo, BLACK);
+                DrawRectangleRec(retangulo, (Color){0,0,0,100});
                 DrawRectangleLinesEx(retangulo, 2, (Color){180, 240, 100, 255});
 
                 DrawCircle(0, 0, 2, GREEN);
@@ -292,12 +329,14 @@ int main()
 
             EndMode2D();
 
-            DrawText(FormatText("Numero de paredes: %i", fase.parede_atual), 10, 10, 20, tipo == PAREDE ? GREEN :DARKGREEN);
-            DrawText(FormatText("Numero de pisos: %i", fase.piso_atual), 10, 30, 20, tipo == PISO ? GREEN :DARKGREEN);
-            DrawText(FormatText("Numero de inimigos: %i", fase.inimigo_atual), 10, 50, 20, tipo == INIMIGO ? GREEN :DARKGREEN);
+            DrawText(FormatText("Numero de paredes: %i", fase.parede_atual),    10, 10 +0*ESPACAMENTO_P1, 20, tipo == PAREDE ? GREEN :DARKGREEN);
+            DrawText(FormatText("Numero de pisos: %i",  fase.piso_atual),       10, 10 +1*ESPACAMENTO_P1, 20, tipo == PISO ? GREEN :DARKGREEN);
+            DrawText(FormatText("Numero de inimigos: %i", fase.inimigo_atual),  10, 10 +2*ESPACAMENTO_P1, 20, tipo == INIMIGO ? GREEN :DARKGREEN);
+            DrawText(FormatText("Numero de vidas: %i", fase.vida_atual),        10, 10 +3*ESPACAMENTO_P1, 20, tipo == VIDA ? GREEN :DARKGREEN);
+            DrawText(FormatText("Numero de flechas: %i", fase.flecha_atual),    10, 10 +4*ESPACAMENTO_P1, 20, tipo == FLECHA ? GREEN :DARKGREEN);
 
-            DrawText((FormatText("Zoom: %.2f", camera.zoom)), 10, 70, 20, LIGHTGRAY);
-            DrawText((FormatText("Selecionado: %i %i", selecionado.tipo, selecionado.indice)), 10, 100, 20, LIGHTGRAY);
+            DrawText((FormatText("Zoom: %.2f", camera.zoom)), 10, 10 +5*ESPACAMENTO_P1, 20, LIGHTGRAY);
+            DrawText((FormatText("Selecionado: %i %i", selecionado.tipo, selecionado.indice)), 10, 10 +6*ESPACAMENTO_P1, 20, LIGHTGRAY);
 
             if (IsKeyDown(KEY_F1))
             {

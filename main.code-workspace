@@ -12,7 +12,8 @@
 			"stdio.h": "c",
 			"*.m": "c",
 			"data.h": "c",
-			"functions.h": "c"
+			"functions.h": "c",
+			"mapa.h": "c"
 		}
 	}
 }
