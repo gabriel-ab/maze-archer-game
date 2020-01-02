@@ -8,32 +8,52 @@
     #include "../../lib/projetil.h"
     #include "../../lib/som.h"
 #endif
-void posicionaInimigos(Personagem *inimigo);
-void posicionaParedes(Rectangle *PAREDES);
-void posicionaPisos(Rectangle *PISOS);
+void posicionaInimigos(Personagem *inimigo, Mapa fase);
+void posicionaParedes(Mapa *fase);
+void posicionaPisos(Mapa *fase);
 void fase_1();
 
 void fase_1()
 {
-    Rectangle PAREDES[100];
-    posicionaParedes(PAREDES);
-    int n_paredes = 100;
+    Mapa fase;
+    // Mapa fase = loadFase(1) TO DO
+    //================ZERANDO VALORES====================
+    for (int i = 0; i < MAX_RETANGULOS; i++)
+    {
+        fase.parede[i] = (Rectangle){0, 0, 0, 0};
+        fase.piso[i] = (Rectangle){0, 0, 0, 0};
+    }
+    for (int i = 0; i < MAX_ITENS; i++){
+        fase.flecha[i].posicao = (Vector2){0,0};
+        fase.vida[i].posicao = (Vector2){0,0};
+    }
+    for (int i = 0; i < MAX_INIMIGOS; i++) fase.inimigo[i].posicao = (Vector2){0,0};
 
-    Rectangle PISO[21];
-    posicionaPisos(PISO);
-    int n_pisoTextures = sizeof(PISO)/sizeof(Rectangle);    
+    fase.n_paredes = 0;
+    fase.n_pisos = 0; 
+    fase.n_vidas = 0;
+    fase.n_inimigos = 0;
+    fase.n_flechas = 0; 
+    fase.inicio = (Vector2){0,0};
+    fase.fim = (Vector2){0,0};
+    //======================================================
+    fase.n_paredes = 100;   // temp
+    fase.n_pisos = 21;      // temp
+    fase.n_inimigos = 30;   // temp
+    posicionaParedes(&fase);
+    posicionaPisos(&fase);
 
+
+    // Inicializando personagem // Será global
     Personagem xala;
     xala = personagemConstructor();
-    xala.posicao = (Vector2){-1054,1716};
+    xala.posicao = fase.inicio;
     xala.altura = 48;
     xala.largura = 48;
-
     xala.sprite = spriteConstructor("resources/images/personagem.png",48,48,15);
 
+    //Flechas do jogo // Será global
     Projetil flecha[quantidade_maxima_flechas];
-
-    //indice da flecha
     projetil_atual = xala.quantidadeFlechas -1;
     
 
@@ -52,15 +72,13 @@ void fase_1()
         flecha[i].textura = flechasTexture;
     }
 
-    int n_inimigos = 30;
-    Personagem inimigo[n_inimigos]; 
-    
+    // Inicializando inimigos na fase Será global para ser carregado no menu
 
-    for(int i = 0; i < n_inimigos; i++)
+    for(int i = 0; i < fase.n_inimigos; i++)
     {
-        inimigo[i] = inimigoContructor();
+        fase.inimigo[i] = inimigoContructor();
     }
-    posicionaInimigos(inimigo);
+    posicionaInimigos(fase.inimigo, fase);
 
     setTargetCamera(&xala);
 
@@ -115,7 +133,7 @@ void fase_1()
             playMusic(2);
        
             movimentar(&xala);
-            colisaoPersonagem(&xala, PAREDES, n_paredes);
+            colisaoPersonagem(&xala, fase.parede, fase.n_paredes);
 
 
             // -----------Atualização da Camera------------- //
@@ -150,14 +168,15 @@ void fase_1()
                 }
             }
             
+            // Fisica da Flecha
             for(int i = 0; i < xala.quantidadeFlechas; i++)
             {   
                 if(flecha[i].ativa)
                 {
                     aplicarInerciaV(&flecha[i].posicao, flecha[i].velocidade);
                     aplicarAtritoProjetil(&flecha[i],0.5);
-                    colisaoProjetil_mapa(&flecha[i], PAREDES, n_paredes);
-                    colisaoProjetil_inimigo(&flecha[i], inimigo, n_inimigos);
+                    colisaoProjetil_mapa(&flecha[i], fase.parede, fase.n_paredes);
+                    colisaoProjetil_inimigo(&flecha[i], fase.inimigo, fase.n_inimigos);
                 }
             }
             
@@ -167,7 +186,7 @@ void fase_1()
             }
             
             // RAFAEL PARTE DE PEGAR OBJETO (flechas)
-            if(projetil_atual +1 < xala.quantidadeFlechas && IsKeyPressed(KEY_SPACE)) projetil_atual++; //temporario
+            if(projetil_atual +1 < xala.quantidadeFlechas && IsKeyPressed(KEY_SPACE)) projetil_atual++; // era temporario
 
             //----------Atualização dos sprites------------
             if(IsKeyDown(KEY_A)) {
@@ -187,12 +206,12 @@ void fase_1()
 
 
             //----------Atualização dos inimigos-----------
-            for( int i = 0; i < n_inimigos; i++)
+            for( int i = 0; i < fase.n_inimigos; i++)
             {
-                if(inimigo[i].vida > 0) {
-                    logicaInimigo(&inimigo[i], &xala);
-                    colisaoPersonagem(&inimigo[i], PAREDES, n_paredes);
-                    atualizarPersonagem(&inimigo[i]);
+                if(fase.inimigo[i].vida > 0) {
+                    logicaInimigo(&fase.inimigo[i], &xala);
+                    colisaoPersonagem(&fase.inimigo[i], fase.parede , fase.n_paredes);
+                    atualizarPersonagem(&fase.inimigo[i]);
                 }
             }
 
@@ -213,15 +232,15 @@ void fase_1()
                 BeginMode2D(cam);
 
                     
-                    drawPiso(PISO, n_pisoTextures);
-                    drawParedes(PAREDES, n_paredes);
+                    drawPiso(fase.piso, fase.n_pisos);
+                    drawParedes(fase.parede, fase.n_paredes);
                     DrawTextureRec(portalTexture, frameRecPortal, (Vector2){-400, 1500}, WHITE);
                     
-                    drawInimigos(inimigo, n_inimigos);
+                    drawInimigos(fase.inimigo, fase.n_inimigos);
 
                     DrawCircle(0,0,2,WHITE);
                     drawXala(&xala);
-                    drawFlecha(&flecha, xala);
+                    drawFlecha(flecha, xala);
                     
                 EndMode2D();
                 
@@ -238,7 +257,7 @@ void fase_1()
     }
     
 }
-void posicionaParedes(Rectangle *paredes){
+void posicionaParedes(Mapa *fase){
     Rectangle PAREDES[] = {
         -1504, -1728, 32, 192,
         -1504, -1408, 32, 192,
@@ -341,13 +360,13 @@ void posicionaParedes(Rectangle *paredes){
         -1216, 1568, 32, 288,
         -1728, -384, 32, 192
     };
-    int n_paredes = 100;
-    for( int i = 0; i < n_paredes; i++)
+    
+    for( int i = 0; i < fase->n_paredes; i++)
     {
-        paredes[i] = PAREDES[i];
+        fase->parede[i] = PAREDES[i];
     }
 }
-void posicionaPisos(Rectangle *PISOS){
+void posicionaPisos(Mapa *fase){
     Rectangle pisos[] = {
         -1696, -1888, 384, 1696,
         -1312, -1888, 1088, 128,
@@ -374,11 +393,11 @@ void posicionaPisos(Rectangle *PISOS){
     int n_pisos = 21;
     for( int i = 0; i < n_pisos; i++)
     {
-        PISOS[i] = pisos[i];
+        fase->piso[i] = pisos[i];
     }
 }
 
-void posicionaInimigos(Personagem *inimigo)
+void posicionaInimigos(Personagem *inimigo, Mapa fase)
 {
     Vector2 inimigoPos[] = {
         -472, -601,

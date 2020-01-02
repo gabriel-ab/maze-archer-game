@@ -2,12 +2,18 @@
 #define DEFINE_H_INCLUDED
 
 #include <raylib.h>
+#include "textura.h"
+#include "personagem.h"
 
 //Definições Gerais para regulagem do jogo
 
 bool jogo_rodando = true;
 bool isPaused;
 bool isRestarting;
+
+#define MAX_RETANGULOS 200
+#define MAX_INIMIGOS 100
+#define MAX_ITENS 50
 
 #define ACELERACAO 0.5
 #define TAXA_ATRITO 0.05
