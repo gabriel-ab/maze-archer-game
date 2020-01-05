@@ -12,7 +12,7 @@ void logicaBotoesMenu(Rectangle botoes[]);
 void telaMenu() {
     
     setFont("resources/font/custom_alagard.png");
-    
+    SetMusicVolume(music, 0.7);
     playMusic(1);
     
     drawTelaMenu(background, getBotoesMenu());
@@ -57,7 +57,7 @@ void logicaBotoesMenu(Rectangle botoes[]) {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
             PlaySound(somBotao);
-            telaAtual = TELA_FASE_1;
+            telaAtual = BOSS_FIGHT;
                         
         }
     }

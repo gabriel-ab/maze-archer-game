@@ -173,6 +173,7 @@ void fase_2()
             if(xala.vida < 1) {
                 telaAnterior = telaAtual;
                 telaAtual = TELA_FRACASSO;
+                stopMusic(2);
             }
             if(CheckCollisionPointRec(xala.posicao, portal_certo_collision) && contadorPortal >= 2) {
                 telaAtual = TELA_FASE_3;

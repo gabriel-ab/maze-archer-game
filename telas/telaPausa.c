@@ -17,6 +17,8 @@ void telaPausa() {
     setImageBackground(image);
     setShader("resources/shaders/blur.fs");
     
+    SetMusicVolume(music, 0);
+    
     while(isPaused) {
         
         drawtelaPausa(background, getBotoesPausa());

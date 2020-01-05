@@ -39,11 +39,11 @@ int main(){
     //AUDIO
     InitAudioDevice();
     setMusic("resources/soundtrack/epic.ogg");
-    setMusicBg("resources/soundtrack/cave_loop.ogg", "resources/soundtrack/winter_loop.ogg", "resources/soundtrack/lava_loop.ogg");
-    setFx("resources/fx/setting click.wav", "resources/fx/you_died.wav", "resources/fx/pickup.wav");
+    setMusicBg("resources/soundtrack/fase1_loop.ogg", "resources/soundtrack/fase2_loop.ogg", "resources/soundtrack/fase3_loop.ogg", "resources/soundtrack/boss_loop.ogg");
+    setFx("resources/fx/click.wav", "resources/fx/you_died.wav", "resources/fx/pickup.wav");
     setTiroFx("resources/fx/arrow.wav", "resources/fx/arco.wav");
-    setFootStep("resources/fx/footstep_dirty.wav");
-    setHitFx("resources/fx/hit.wav");
+    setFootStep("resources/fx/footstep_dirty2.wav");
+    setHitFx("resources/fx/hit.wav", "resources/fx/hit2.wav", "resources/fx/attack_boss.wav");
     setTrapFx("resources/fx/trap.wav", "resources/fx/burn.wav" );
     initMusic();
     

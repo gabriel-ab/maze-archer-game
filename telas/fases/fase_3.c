@@ -216,7 +216,7 @@ void fase_3()
 
     while(telaAtual == TELA_FASE_3) {
         TEMPO = GetTime();
-        playMusic(2);
+        playMusic(4);
         if(isPaused) 
         {
             telaPausa();
@@ -276,7 +276,6 @@ void draw_fase_3(Personagem* xala, Personagem inimigos[], Projetil flechas[], Re
 //Função responsável pela lógica da Fase 3
 void logica_fase_3(Personagem* xala, Personagem inimigo[], Projetil flecha[], Rectangle PAREDES[], Rectangle ARMADILHA[]) {
     
-    playMusic(2);
     HideCursor();
 
     if(IsKeyPressed(KEY_ESCAPE)) {
@@ -286,6 +285,7 @@ void logica_fase_3(Personagem* xala, Personagem inimigo[], Projetil flecha[], Re
     if(xala->vida < 1) {
         telaAnterior = telaAtual;
         telaAtual = TELA_FRACASSO;
+        stopMusic(3);
     }
 
     if(CheckCollisionPointRec(xala->posicao, vidaUpgrade) && !isUpgradeGetted) {

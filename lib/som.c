@@ -4,10 +4,11 @@ void setMusic(char* musicPath) {
     music = LoadMusicStream(musicPath);
 }
 //MUSICAS DE FUNDO DOS MAPAS
-void setMusicBg(char* cave, char* winter, char* lava){
+void setMusicBg(char* cave, char* winter, char* lava, char* bossMusic){
     caveBG = LoadMusicStream(cave);
     winterBG = LoadMusicStream(winter);
     lavaBG = LoadMusicStream(lava);
+    bossBG = LoadMusicStream(bossMusic);
 }
 
 //FUNÇÃO QUE INICIALIZA AS MUSICAS DO JOGO
@@ -16,6 +17,7 @@ void initMusic(){
     PlayMusicStream(winterBG);
     PlayMusicStream(lavaBG);
     PlayMusicStream(music);
+    PlayMusicStream(bossBG);
 }
 
 //FUNÇAO PRA ADICIONAR SFX DIVERSOS
@@ -39,8 +41,10 @@ void setTrapFx(char* armadilha, char* fogo){
 }
 
 //FUNÇAO PARA ADICIONAR SOM DO HIT
-void setHitFx(char* hit){
+void setHitFx(char* hit, char* monstro, char* chefe){
     acerto = LoadSound(hit);
+    acertoMonstro = LoadSound(monstro);
+    bossAttack = LoadSound(chefe);
 }
 
 //FUNÇAO PARA ADICIONAR O SOM DO PASSO
@@ -52,7 +56,7 @@ void setFootStep(char* footstepFx){
 void playFx(int fxNumber){
     //AQUI O SOM E O BOTÃO É ACIONADO AO MESMO TEMPO, INDEPENDENTE SE ELE ACABOU DE TOCAR
     if(fxNumber == 1){
-        SetSoundVolume(somBotao, 0.2);
+        //SetSoundVolume(somBotao, 0.2);
         PlaySound(somBotao);
     }
     
@@ -74,7 +78,7 @@ void playFx(int fxNumber){
     }
     //SOM DO HIT
     if(fxNumber == 5){
-        SetSoundVolume(acerto, 0.5);
+        SetSoundVolume(acerto, 0.7);
         PlaySound(acerto);
     }
     
@@ -92,9 +96,18 @@ void playFx(int fxNumber){
     if(fxNumber == 8){
         PlaySound(queima);
     }
-    
+    //SOM AO PEGAR IDEM DE VIDA
     if(fxNumber == 9){
         PlaySound(item);
+    }
+    //HIT QUANDO O MONSTRO DÁ DANO
+    if(fxNumber == 10){
+        //SetSoundVolume(acertoMonstro, 0.8);
+        PlaySound(acertoMonstro);
+    }
+    if(fxNumber == 11){
+        //SetSoundVolume(bossAttack, 0.8);
+        PlaySound(bossAttack);
     }
     
     
@@ -103,29 +116,36 @@ void playFx(int fxNumber){
 void playMusic(int musicNumber){
     //MUSICA MENU
     if(musicNumber == 1){
+        
         PlayMusicStream(music);
         UpdateMusicStream(music);
     }
-    //SOM DE FUNDO CAVERNA
+    //SOM DE FUNDO FASE1
     if(musicNumber == 2){
-        SetMusicVolume(caveBG, 0.4);
+        SetMusicVolume(caveBG, 0.3);
         UpdateMusicStream(caveBG);
     }
-    //SOM DE FUNDO NEVE
+    //SOM DE FUNDO FASE2
     if(musicNumber == 3){
-        SetMusicVolume(winterBG, 0.5);
+        SetMusicVolume(winterBG, 0.3);
         UpdateMusicStream(winterBG);
     }
-    //SOM DE FUNDO LAVA
+    //SOM DE FUNDO FASE3
     if(musicNumber == 4){
-        SetMusicVolume(lavaBG, 0.7);
+        SetMusicVolume(lavaBG, 0.3);
         UpdateMusicStream(lavaBG);
     }
+    //SOM DA BOSSFIGHT
+    if(musicNumber == 5){
+        SetMusicVolume(bossBG, 0.3);
+        UpdateMusicStream(bossBG);
+    }
+    
 }
 
 //FUNÇÃO PARA OS PASSOS DA PERSONAGEM... TALVEZ AINDA FALTA UNS AJUSTES VOU ALMOÇAR
 void footStep(){
-    SetSoundVolume(passo, 0.3);
+    SetSoundVolume(passo, 0.5);
     if(!IsSoundPlaying(passo)){
         PlaySound(passo);
     }
@@ -144,6 +164,30 @@ void checkClickBow(){
         } 
 }
 
+void stopMusic(int musicNumber){
+    //SOM DE FUNDO FASE1
+    if(musicNumber == 1){
+       StopMusicStream(caveBG);
+       PlayMusicStream(caveBG);
+    }
+    //SOM DE FUNDO FASE2
+    if(musicNumber == 2){
+        StopMusicStream(winterBG);
+        PlayMusicStream(winterBG);
+    }
+    //SOM DE FUNDO FASE3
+    if(musicNumber == 3){
+        StopMusicStream(lavaBG);
+        PlayMusicStream(lavaBG);
+    }
+    //SOM DA BOSSFIGHT
+    if(musicNumber == 4){
+        StopMusicStream(bossBG);
+        PlayMusicStream(bossBG);
+    }
+    
+}
+
 void unloadAllSound(){
     //DESCARREGAR SFX
     UnloadSound(somBotao);
@@ -154,11 +198,15 @@ void unloadAllSound(){
     UnloadSound(lanca);
     UnloadSound(gameover);
     UnloadSound(queima);
+    UnloadSound(item);
+    UnloadSound(acertoMonstro);
+    UnloadSound(bossAttack);
     
     //DESCARREGAR MUSICAS
     UnloadMusicStream(music);
     UnloadMusicStream(caveBG);
     UnloadMusicStream(winterBG);
     UnloadMusicStream(lavaBG);
+    UnloadMusicStream(bossBG);
     
 }

@@ -80,7 +80,8 @@ void fase_1()
     
     while(telaAtual == TELA_FASE_1){ 
         TEMPO = GetTime();
-
+        playMusic(2);
+        
         if(isPaused) {
             telaPausa();
         } else {
@@ -92,6 +93,7 @@ void fase_1()
             if(xala.vida < 1) {
                 telaAnterior = telaAtual;
                 telaAtual = TELA_FRACASSO;
+                stopMusic(1);
             }
 
             if(CheckCollisionPointRec(xala.posicao, portalCollision)) {
@@ -112,7 +114,7 @@ void fase_1()
             }
             // -----------------------------------------------------//
 
-            playMusic(2);
+            
        
             movimentar(&xala);
             colisaoPersonagem(&xala, PAREDES, n_paredes);

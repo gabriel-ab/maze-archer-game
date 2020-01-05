@@ -5,6 +5,7 @@
 #include "../../lib/tela.h"
 #include "../../lib/define.h"
 #include "../../lib/draw.h"
+#include "../../lib/som.h"
 
 #define MAX_PEDRAS 50
 
@@ -131,6 +132,7 @@ void boss_fight()
 
         } else 
         {
+            playMusic(5);
             draw_boss_fight(&xala, &boss, flechas, PAREDES, PISO);
             logica_boss_fight(&xala, &boss, flechas, PAREDES); 
         }
@@ -230,6 +232,7 @@ void logica_boss_fight(Personagem* xala, Personagem* boss, Projetil flecha[], Re
     if(xala->vida < 1) {
         telaAnterior = telaAtual;
         telaAtual = TELA_FRACASSO;
+        stopMusic(4);
     }
 
     if(CheckCollisionPointRec(xala->posicao, portalCollision)) {
@@ -325,6 +328,7 @@ void logica_boss_fight(Personagem* xala, Personagem* boss, Projetil flecha[], Re
 
 
             if(estaColidindo && pedras[i].ativa && !(xala->invulneravel))  {
+                playFx(10);
                 xala->vida--;
                 xala->invulneravel = !(xala->invulneravel);
                 xala->tempoInvulneravel = TEMPO;
@@ -414,6 +418,7 @@ void logica_boss_fight(Personagem* xala, Personagem* boss, Projetil flecha[], Re
 
             // ----------------- ATAQUE BOSS -------------------- //
             if(frameCount % 20 == 0 && currentFrame == 4) {
+                playFx(11);
                 for (int i = 0; i < 5; i++)
                 {
                     pedras[pedrasCount] = pedraConstructor(boss);

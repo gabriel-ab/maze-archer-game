@@ -2,6 +2,7 @@
 #include "tela.h"
 #include "movimenta.h"
 #include "define.h"
+#include "som.h"
 #include <math.h>
 
 Personagem personagemConstructor()
@@ -128,6 +129,7 @@ void logicaInimigo(Personagem *inimigo, Personagem *fulano)
 
                     if (CheckCollisionCircles(pontoDeAtaque, 5, fulano->posicao, 16))
                     {
+                        playFx(10);
                         fulano->vida--;
                         fulano->invulneravel = 1;
                         fulano->tempoInvulneravel = TEMPO;
