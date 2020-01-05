@@ -57,7 +57,7 @@ void logicaBotoesMenu(Rectangle botoes[]) {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
         {
             PlaySound(somBotao);
-            telaAtual = BOSS_FIGHT;
+            telaAtual = TELA_FASE_3;
                         
         }
     }

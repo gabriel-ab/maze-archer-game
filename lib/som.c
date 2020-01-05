@@ -68,17 +68,17 @@ void playFx(int fxNumber){
     
     //SOM DA FLECHA
     if(fxNumber == 3){
-        SetSoundVolume(flecha, 0.8);
+        SetSoundVolume(flecha, 0.6);
         PlaySound(flecha);
     }
     //SOM ARCO
     if(fxNumber == 4){
-        SetSoundVolume(arco, 0.8);
+        //SetSoundVolume(arco, 0.8);
         PlaySound(arco);
     }
     //SOM DO HIT
     if(fxNumber == 5){
-        SetSoundVolume(acerto, 0.7);
+        SetSoundVolume(acerto, 0.8);
         PlaySound(acerto);
     }
     
@@ -122,22 +122,22 @@ void playMusic(int musicNumber){
     }
     //SOM DE FUNDO FASE1
     if(musicNumber == 2){
-        SetMusicVolume(caveBG, 0.3);
+        SetMusicVolume(caveBG, 0.1);
         UpdateMusicStream(caveBG);
     }
     //SOM DE FUNDO FASE2
     if(musicNumber == 3){
-        SetMusicVolume(winterBG, 0.3);
+        SetMusicVolume(winterBG, 0.1);
         UpdateMusicStream(winterBG);
     }
     //SOM DE FUNDO FASE3
     if(musicNumber == 4){
-        SetMusicVolume(lavaBG, 0.3);
+        SetMusicVolume(lavaBG, 0.1);
         UpdateMusicStream(lavaBG);
     }
     //SOM DA BOSSFIGHT
     if(musicNumber == 5){
-        SetMusicVolume(bossBG, 0.3);
+        SetMusicVolume(bossBG, 0.1);
         UpdateMusicStream(bossBG);
     }
     
