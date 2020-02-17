@@ -10,10 +10,10 @@ void drawXala(Personagem* xala) {
         if(TEMPO -contador > 0.10){
             contador = TEMPO;
         }else{
-            drawSprite(xala->sprite,(Vector2){xala->posicao.x - xala->largura/2, xala->posicao.y - xala->altura/2}, (Vector2){0,0},0,RED);
+            drawSprite(xala->sprite,xala->posicao, (Vector2){0,0},0,1,RED);
         }
     } else {
-        drawSprite(xala->sprite,(Vector2){xala->posicao.x - xala->largura/2, xala->posicao.y - xala->altura/2}, (Vector2){0,0},0,WHITE);
+        drawSprite(xala->sprite,xala->posicao, (Vector2){0,0},0,1,WHITE);
     }
 }
 
@@ -45,7 +45,8 @@ void drawInimigos(Personagem inimigos[], int quantidade) {
     for(int i = 0; i < quantidade; i++){
         
         if(inimigos[i].vida > 0) {
-            DrawCircleV(inimigos[i].posicao, 10, (Color){150,150,255,255});
+            drawSprite(inimigos[i].sprite, inimigos[i].posicao, (Vector2){0,0}, 0, 1, WHITE);
+            // DrawCircleV(inimigos[i].posicao, 10, (Color){150,150,255,255});
         }
         
     }
@@ -119,6 +120,22 @@ void drawArmadilhasRec(Rectangle ARMADILHAS[], int tamanho, Rectangle frameRec) 
     }
 }
 
-void drawSprite(Sprite sprite, Vector2 posicao, Vector2 origem, float rotacao, Color cor){
-    DrawTexturePro(sprite.textura, sprite.recorte, (Rectangle){posicao.x, posicao.y, sprite.recorte.width, sprite.recorte.width},origem,rotacao,cor);
+void drawSprite(Sprite sprite, Vector2 posicao, Vector2 origem, float rotacao, float escala, Color cor){
+    // DrawTexturePro(sprite.textura, sprite.recorte, (Rectangle){posicao.x, posicao.y, sprite.recorte.width, sprite.recorte.width},origem,rotacao,cor);
+    DrawTexturePro(
+                sprite.textura, 
+                sprite.recorte, 
+                (Rectangle){
+                    posicao.x, 
+                    posicao.y, 
+                    escala*sprite.recorte.width, 
+                    escala*sprite.recorte.width
+                },
+                (Vector2){
+                    origem.x +sprite.recorte.width/2 ,
+                    origem.x +sprite.recorte.height/2
+                },
+                rotacao,
+                cor
+            );
 }

@@ -46,6 +46,7 @@ Personagem personagemConstructor()
 Personagem inimigoContructor()
 {
     Personagem inimigo;
+    inimigo.sprite = spriteConstructor("resources/images/inimigo.png",32,32,10);
     inimigo.acao.contador = 0;
     inimigo.acao.duracao = 2;
     inimigo.acao.atual = INIMIGO_DE_BOA;

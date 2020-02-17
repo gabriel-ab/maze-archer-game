@@ -200,6 +200,7 @@ void fase_1()
             if(IsKeyDown(KEY_W) || IsKeyDown(KEY_S)){
                 animaSprite(&xala.sprite, segmentos_xala);
             }
+            for (int i = 0; i < fase.n_inimigos; i++) animaSpriteLinha(&fase.inimigo[i].sprite);
 
             //---------------------------------------------
             
