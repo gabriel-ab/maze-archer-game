@@ -4,12 +4,12 @@
 #include <raylib.h>
 #include "personagem.h"
 
-#define LARGURA_TELA 1366
-#define ALTURA_TELA 768
+#define LARGURA_TELA 1000
+#define ALTURA_TELA 600
 
 Rectangle tela = {100, 100, LARGURA_TELA, ALTURA_TELA};
-int larguraAnterior = 800;
-int alturaAnterior = 500;
+int larguraAnterior = LARGURA_TELA;
+int alturaAnterior = ALTURA_TELA;
 
 int telaAtual = 0;
 int telaAnterior = 0;

@@ -52,7 +52,7 @@ void logicaBotoesConfiguracao(Rectangle botoes[]) {
             telaCheia();
             updateBackground();
             if(is_fullscreen){
-               textButtonsConfiguracao[0] = "FULLSCREEN: ON";
+                textButtonsConfiguracao[0] = "FULLSCREEN: ON";
             }else{
                 textButtonsConfiguracao[0] = "FULLSCREEN: OFF";
             }

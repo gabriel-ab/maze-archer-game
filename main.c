@@ -25,12 +25,7 @@
 int main(){
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-    SetConfigFlags(FLAG_MSAA_4X_HINT);
-    
     InitWindow(tela.width, tela.height, "Untitle Dungeon Game");
-    SetWindowMinSize(800,500);
-    
-    telaCheia();
     
     //BACKGROUND
     setPathImageBackground("resources/images/wallpaper.png");

@@ -123,19 +123,19 @@ void drawArmadilhasRec(Rectangle ARMADILHAS[], int tamanho, Rectangle frameRec) 
 void drawSprite(Sprite sprite, Vector2 posicao, Vector2 origem, float rotacao, float escala, Color cor){
     // DrawTexturePro(sprite.textura, sprite.recorte, (Rectangle){posicao.x, posicao.y, sprite.recorte.width, sprite.recorte.width},origem,rotacao,cor);
     DrawTexturePro(
-                sprite.textura, 
-                sprite.recorte, 
-                (Rectangle){
-                    posicao.x, 
-                    posicao.y, 
-                    escala*sprite.recorte.width, 
-                    escala*sprite.recorte.width
-                },
-                (Vector2){
-                    origem.x +sprite.recorte.width/2 ,
-                    origem.x +sprite.recorte.height/2
-                },
-                rotacao,
-                cor
-            );
+        sprite.textura, 
+        sprite.recorte, 
+        (Rectangle){
+            posicao.x, 
+            posicao.y, 
+            escala*sprite.recorte.width, 
+            escala*sprite.recorte.width
+        },
+        (Vector2){
+            origem.x +sprite.recorte.width/2 ,
+            origem.x +sprite.recorte.height/2
+        },
+        rotacao,
+        cor
+    );
 }
