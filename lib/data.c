@@ -51,3 +51,34 @@ int load() {
 
 	return telaAtual;
 }
+Mapa LoadMapa(const char *endereco){
+    Mapa fase = { 0 };
+    
+    FILE *arquivo = fopen(endereco,"r");
+
+    fscanf(arquivo,"inicio %f %f\n", &fase.inicio.x, &fase.inicio.y);
+    fscanf(arquivo,"fim %f %f\n", &fase.fim.x, &fase.fim.y);
+
+    fscanf(arquivo,"paredes %i\n", &fase.n_paredes);
+    for( int i = 0; i < fase.n_paredes; i++){
+        fscanf(arquivo,"%f %f %f %f\n", &fase.parede[i].x, &fase.parede[i].y, &fase.parede[i].width, &fase.parede[i].height);
+    }
+    fscanf(arquivo,"pisos %i\n", &fase.n_pisos);
+    for( int i = 0; i < fase.n_pisos; i++){
+        fscanf(arquivo,"%f %f %f %f\n", &fase.piso[i].x, &fase.piso[i].y, &fase.piso[i].width, &fase.piso[i].height);
+    }
+    fscanf(arquivo,"inimigos %i\n", &fase.n_inimigos);
+    for( int i = 0; i < fase.n_inimigos; i++){
+        fscanf(arquivo,"%f %f\n", &fase.inimigo[i].posicao.x, &fase.inimigo[i].posicao.y);
+    }
+    fscanf(arquivo,"vidas %i\n", &fase.n_vidas);
+    for( int i = 0; i < fase.n_vidas; i++){
+        fscanf(arquivo,"%f %f\n", &fase.vida[i].posicao.x, &fase.vida[i].posicao.y);
+    }
+    fscanf(arquivo,"flechas %i\n", &fase.n_flechas);
+    for( int i = 0; i < fase.n_flechas; i++){
+        fscanf(arquivo,"%f %f\n", &fase.flecha[i].posicao.x, &fase.flecha[i].posicao.y);
+    }
+    fclose(arquivo);
+    return fase;
+}

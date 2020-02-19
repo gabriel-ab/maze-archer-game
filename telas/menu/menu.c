@@ -44,7 +44,8 @@ void drawTelaMenu(Texture2D background, Rectangle botoes[]) {
             DrawRectangleLines((int)botoes[i].x-5, (int) botoes[i].y-5, (int) botoes[i].width+10, (int) botoes[i].height+10, CheckCollisionPointRec(GetMousePosition(), botoes[i]) ? (Color){164,0,0, 255} : (Color){128,0,0, 255});
             DrawText( textButtonsMenu[i], (int)( botoes[i].x + botoes[i].width/2 - MeasureText(textButtonsMenu[i], 20)/2), (int) botoes[i].y + 16, 20, WHITE);
         }
-        
+        DrawRectangle(10,30,300,40,WHITE);
+        DrawText("Seletor de Fases",15,40,20,BLACK);
 
     EndDrawing();
 }
@@ -95,5 +96,13 @@ void logicaBotoesMenu(Rectangle botoes[]) {
             
         }
     }
-   
+    //Temporario
+    if (CheckCollisionPointRec(GetMousePosition(), (Rectangle){10,30,300,40}))
+    {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+        {
+            playFx(2);
+            selecao_de_fase();
+        }
+    }
 }

@@ -49,14 +49,13 @@ void fase_1()
     xala = personagemConstructor();
     xala.posicao = fase.inicio;
     xala.altura = 48;
-    xala.largura = 48;
+    xala.largura = 32;
     xala.sprite = spriteConstructor("resources/images/personagem.png",48,48,15);
 
     //Flechas do jogo // Será global
     Projetil flecha[quantidade_maxima_flechas];
     projetil_atual = xala.quantidadeFlechas -1;
     
-
     //Limpando atributos
     for(int i = 0; i < quantidade_maxima_flechas; i++){
         flecha[i].ativa = false;

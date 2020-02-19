@@ -29,5 +29,6 @@ typedef struct Mapa
 
 void save();
 int load();
+Mapa LoadMapa();
 
 #endif

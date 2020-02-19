@@ -21,8 +21,8 @@ typedef enum TELAS {
     TELA_FASE_1 = 1,
     TELA_FASE_2 = 2,
     TELA_FASE_3 = 3,
-    TELA_FASE_4 = 4,
-    BOSS_FIGHT = 5
+    BOSS_FIGHT = 4,
+    TELA_FASE_CUSTOM = 5,
 }TELAS;
 
 bool is_fullscreen = false; 

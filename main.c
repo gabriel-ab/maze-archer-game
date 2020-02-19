@@ -12,6 +12,8 @@
 #include "lib/textura.c"
 #include "lib/draw.c"
 
+#include "telas/fases/fase_custom.c"
+#include "telas/menu/selecao_mapa.c"
 #include "telas/menu/menu.c"
 #include "telas/menu/configuracao.c"
 #include "telas/fases/fase_1.c"
@@ -20,7 +22,6 @@
 #include "telas/fases/boss_fight.c"
 #include "telas/telaFracasso.c"
 #include "telas/telaPausa.c"
-
 
 int main(){
 
@@ -80,6 +81,10 @@ int main(){
 
         while(telaAtual == TELA_FASE_3) {
             fase_3();
+        }
+
+        if(telaAtual == TELA_FASE_CUSTOM) {
+            fase_custom();
         }
 
         while(telaAtual == BOSS_FIGHT) {
