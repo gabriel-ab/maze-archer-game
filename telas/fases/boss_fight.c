@@ -123,7 +123,7 @@ void boss_fight()
     setTargetCamera(&xala);
 
     
-    while(telaAtual == BOSS_FIGHT) {
+    while(telaAtual == BOSS_FIGHT && !WindowShouldClose()) {
         TEMPO = GetTime();
         if(isPaused) 
         {

@@ -95,16 +95,37 @@ void fase_1()
     HideCursor();
     
     
-    while(telaAtual == TELA_FASE_1){ 
+    while(telaAtual == TELA_FASE_1 && !WindowShouldClose()){ 
         TEMPO = GetTime();
 
         if(isPaused) {
             telaPausa();
         } else {
+            
+            BeginDrawing();
+                ClearBackground((Color){20,20,20,255});
 
-            if(IsKeyPressed(KEY_ESCAPE)) {
-                isPaused = true;
-            }
+                BeginMode2D(cam);
+
+                    
+                    drawPiso(fase.piso, fase.n_pisos);
+                    drawParedes(fase.parede, fase.n_paredes);
+                    DrawTextureRec(portalTexture, frameRecPortal, (Vector2){-400, 1500}, WHITE);
+                    
+                    drawInimigos(fase.inimigo, fase.n_inimigos);
+
+                    DrawCircle(0,0,2,WHITE);
+                    drawXala(&xala);
+                    drawFlecha(flecha, xala);
+                    
+                EndMode2D();
+                
+                DrawCircleV(GetMousePosition(),5,PURPLE);
+                drawHUD(xala.vida, projetil_atual +1);
+                
+            EndDrawing();
+
+            if(IsKeyPressed(KEY_ESCAPE)) isPaused = true;
 
             if(xala.vida < 1) {
                 telaAnterior = telaAtual;
@@ -144,9 +165,6 @@ void fase_1()
             if(IsKeyDown(KEY_PAGE_UP)) cam.zoom += 0.01;    // Temporario
             if(IsKeyDown(KEY_PAGE_DOWN)) cam.zoom -= 0.01;  //
             
-            // -------------------------------------------- //
-            
-
             //------------Logica do Projetil--------------
 
          
@@ -201,10 +219,6 @@ void fase_1()
             }
             for (int i = 0; i < fase.n_inimigos; i++) animaSpriteLinha(&fase.inimigo[i].sprite);
 
-            //---------------------------------------------
-            
-
-
             //----------Atualização dos inimigos-----------
             for( int i = 0; i < fase.n_inimigos; i++)
             {
@@ -215,8 +229,6 @@ void fase_1()
                 }
             }
 
-
-
             //--------------INVUNERABILIDADE---------------
             if(xala.invulneravel)
             {
@@ -225,29 +237,6 @@ void fase_1()
                     xala.invulneravel = 0;
                 }
             }
-
-            BeginDrawing();
-                ClearBackground((Color){20,20,20,255});
-
-                BeginMode2D(cam);
-
-                    
-                    drawPiso(fase.piso, fase.n_pisos);
-                    drawParedes(fase.parede, fase.n_paredes);
-                    DrawTextureRec(portalTexture, frameRecPortal, (Vector2){-400, 1500}, WHITE);
-                    
-                    drawInimigos(fase.inimigo, fase.n_inimigos);
-
-                    DrawCircle(0,0,2,WHITE);
-                    drawXala(&xala);
-                    drawFlecha(flecha, xala);
-                    
-                EndMode2D();
-                
-                DrawCircleV(GetMousePosition(),5,PURPLE);
-                drawHUD(xala.vida, projetil_atual +1);
-                
-            EndDrawing();
         }
         if(isRestarting) 
         {

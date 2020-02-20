@@ -53,42 +53,19 @@ int main(){
 
     telaAtual = TELA_MENU;
 
-    while (jogo_rodando) 
+    while (jogo_rodando & !WindowShouldClose()) 
     {
-        
-        while(telaAtual == TELA_MENU && jogo_rodando) {
-            telaMenu();
-            playMusic(1);
-        }
-
-        while(telaAtual == TELA_CONFIG) 
+        switch (telaAtual)
         {
-            telaConfiguracao();
-            playMusic(1);
-        }
-
-        if(telaAtual == TELA_FRACASSO) {
-            telaFracasso();
-        }
-        
-        if(telaAtual == TELA_FASE_1) {
-            fase_1();
-        }
-        
-        while(telaAtual == TELA_FASE_2) {
-            fase_2();
-        }
-
-        while(telaAtual == TELA_FASE_3) {
-            fase_3();
-        }
-
-        if(telaAtual == TELA_FASE_CUSTOM) {
-            fase_custom();
-        }
-
-        while(telaAtual == BOSS_FIGHT) {
-            boss_fight();
+            case TELA_MENU:         telaMenu(); break;
+            case TELA_CONFIG:       telaConfiguracao(); break;
+            case TELA_FRACASSO:     telaFracasso(); break;
+            case TELA_SEL_MAPA:     selecao_de_mapa(); break;
+            case TELA_FASE_1:       fase_1(); break;
+            case TELA_FASE_2:       fase_2(); break;
+            case TELA_FASE_3:       fase_3(); break;
+            case TELA_FASE_CUSTOM:  fase_custom(); break;
+            case BOSS_FIGHT:        boss_fight(); break;
         }
     }
     

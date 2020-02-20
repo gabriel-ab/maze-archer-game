@@ -214,14 +214,14 @@ void fase_3()
     setTargetCamera(&xala);
 
 
-    while(telaAtual == TELA_FASE_3) {
+    while(telaAtual == TELA_FASE_3 && !WindowShouldClose()) {
         TEMPO = GetTime();
         playMusic(2);
         if(isPaused) 
         {
             telaPausa();
-
-        } else 
+        }
+        else 
         {
             draw_fase_3(&xala, inimigos, flechas, PAREDES, PISO, ARMADILHAS);
             logica_fase_3(&xala, inimigos, flechas, PAREDES, ARMADILHAS); 

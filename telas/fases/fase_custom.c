@@ -5,7 +5,7 @@ void fase_custom(){
     Personagem xala = personagemConstructor();
     xala.posicao = fase.inicio;
     xala.altura = 48;
-    xala.largura = 48;
+    xala.largura = 32;
     xala.sprite = spriteConstructor("resources/images/personagem.png",48,48,15);
     
     //Flechas do jogo // Será global
@@ -45,9 +45,28 @@ void fase_custom(){
             telaPausa();
         } else {
 
-            if(IsKeyPressed(KEY_ESCAPE)) {
-                isPaused = true;
-            }
+            BeginDrawing();
+                ClearBackground((Color){20,20,20,255});
+
+                BeginMode2D(cam);
+
+                    drawPiso(fase.piso, fase.n_pisos);
+                    drawParedes(fase.parede, fase.n_paredes);
+                    DrawTextureRec(portalTexture, frameRecPortal, (Vector2){-400, 1500}, WHITE);
+                    
+                    drawInimigos(fase.inimigo, fase.n_inimigos);
+
+                    DrawCircle(0,0,2,WHITE);
+                    drawXala(&xala);
+                    drawFlecha(flecha, xala);
+                    
+                EndMode2D();
+                
+                DrawCircleV(GetMousePosition(),5,PURPLE);
+                drawHUD(xala.vida, projetil_atual +1);
+            EndDrawing();
+
+            if(IsKeyPressed(KEY_ESCAPE)) isPaused = true;
 
             if(xala.vida < 1) {
                 telaAnterior = telaAtual;
@@ -55,7 +74,6 @@ void fase_custom(){
             }
 
             if(CheckCollisionPointRec(xala.posicao, portalCollision)) {
-                // telaAtual = TELA_FASE_2;
                 save();
             }
 
@@ -76,11 +94,6 @@ void fase_custom(){
             // -----------Atualização da Camera----------
             atualizarCamera(&cam, xala.posicao);
             verificarTamanhoTela();
-
-
-            if(IsKeyPressed(KEY_F)) telaCheia();            //
-            if(IsKeyDown(KEY_PAGE_UP)) cam.zoom += 0.01;    // Temporario
-            if(IsKeyDown(KEY_PAGE_DOWN)) cam.zoom -= 0.01;  //
             
             // ------------Logica do Projetil-------------- 
             checkClickBow();
@@ -156,27 +169,6 @@ void fase_custom(){
                     xala.invulneravel = 0;
                 }
             }
-
-            BeginDrawing();
-                ClearBackground((Color){20,20,20,255});
-
-                BeginMode2D(cam);
-
-                    drawPiso(fase.piso, fase.n_pisos);
-                    drawParedes(fase.parede, fase.n_paredes);
-                    DrawTextureRec(portalTexture, frameRecPortal, (Vector2){-400, 1500}, WHITE);
-                    
-                    drawInimigos(fase.inimigo, fase.n_inimigos);
-
-                    DrawCircle(0,0,2,WHITE);
-                    drawXala(&xala);
-                    drawFlecha(flecha, xala);
-                    
-                EndMode2D();
-                
-                DrawCircleV(GetMousePosition(),5,PURPLE);
-                drawHUD(xala.vida, projetil_atual +1);
-            EndDrawing();
         }
         if(isRestarting) 
         {

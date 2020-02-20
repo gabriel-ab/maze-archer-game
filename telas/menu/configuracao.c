@@ -3,20 +3,25 @@
 #include "../../lib/tela.h"
 
 void telaConfiguracao();
-void drawTelaConfiguracao(Texture2D background, Rectangle botoes[]);
-void logicaBotoesConfiguracao(Rectangle botoes[]);
+void drawTelaConfiguracao(Texture2D background, Rectangle botoes[], int seletor);
+void logicaBotoesConfiguracao(Rectangle botoes[], int *seletor);
 
 //TELA DE CONFIGURAÇÃO
 void telaConfiguracao() {
+    static int seletor = 0;
     
-    playMusic(1);
-    drawTelaConfiguracao(background, getBotoesConfiguracao());
-    logicaBotoesConfiguracao(getBotoesConfiguracao());
+    while(telaAtual == TELA_CONFIG && !WindowShouldClose()) {
+        playMusic(1);
+        verificarTamanhoTela();
+        if (IsKeyPressed(KEY_UP) && seletor > 0)   seletor--;
+        if (IsKeyPressed(KEY_DOWN) && seletor < 2) seletor++;
 
-    verificarTamanhoTela();
+        drawTelaConfiguracao(background, getBotoesConfiguracao(),seletor);
+        logicaBotoesConfiguracao(getBotoesConfiguracao(),&seletor);
+    }
 }
 
-void drawTelaConfiguracao(Texture2D background, Rectangle botoes[]) {
+void drawTelaConfiguracao(Texture2D background, Rectangle botoes[], int seletor) {
     BeginDrawing();
             
         ClearBackground(BLACK);
@@ -28,25 +33,26 @@ void drawTelaConfiguracao(Texture2D background, Rectangle botoes[]) {
         } else {
             DrawTexture(background, 0, 0, WHITE);
         }
-
         
-
         for (int i = 0; i < 3; i++)
         {
-            DrawRectangleRec(botoes[i], CheckCollisionPointRec(GetMousePosition(), botoes[i]) ? (Color){128,0,0, 255} : (Color){164,0,0, 255});
-            DrawRectangleLines((int)botoes[i].x-5, (int) botoes[i].y-5, (int) botoes[i].width+10, (int) botoes[i].height+10, CheckCollisionPointRec(GetMousePosition(), botoes[i]) ? (Color){164,0,0, 255} : (Color){128,0,0, 255});
+            DrawRectangleRec(botoes[i], seletor == i ? (Color){128,0,0, 255} : (Color){164,0,0, 255});
+            DrawRectangleLines((int)botoes[i].x-5, (int) botoes[i].y-5, (int) botoes[i].width+10, (int) botoes[i].height+10, seletor == i ? (Color){164,0,0, 255} : (Color){128,0,0, 255});
             DrawText(textButtonsConfiguracao[i], (int)( botoes[i].x + botoes[i].width/2 - MeasureText(textButtonsConfiguracao[i], 20)/2), (int) botoes[i].y + 16, 20, WHITE);
         }
 
     EndDrawing();
 }
 
-void logicaBotoesConfiguracao(Rectangle botoes[]) {
+void logicaBotoesConfiguracao(Rectangle botoes[], int *seletor) {
+    
+    if (IsKeyPressed(KEY_ESCAPE)) telaAtual = telaAnterior;
 
     // MUDAR PARA TELA CHEIA
-    if(CheckCollisionPointRec(GetMousePosition(), botoes[0])) 
+    if(CheckCollisionPointRec(GetMousePosition(), botoes[0]) || *seletor == 0) 
     {
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+        *seletor = 0;
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || IsKeyPressed(KEY_ENTER)) 
         {
             playFx(1);
             telaCheia();
@@ -61,9 +67,10 @@ void logicaBotoesConfiguracao(Rectangle botoes[]) {
     }
 
     // DEIXAR O JOGO SEM SOM
-    if(CheckCollisionPointRec(GetMousePosition(), botoes[1])) 
+    if(CheckCollisionPointRec(GetMousePosition(), botoes[1]) || *seletor == 1) 
     {
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+        *seletor = 1;
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || IsKeyPressed(KEY_ENTER)) 
         {
             static bool mute = false;
             playFx(1);
@@ -76,14 +83,14 @@ void logicaBotoesConfiguracao(Rectangle botoes[]) {
                 SetMasterVolume(100);
                 mute = false;
             }
-            
         }
     }
 
     //VOLTAR PARA O MENU
-    if (CheckCollisionPointRec(GetMousePosition(), botoes[2]))
+    if (CheckCollisionPointRec(GetMousePosition(), botoes[2]) || *seletor == 2)
     {
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+        *seletor = 2;
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || IsKeyPressed(KEY_ENTER)) 
         {
             playFx(1);
             telaAtual = telaAnterior;

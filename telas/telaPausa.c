@@ -3,8 +3,8 @@
 #include "../lib/som.h"
 
 void telaPausa();
-void drawtelaPausa(Texture2D background, Rectangle botoes[]);
-void logicatelaPausa(Rectangle botoes[]);
+void drawtelaPausa(Texture2D background, Rectangle botoes[], int seletor);
+void logicatelaPausa(Rectangle botoes[], int *seletor);
 
 Shader shader;
 
@@ -16,11 +16,15 @@ void telaPausa() {
     ImageColorBrightness(&image, -80);
     setImageBackground(image);
     setShader("resources/shaders/blur.fs");
+
+    static int seletor = 0;
     
     while(isPaused) {
+        if (IsKeyPressed(KEY_UP) && seletor > 0)   seletor--;
+        if (IsKeyPressed(KEY_DOWN) && seletor < 3) seletor++;
         
-        drawtelaPausa(background, getBotoesPausa());
-        logicatelaPausa(getBotoesPausa());
+        drawtelaPausa(background, getBotoesPausa(), seletor);
+        logicatelaPausa(getBotoesPausa(), &seletor);
 
         while (telaAtual == TELA_CONFIG)
         {
@@ -30,11 +34,10 @@ void telaPausa() {
             }
             telaConfiguracao();
         }
-        
     }
 }
 
-void drawtelaPausa(Texture2D background, Rectangle botoes[]) {
+void drawtelaPausa(Texture2D background, Rectangle botoes[], int seletor) {
     BeginDrawing();
         ClearBackground(BLACK);
 
@@ -44,22 +47,23 @@ void drawtelaPausa(Texture2D background, Rectangle botoes[]) {
 
         for (int i = 0; i < 4; i++)
         {
-            DrawRectangleRec(botoes[i], CheckCollisionPointRec(GetMousePosition(), botoes[i]) ? (Color){128,0,0, 255} : (Color){164,0,0, 255});
-            DrawRectangleLines((int)botoes[i].x-5, (int) botoes[i].y-5, (int) botoes[i].width+10, (int) botoes[i].height+10, CheckCollisionPointRec(GetMousePosition(), botoes[i]) ? (Color){164,0,0, 255} : (Color){128,0,0, 255});
+            DrawRectangleRec(botoes[i], seletor == i ? (Color){128,0,0, 255} : (Color){164,0,0, 255});
+            DrawRectangleLines((int)botoes[i].x-5, (int) botoes[i].y-5, (int) botoes[i].width+10, (int) botoes[i].height+10, seletor == i ? (Color){164,0,0, 255} : (Color){128,0,0, 255});
             DrawText(textButtonsPausa[i], (int)( botoes[i].x + botoes[i].width/2 - MeasureText(textButtonsPausa[i], 20)/2), (int) botoes[i].y + 16, 20, WHITE);
         }
         
     EndDrawing();
 }
 
-void logicatelaPausa(Rectangle botoes[]){
+void logicatelaPausa(Rectangle botoes[], int *seletor){
 
     ShowCursor();
 
     //VOLTAR PARA O JOGO
-    if (CheckCollisionPointRec(GetMousePosition(), botoes[0]))
+    if (CheckCollisionPointRec(GetMousePosition(), botoes[0]) || *seletor == 0)
     {
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+        *seletor = 0;
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || IsKeyPressed(KEY_ENTER)) 
         {
             PlaySound(somBotao);
             setPathImageBackground("resources/images/wallpaper.png");
@@ -70,9 +74,10 @@ void logicatelaPausa(Rectangle botoes[]){
     }
 
     //VOLTAR PARA REINICIAR O JOGO
-    if (CheckCollisionPointRec(GetMousePosition(), botoes[1]))
+    if (CheckCollisionPointRec(GetMousePosition(), botoes[1]) || *seletor == 1)
     {
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+        *seletor = 1;
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || IsKeyPressed(KEY_ENTER)) 
         {
             PlaySound(somBotao);
             setPathImageBackground("resources/images/wallpaper.png");
@@ -83,9 +88,10 @@ void logicatelaPausa(Rectangle botoes[]){
     }
 
     //VOLTAR PARA A TELA DE CONFIGURAÇÕES
-    if (CheckCollisionPointRec(GetMousePosition(), botoes[2]))
+    if (CheckCollisionPointRec(GetMousePosition(), botoes[2]) || *seletor == 2)
     {
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+        *seletor = 2;
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || IsKeyPressed(KEY_ENTER)) 
         {
             PlaySound(somBotao);
             telaAnterior = telaAtual;
@@ -94,9 +100,10 @@ void logicatelaPausa(Rectangle botoes[]){
     }
     
     //IR PARA TELA DE MENU
-    if (CheckCollisionPointRec(GetMousePosition(), botoes[3]))
+    if (CheckCollisionPointRec(GetMousePosition(), botoes[3]) || *seletor == 3)
     {
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+        *seletor = 3;
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || IsKeyPressed(KEY_ENTER)) 
         {
             setPathImageBackground("resources/images/wallpaper.png");
             updateBackground();
@@ -107,6 +114,6 @@ void logicatelaPausa(Rectangle botoes[]){
     }
 
     if(IsKeyPressed(KEY_ESCAPE)) {
-        isPaused = !isPaused;
+        isPaused = false;
     }
 }

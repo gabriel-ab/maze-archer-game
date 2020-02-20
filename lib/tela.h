@@ -15,6 +15,7 @@ int telaAtual = 0;
 int telaAnterior = 0;
 
 typedef enum TELAS {
+    TELA_SEL_MAPA = -3,
     TELA_FRACASSO = -2,
     TELA_CONFIG = -1,
     TELA_MENU = 0,
