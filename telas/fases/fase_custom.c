@@ -1,12 +1,13 @@
 void fase_custom(){
 
     Mapa fase = LoadMapa(diretorio);
-    
+    for(int i = 0; i < fase.n_inimigos; i++)
+    {
+        fase.inimigo[i].sprite = spriteConstructor("resources/images/inimigo.png",32,32,10);
+    }
     Personagem xala = personagemConstructor();
-    xala.posicao = fase.inicio;
-    xala.altura = 48;
-    xala.largura = 32;
     xala.sprite = spriteConstructor("resources/images/personagem.png",48,48,15);
+    xala.posicao = fase.inicio;
     
     //Flechas do jogo // Será global
     Projetil flecha[quantidade_maxima_flechas];
@@ -18,10 +19,6 @@ void fase_custom(){
     
     for (int i = 0; i < quantidade_maxima_flechas; i++) {
         flecha[i].textura = flechasTexture;
-    }
-    for (int i = 0; i < fase.n_inimigos; i++)
-    {
-        fase.inimigo[i] = inimigoContructor();
     }
     setTargetCamera(&xala);
     
@@ -93,6 +90,7 @@ void fase_custom(){
 
             // -----------Atualização da Camera----------
             atualizarCamera(&cam, xala.posicao);
+            // cam.zoom += (float)GetMouseWheelMove()/10.0f;
             verificarTamanhoTela();
             
             // ------------Logica do Projetil-------------- 

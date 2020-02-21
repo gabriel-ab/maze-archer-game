@@ -17,7 +17,7 @@ bool isRestarting;
 #define MAX_ITENS 50
 
 #define ACELERACAO 0.5
-#define TAXA_ATRITO 0.05
+#define TAXA_ATRITO 0.1
 #define TEMPO_MAX_INVULNERAVEL 2
 
 int tempo_invunerabilidade = TEMPO_MAX_INVULNERAVEL;

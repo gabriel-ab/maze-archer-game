@@ -68,7 +68,9 @@ Mapa LoadMapa(const char *endereco){
         fscanf(arquivo,"%f %f %f %f\n", &fase.piso[i].x, &fase.piso[i].y, &fase.piso[i].width, &fase.piso[i].height);
     }
     fscanf(arquivo,"inimigos %i\n", &fase.n_inimigos);
-    for( int i = 0; i < fase.n_inimigos; i++){
+    for (int i = 0; i < fase.n_inimigos; i++)
+    {
+        fase.inimigo[i] = inimigoContructor();
         fscanf(arquivo,"%f %f\n", &fase.inimigo[i].posicao.x, &fase.inimigo[i].posicao.y);
     }
     fscanf(arquivo,"vidas %i\n", &fase.n_vidas);

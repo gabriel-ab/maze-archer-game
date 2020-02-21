@@ -29,6 +29,6 @@ typedef struct Mapa
 
 void save();
 int load();
-Mapa LoadMapa();
+Mapa LoadMapa(const char *endereco);
 
 #endif

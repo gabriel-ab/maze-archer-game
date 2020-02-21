@@ -10,10 +10,10 @@ void drawXala(Personagem* xala) {
         if(TEMPO -contador > 0.10){
             contador = TEMPO;
         }else{
-            drawSprite(xala->sprite,xala->posicao, (Vector2){0,0},0,1,RED);
+            drawSprite(xala->sprite,xala->posicao, (Vector2){0,16},0,1,RED);
         }
     } else {
-        drawSprite(xala->sprite,xala->posicao, (Vector2){0,0},0,1,WHITE);
+        drawSprite(xala->sprite,xala->posicao, (Vector2){0,16},0,1,WHITE);
     }
 }
 
@@ -124,17 +124,14 @@ void drawSprite(Sprite sprite, Vector2 posicao, Vector2 origem, float rotacao, f
     // DrawTexturePro(sprite.textura, sprite.recorte, (Rectangle){posicao.x, posicao.y, sprite.recorte.width, sprite.recorte.width},origem,rotacao,cor);
     DrawTexturePro(
         sprite.textura, 
-        sprite.recorte, 
+        sprite.recorte,
         (Rectangle){
-            posicao.x, 
-            posicao.y, 
+            posicao.x -sprite.recorte.width/2, 
+            posicao.y -sprite.recorte.height/2, 
             escala*sprite.recorte.width, 
             escala*sprite.recorte.width
         },
-        (Vector2){
-            origem.x +sprite.recorte.width/2 ,
-            origem.x +sprite.recorte.height/2
-        },
+        origem,
         rotacao,
         cor
     );
