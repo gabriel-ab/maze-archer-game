@@ -76,6 +76,7 @@ void fase_1()
     for(int i = 0; i < fase.n_inimigos; i++)
     {
         fase.inimigo[i] = inimigoContructor();
+        fase.inimigo[i].sprite = spriteConstructor("resources/images/inimigo.png",32,32,10);
     }
     posicionaInimigos(fase.inimigo, fase);
 

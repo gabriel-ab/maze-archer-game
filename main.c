@@ -29,8 +29,7 @@ int main(){
     InitWindow(tela.width, tela.height, "Untitle Dungeon Game");
     
     //BACKGROUND
-    setPathImageBackground("resources/images/wallpaper.png");
-    updateBackground();
+    background = LoadTexture("resources/images/wallpaper.png");
     
     //AUDIO
     InitAudioDevice();

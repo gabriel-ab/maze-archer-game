@@ -136,3 +136,18 @@ void drawSprite(Sprite sprite, Vector2 posicao, Vector2 origem, float rotacao, f
         cor
     );
 }
+void drawMenuBackground(Color cor)
+{
+    DrawTexturePro(
+            background,
+            (Rectangle){0,0,background.width, background.height},
+            (Rectangle){
+                0,
+                0,
+                tela.width,
+                tela.height},
+            (Vector2){0,0},
+            0,
+            WHITE
+        );
+}

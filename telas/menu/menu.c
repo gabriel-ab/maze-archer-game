@@ -15,7 +15,7 @@ void telaMenu() {
     
     while(telaAtual == TELA_MENU && jogo_rodando && !WindowShouldClose()) {
         playMusic(1);
-        
+        verificarTamanhoTela();
         drawTelaMenu(background, getBotoesMenu(), seletorMapa);
         logicaBotoesMenu(getBotoesMenu(),&seletorMapa);
 
@@ -25,7 +25,6 @@ void telaMenu() {
         if (IsKeyPressed(KEY_RIGHT)) seletorMapa = 4;
         if (IsKeyDown(KEY_LEFT_ALT) && IsKeyDown(KEY_F4)) jogo_rodando = false;
         
-        verificarTamanhoTela();
     }
 }
 
@@ -41,7 +40,7 @@ void drawTelaMenu(Texture2D background, Rectangle botoes[], int seletorMapa) {
             
         ClearBackground(BLACK);
 
-        DrawTexture(background, 0, 0, WHITE);
+        drawMenuBackground(WHITE);
         
         DrawTextEx(font, TextSubtext(titulo, 0, framescounter/6), (Vector2){101,108}, 60, 0, GOLD);
         DrawTextEx(font, TextSubtext(titulo, 0, framescounter/6), (Vector2){100,100}, 60, 0, RED);
@@ -49,7 +48,7 @@ void drawTelaMenu(Texture2D background, Rectangle botoes[], int seletorMapa) {
         for (int i = 0; i < 4; i++)
         {
             DrawRectangleRec(botoes[i], seletorMapa == i ? (Color){128,0,0, 255} : (Color){164,0,0, 255});
-            DrawRectangleLines((int)botoes[i].x-5, (int) botoes[i].y-5, (int) botoes[i].width+10, (int) botoes[i].height+10, seletorMapa == i ? (Color){164,0,0, 255} : (Color){128,0,0, 255});
+            DrawRectangleLines((int)botoes[i].x-5, (int) botoes[i].y-5, (int) botoes[i].width+10, (int) botoes[i].height+10, seletorMapa == i ? LIGHTGRAY : (Color){128,0,0, 255});
             DrawText( textButtonsMenu[i], (int)( botoes[i].x + botoes[i].width/2 - MeasureText(textButtonsMenu[i], 20)/2), (int) botoes[i].y + 16, 20, WHITE);
         }
         DrawRectangle(tela.width -260, tela.height -80,  260, 40, seletorMapa == 4 ? RED : DARKPURPLE);

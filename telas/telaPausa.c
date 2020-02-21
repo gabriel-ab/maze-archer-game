@@ -3,18 +3,18 @@
 #include "../lib/som.h"
 
 void telaPausa();
-void drawtelaPausa(Texture2D background, Rectangle botoes[], int seletor);
+void drawtelaPausa(Rectangle botoes[], int seletor);
 void logicatelaPausa(Rectangle botoes[], int *seletor);
 
 Shader shader;
 
 void telaPausa() {
     
-    //pathImageBackgroundAnterior = pathImageBackground;
     Image image = GetScreenData();
     ImageColorContrast(&image, -40);
     ImageColorBrightness(&image, -80);
-    setImageBackground(image);
+    screenshot = LoadTextureFromImage(image);
+    UnloadImage(image);
     setShader("resources/shaders/blur.fs");
 
     static int seletor = 0;
@@ -23,7 +23,7 @@ void telaPausa() {
         if (IsKeyPressed(KEY_UP) && seletor > 0)   seletor--;
         if (IsKeyPressed(KEY_DOWN) && seletor < 3) seletor++;
         
-        drawtelaPausa(background, getBotoesPausa(), seletor);
+        drawtelaPausa(getBotoesPausa(), seletor);
         logicatelaPausa(getBotoesPausa(), &seletor);
 
         while (telaAtual == TELA_CONFIG)
@@ -37,12 +37,17 @@ void telaPausa() {
     }
 }
 
-void drawtelaPausa(Texture2D background, Rectangle botoes[], int seletor) {
+void drawtelaPausa(Rectangle botoes[], int seletor) {
     BeginDrawing();
         ClearBackground(BLACK);
 
         BeginShaderMode(shader);
-            DrawTexture(background, 0, 0, WHITE);
+            DrawTexture(
+                screenshot,
+                tela.width/2 -screenshot.width/2,
+                tela.height/2 -screenshot.height/2,
+                Fade(BLACK,0.2)
+            );
         EndShaderMode();
 
         for (int i = 0; i < 4; i++)
@@ -66,8 +71,6 @@ void logicatelaPausa(Rectangle botoes[], int *seletor){
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || IsKeyPressed(KEY_ENTER)) 
         {
             PlaySound(somBotao);
-            setPathImageBackground("resources/images/wallpaper.png");
-            updateBackground();
             isPaused = !isPaused;
             
         }
@@ -80,8 +83,6 @@ void logicatelaPausa(Rectangle botoes[], int *seletor){
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || IsKeyPressed(KEY_ENTER)) 
         {
             PlaySound(somBotao);
-            setPathImageBackground("resources/images/wallpaper.png");
-            updateBackground();
             isRestarting = true;
             isPaused = !isPaused;
         }
@@ -105,8 +106,6 @@ void logicatelaPausa(Rectangle botoes[], int *seletor){
         *seletor = 3;
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || IsKeyPressed(KEY_ENTER)) 
         {
-            setPathImageBackground("resources/images/wallpaper.png");
-            updateBackground();
             PlaySound(somBotao);
             telaAtual = TELA_MENU;
             isPaused = !isPaused;

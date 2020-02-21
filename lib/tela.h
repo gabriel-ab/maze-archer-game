@@ -32,14 +32,9 @@ void telaCheia();
 void atualizarCamera(Camera2D *cam, Vector2 posicao);
 void verificarTamanhoTela();
 
-//-------------- BACKGROUND ---------------//
-Texture2D background;
-char* pathImageBackground;
-char* pathImageBackgroundAnterior;
 
-void setPathImageBackground(char* imagePath);
-void setImageBackground(Image backgroundImage);
-void updateBackground();
+Texture background;
+Texture screenshot;
 
 //-------------- HUD ---------------//
 

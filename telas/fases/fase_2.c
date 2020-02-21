@@ -109,6 +109,7 @@ void fase_2()
     for(int i = 0; i < QTD_INIMIGO_2; i++)
     {
         inimigos[i] = inimigoContructor();
+        inimigos[i].sprite = spriteConstructor("resources/images/inimigo.png",32,32,10);
     }
     set_posicao_inimigos_2(inimigos);
 

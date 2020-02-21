@@ -3,7 +3,7 @@
 #include "../../lib/tela.h"
 
 void telaConfiguracao();
-void drawTelaConfiguracao(Texture2D background, Rectangle botoes[], int seletor);
+void drawTelaConfiguracao(Rectangle botoes[], int seletor);
 void logicaBotoesConfiguracao(Rectangle botoes[], int *seletor);
 
 //TELA DE CONFIGURAÇÃO
@@ -11,36 +11,40 @@ void telaConfiguracao() {
     static int seletor = 0;
     
     while(telaAtual == TELA_CONFIG && !WindowShouldClose()) {
-        playMusic(1);
         verificarTamanhoTela();
         if (IsKeyPressed(KEY_UP) && seletor > 0)   seletor--;
         if (IsKeyPressed(KEY_DOWN) && seletor < 2) seletor++;
 
-        drawTelaConfiguracao(background, getBotoesConfiguracao(),seletor);
+        drawTelaConfiguracao(getBotoesConfiguracao(),seletor);
         logicaBotoesConfiguracao(getBotoesConfiguracao(),&seletor);
     }
 }
 
-void drawTelaConfiguracao(Texture2D background, Rectangle botoes[], int seletor) {
+void drawTelaConfiguracao(Rectangle botoes[], int seletor) {
     BeginDrawing();
             
         ClearBackground(BLACK);
 
         if(isPaused) {
             BeginShaderMode(shader);
-                DrawTexture(background, 0, 0, WHITE);
+            DrawTexture(
+                screenshot,
+                tela.width/2 -screenshot.width/2,
+                tela.height/2 -screenshot.height/2,
+                Fade(BLACK,0.2)
+            );
             EndShaderMode();
         } else {
-            DrawTexture(background, 0, 0, WHITE);
+            drawMenuBackground(WHITE);
+            playMusic(1);
         }
         
         for (int i = 0; i < 3; i++)
         {
             DrawRectangleRec(botoes[i], seletor == i ? (Color){128,0,0, 255} : (Color){164,0,0, 255});
-            DrawRectangleLines((int)botoes[i].x-5, (int) botoes[i].y-5, (int) botoes[i].width+10, (int) botoes[i].height+10, seletor == i ? (Color){164,0,0, 255} : (Color){128,0,0, 255});
+            DrawRectangleLines((int)botoes[i].x-5, (int) botoes[i].y-5, (int) botoes[i].width+10, (int) botoes[i].height+10, seletor == i ? LIGHTGRAY : (Color){128,0,0, 255});
             DrawText(textButtonsConfiguracao[i], (int)( botoes[i].x + botoes[i].width/2 - MeasureText(textButtonsConfiguracao[i], 20)/2), (int) botoes[i].y + 16, 20, WHITE);
         }
-
     EndDrawing();
 }
 
@@ -56,7 +60,6 @@ void logicaBotoesConfiguracao(Rectangle botoes[], int *seletor) {
         {
             playFx(1);
             telaCheia();
-            updateBackground();
             if(is_fullscreen){
                 textButtonsConfiguracao[0] = "FULLSCREEN: ON";
             }else{
