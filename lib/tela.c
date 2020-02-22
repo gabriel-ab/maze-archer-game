@@ -33,35 +33,11 @@ void atualizarCamera(Camera2D *cam, Vector2 posicao)
 }
 
 void verificarTamanhoTela(){
-    if(IsWindowResized())
-    {
+    if(IsWindowResized()){
         tela.width = GetScreenWidth();
-        tela.height = GetScreenHeight();   
-
-        if(telaAtual == TELA_CONFIG || telaAtual == TELA_MENU){
-            updateBackground();
-        }
+        tela.height = GetScreenHeight();
     }
 }
-
-
-//-------------- BACKGROUND ---------------//
-void setPathImageBackground(char* imagePath) {
-    pathImageBackground = imagePath;
-}
-
-void setImageBackground(Image backgroundImage) {
-    background = LoadTextureFromImage(backgroundImage);
-    UnloadImage(backgroundImage);
-}
-
-void updateBackground() {
-    Image backgroundImage = LoadImage(pathImageBackground);
-    ImageResize(&backgroundImage, tela.width, tela.height);  
-    background = LoadTextureFromImage(backgroundImage);
-    UnloadImage(backgroundImage);
-}
-
 
 //-------------- HUD ---------------//
 

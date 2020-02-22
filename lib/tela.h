@@ -4,25 +4,26 @@
 #include <raylib.h>
 #include "personagem.h"
 
-#define LARGURA_TELA 1366
-#define ALTURA_TELA 768
+#define LARGURA_TELA 1000
+#define ALTURA_TELA 600
 
 Rectangle tela = {100, 100, LARGURA_TELA, ALTURA_TELA};
-int larguraAnterior = 800;
-int alturaAnterior = 500;
+int larguraAnterior = LARGURA_TELA;
+int alturaAnterior = ALTURA_TELA;
 
 int telaAtual = 0;
 int telaAnterior = 0;
 
 typedef enum TELAS {
+    TELA_SEL_MAPA = -3,
     TELA_FRACASSO = -2,
     TELA_CONFIG = -1,
     TELA_MENU = 0,
     TELA_FASE_1 = 1,
     TELA_FASE_2 = 2,
     TELA_FASE_3 = 3,
-    TELA_FASE_4 = 4,
-    BOSS_FIGHT = 5
+    BOSS_FIGHT = 4,
+    TELA_FASE_CUSTOM = 5,
 }TELAS;
 
 bool is_fullscreen = false; 
@@ -31,14 +32,9 @@ void telaCheia();
 void atualizarCamera(Camera2D *cam, Vector2 posicao);
 void verificarTamanhoTela();
 
-//-------------- BACKGROUND ---------------//
-Texture2D background;
-char* pathImageBackground;
-char* pathImageBackgroundAnterior;
 
-void setPathImageBackground(char* imagePath);
-void setImageBackground(Image backgroundImage);
-void updateBackground();
+Texture background;
+Texture screenshot;
 
 //-------------- HUD ---------------//
 

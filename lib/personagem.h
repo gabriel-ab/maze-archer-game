@@ -12,9 +12,8 @@ typedef enum AtitudesInimigas{
     INIMIGO_PISTOLA,
     INIMIGO_AI_PAI_PARA,
     INIMIGO_ATORDOADO
-};
+}AtitudesInimigas;
 
-Vector2 c;
 
 typedef struct IA{
     double contador;

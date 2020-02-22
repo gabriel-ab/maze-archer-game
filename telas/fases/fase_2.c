@@ -109,6 +109,7 @@ void fase_2()
     for(int i = 0; i < QTD_INIMIGO_2; i++)
     {
         inimigos[i] = inimigoContructor();
+        inimigos[i].sprite = spriteConstructor("resources/images/inimigo.png",32,32,10);
     }
     set_posicao_inimigos_2(inimigos);
 
@@ -157,7 +158,7 @@ void fase_2()
 
     HideCursor();
 
-    while(telaAtual == TELA_FASE_2){ 
+    while(telaAtual == TELA_FASE_2 && !WindowShouldClose()) {
         TEMPO = GetTime();
         //FUNCAO PARA TOCAR O SOM DE FUNDO
         playMusic(3);
@@ -166,9 +167,53 @@ void fase_2()
             telaPausa();
         } else {
 
-            if(IsKeyPressed(KEY_ESCAPE)) {
-                isPaused = true;
-            }
+            BeginDrawing();
+                ClearBackground(GRAY);
+
+                BeginMode2D(cam);
+                    
+                    drawParedes(PAREDE, TAM_MAPA_2);
+                    drawPiso(PISO, TAM_PISO_2);
+
+                    if(contadorPortal == 0) {
+                        DrawTexture(marca_extra, -185, 190, WHITE);
+                    }
+
+                    if(contadorPortal == 1) {
+                        DrawTexture(marca_extra, 3090, 640, WHITE);
+                    }
+
+                    if(contadorPortal == 2) {
+                        DrawTexture(marca_extra, 1240, 501, WHITE);
+                    }                    
+                    
+                    if(!isUpgradeGetted && contadorPortal == 2) {
+                        DrawTexture(vidaTexture, vidaUpgrade.x, vidaUpgrade.y,  WHITE);
+                    }
+
+                    DrawTextureRec(portalTexture, frameRecPortal, (Vector2){1096, -627}, GREEN);
+                    DrawTexture(marca_1, 1115, -577, WHITE);
+
+                    DrawTextureRec(portalTexture, frameRecPortal, (Vector2){317, 390}, GREEN);
+                    DrawTexture(marca_2, 335, 450, WHITE);
+
+                    DrawTextureRec(portalTexture, frameRecPortal, (Vector2){2220, -290}, GREEN);
+                    DrawTexture(marca_3, 2240, -234, WHITE);
+                    
+                    drawInimigos(inimigos, QTD_INIMIGO_2);
+                    drawXala(&xala);
+                    drawFlecha(flechas, xala);
+
+                EndMode2D();
+
+                // "Mira" do mouse
+                DrawCircleV(GetMousePosition(), 5, PURPLE);
+
+                drawHUD(xala.vida, projetil_atual+1);
+
+            EndDrawing();
+            
+            if(IsKeyPressed(KEY_ESCAPE)) isPaused = true;
 
             if(xala.vida < 1) {
                 telaAnterior = telaAtual;
@@ -233,8 +278,6 @@ void fase_2()
                 
                 frameRecPortal.x = (float)currentFrame * (float)portalTexture.width/4;
             }
-            // -----------------------------------------------------//
-
 
 
             // ----------------------- LÓGICA DO PROJÉTIL ------------------------ //
@@ -276,7 +319,6 @@ void fase_2()
                 flechas[projetil_atual].ativa = false;
             }
             
-            // RAFAEL PARTE DE PEGAR OBJETO (flechas)
             if(projetil_atual +1 < xala.quantidadeFlechas && IsKeyPressed(KEY_SPACE)) projetil_atual++; //temporario
 
             // -------------------------------------------------------- //
@@ -314,58 +356,9 @@ void fase_2()
                 }
             }
             // ------------------------------------------------ //
-
-
             movimentar(&xala);
             colisaoPersonagem(&xala, PAREDE, TAM_MAPA_2);
             atualizarCamera(&cam, xala.posicao);
-        
-
-            BeginDrawing();
-                ClearBackground(GRAY);
-
-                BeginMode2D(cam);
-                    
-                    drawParedes(PAREDE, TAM_MAPA_2);
-                    drawPiso(PISO, TAM_PISO_2);
-
-                    if(contadorPortal == 0) {
-                        DrawTexture(marca_extra, -185, 190, WHITE);
-                    }
-
-                    if(contadorPortal == 1) {
-                        DrawTexture(marca_extra, 3090, 640, WHITE);
-                    }
-
-                    if(contadorPortal == 2) {
-                        DrawTexture(marca_extra, 1240, 501, WHITE);
-                    }                    
-                    
-                    if(!isUpgradeGetted && contadorPortal == 2) {
-                        DrawTexture(vidaTexture, vidaUpgrade.x, vidaUpgrade.y,  WHITE);
-                    }
-
-                    DrawTextureRec(portalTexture, frameRecPortal, (Vector2){1096, -627}, GREEN);
-                    DrawTexture(marca_1, 1115, -577, WHITE);
-
-                    DrawTextureRec(portalTexture, frameRecPortal, (Vector2){317, 390}, GREEN);
-                    DrawTexture(marca_2, 335, 450, WHITE);
-
-                    DrawTextureRec(portalTexture, frameRecPortal, (Vector2){2220, -290}, GREEN);
-                    DrawTexture(marca_3, 2240, -234, WHITE);
-                    
-                    drawInimigos(inimigos, QTD_INIMIGO_2);
-                    drawXala(&xala);
-                    drawFlecha(flechas, xala);
-
-                EndMode2D();
-
-                // "Mira" do mouse
-                DrawCircleV(GetMousePosition(), 5, PURPLE);
-
-                drawHUD(xala.vida, projetil_atual+1);
-
-            EndDrawing();
         }
         if(isRestarting) 
         {

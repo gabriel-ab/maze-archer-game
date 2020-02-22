@@ -7,15 +7,13 @@
 Personagem personagemConstructor()
 {
     Personagem xala;
-    //A FAZER Definir sprite para personagem principal
-    //xala.sprite = LoadTexture("resources/DF_Actor.png");
     xala.invulneravel = false;
     xala.vida = vida_maxima_xala;
     xala.quantidadeFlechas = quantidade_maxima_flechas;
     xala.velocidade = (Vector2){0,0};
     xala.posicao = (Vector2){0,0};
-    xala.altura = 8;
-    xala.largura = 12;
+    xala.altura = 18;
+    xala.largura = 28;
     xala.linhaColisaoCima =
         (Rectangle){
             xala.posicao.x - xala.largura / 2 + 2,
@@ -53,8 +51,8 @@ Personagem inimigoContructor()
     inimigo.vida = 3;
     inimigo.velocidade = (Vector2){0, 0};
     inimigo.posicao = (Vector2){0, 0};
-    inimigo.altura = 32;
-    inimigo.largura = 32;
+    inimigo.altura = 20;
+    inimigo.largura = 20;
     inimigo.linhaColisaoCima =
         (Rectangle){
             inimigo.posicao.x - inimigo.largura / 2 + 2,
@@ -92,7 +90,7 @@ void logicaInimigo(Personagem *inimigo, Personagem *fulano)
     if(inimigo->acao.atual != INIMIGO_ATORDOADO)
     {
         if(inimigo->vida < 2) inimigo->acao.atual = INIMIGO_AI_PAI_PARA;
-        else if(distancia >= 300) inimigo->acao.atual = INIMIGO_DE_BOA;
+        else if(distancia >= 150) inimigo->acao.atual = INIMIGO_DE_BOA;
         else inimigo->acao.atual = INIMIGO_PISTOLA;
     }
     
@@ -124,9 +122,7 @@ void logicaInimigo(Personagem *inimigo, Personagem *fulano)
             {
                 if (!fulano->invulneravel)
                 {
-                    Vector2 pontoDeAtaque = {inimigo->posicao.x + cos(angulo)*32, inimigo->posicao.y + sin(angulo)*32};
-
-                    if (CheckCollisionCircles(pontoDeAtaque, 5, fulano->posicao, 16))
+                    if (CheckCollisionCircles(inimigo->posicao, 16, fulano->posicao, 16))
                     {
                         fulano->vida--;
                         fulano->invulneravel = 1;

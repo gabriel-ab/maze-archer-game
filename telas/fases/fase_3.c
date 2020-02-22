@@ -190,6 +190,7 @@ void fase_3()
     for(int i = 0; i < QTD_INIMIGO_3; i++)
     {
         inimigos[i] = inimigoContructor();
+        inimigos[i].sprite = spriteConstructor("resources/images/inimigo.png",32,32,10);
     }
     set_posicao_inimigos_3(inimigos);
 
@@ -214,14 +215,14 @@ void fase_3()
     setTargetCamera(&xala);
 
 
-    while(telaAtual == TELA_FASE_3) {
+    while(telaAtual == TELA_FASE_3 && !WindowShouldClose()) {
         TEMPO = GetTime();
         playMusic(2);
         if(isPaused) 
         {
             telaPausa();
-
-        } else 
+        }
+        else 
         {
             draw_fase_3(&xala, inimigos, flechas, PAREDES, PISO, ARMADILHAS);
             logica_fase_3(&xala, inimigos, flechas, PAREDES, ARMADILHAS); 

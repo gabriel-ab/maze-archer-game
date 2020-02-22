@@ -13,7 +13,7 @@ void telaFracasso() {
     setFont("resources/font/custom_alagard.png");
     
     playFx(7);
-    while(telaAtual == TELA_FRACASSO) {
+    while(telaAtual == TELA_FRACASSO && !WindowShouldClose()) {
         
         drawTelaFracasso(getBotoesFracasso());
         //IRIA DEIXAR ESSA FUNÇÃO PRA SÓ DEIXAR A INTERAÇÃO COM OS BOTÕES

@@ -32,6 +32,7 @@ void animaSpriteLinha(Sprite *sprite){
 }
 
 // Animação geral para sprite dentro de um spritesheet  vide textura.h
+// Lê da esquerda para a direita no segmento dado.
 void animaSprite(Sprite *sprite, Segmento segmento[]){
     if(!sprite->fps) sprite->fps = 1;
 
