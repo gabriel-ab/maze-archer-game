@@ -39,35 +39,8 @@ void verificarTamanhoTela(){
     }
 }
 
-//-------------- HUD ---------------//
 
-void drawHUD(int quantidadeVida, int quantidadeArrow){
-    for (int i = 0; i < quantidadeVida; i++)
-    {
-        DrawTexture(vidaTexture, 10+35*i, 10, WHITE);
-    }
 
-    for (int i = 0; i < quantidadeArrow; i++)
-    {
-        DrawTexture(arrowTexture, 10+35*i, 50, WHITE);
-    }
-}
-
-//-------------- TEXTURE ---------------//
-
-void setTexture(Texture* texture, char* spritePath, int largura, int altura) {
-    Image imagem =  LoadImage(spritePath);
-    ImageResize(&imagem, largura , altura);
-    *texture = LoadTextureFromImage(imagem);
-    UnloadImage(imagem);
-}
-
-void setTextureCropped(Texture* texture, char* spritePath, Rectangle crop) {
-    Image imagem = LoadImage(spritePath);
-    ImageCrop(&imagem, crop);
-    *texture = LoadTextureFromImage(imagem);
-    UnloadImage(imagem);
-}
 
 
 // ------------ SHADERS ----------- //

@@ -126,8 +126,8 @@ void drawSprite(Sprite sprite, Vector2 posicao, Vector2 origem, float rotacao, f
         sprite.textura, 
         sprite.recorte,
         (Rectangle){
-            posicao.x -sprite.recorte.width/2, 
-            posicao.y -sprite.recorte.height/2, 
+            posicao.x -(sprite.recorte.width * escala) /2, 
+            posicao.y -(sprite.recorte.height * escala) /2, 
             escala*sprite.recorte.width, 
             escala*sprite.recorte.width
         },
@@ -150,4 +150,17 @@ void drawMenuBackground(Color cor)
             0,
             WHITE
         );
+}
+//-------------- HUD ---------------//
+
+void drawHUD(int quantidadeVida, int quantidadeArrow){
+    for (int i = 0; i < quantidadeVida; i++)
+    {
+        DrawTextureEx(vidaTexture, (Vector2){10+35*i, 10}, 0, 1.6, WHITE);
+    }
+
+    for (int i = 0; i < quantidadeArrow; i++)
+    {
+        DrawTexture(arrowTexture, 10+35*i, 50, WHITE);
+    }
 }

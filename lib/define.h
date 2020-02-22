@@ -20,9 +20,11 @@ bool isRestarting;
 #define TAXA_ATRITO 0.1
 #define TEMPO_MAX_INVULNERAVEL 2
 
+#define MAX_FLECHAS 10
+
 int tempo_invunerabilidade = TEMPO_MAX_INVULNERAVEL;
-int vida_maxima_xala = 3;
-int quantidade_maxima_flechas = 2;
+int vida_no_save = 3;
+int flechas_no_save = 2;
 
 double TEMPO; //tempo geral
 bool mirando;

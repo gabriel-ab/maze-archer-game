@@ -8,8 +8,8 @@ Personagem personagemConstructor()
 {
     Personagem xala;
     xala.invulneravel = false;
-    xala.vida = vida_maxima_xala;
-    xala.quantidadeFlechas = quantidade_maxima_flechas;
+    xala.vida = vida_no_save;
+    xala.quantidadeFlechas = flechas_no_save;
     xala.velocidade = (Vector2){0,0};
     xala.posicao = (Vector2){0,0};
     xala.altura = 18;

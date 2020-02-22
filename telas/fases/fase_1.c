@@ -50,14 +50,15 @@ void fase_1()
     xala.posicao = fase.inicio;
     xala.altura = 48;
     xala.largura = 32;
-    xala.sprite = spriteConstructor("resources/images/personagem.png",48,48,15);
+    xala.sprite = spriteConstructor(xalaTexture,48,48,15);
 
     //Flechas do jogo // Será global
-    Projetil flecha[quantidade_maxima_flechas];
+    Projetil flecha[flechas_no_save];
     projetil_atual = xala.quantidadeFlechas -1;
     
     //Limpando atributos
-    for(int i = 0; i < quantidade_maxima_flechas; i++){
+    for( int i = 0; i < MAX_FLECHAS; i++) {
+        flecha[i].textura = flechasTexture;
         flecha[i].ativa = false;
     }
     Image temp = LoadImage("resources/images/marmore.png");
@@ -67,16 +68,12 @@ void fase_1()
     paredeTexture = LoadTexture("resources/images/pedra_brilhante.png");
     setTextureCropped(&flechasTexture, "resources/images/flechas.png", (Rectangle){0,0,64,64});
 
-    for( int i = 0; i < quantidade_maxima_flechas; i++) {
-        flecha[i].textura = flechasTexture;
-    }
-
     // Inicializando inimigos na fase Será global para ser carregado no menu
 
     for(int i = 0; i < fase.n_inimigos; i++)
     {
         fase.inimigo[i] = inimigoContructor();
-        fase.inimigo[i].sprite = spriteConstructor("resources/images/inimigo.png",32,32,10);
+        fase.inimigo[i].sprite = spriteConstructor(inimigoTexture,32,32,10);
     }
     posicionaInimigos(fase.inimigo, fase);
 

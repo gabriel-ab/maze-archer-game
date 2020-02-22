@@ -68,7 +68,7 @@ void boss_fight()
     xala.posicao = (Vector2){50, 50};
     xala.altura = 48;
     xala.largura = 48;
-    xala.sprite = spriteConstructor("resources/images/personagem.png",48,48,15);
+    xala.sprite = spriteConstructor(xalaTexture,48,48,15);
     // ----------------------------- //
 
 
@@ -104,14 +104,14 @@ void boss_fight()
 
 
     // ------------FLECHA ------------ //
-    Projetil flechas[quantidade_maxima_flechas];
+    Projetil flechas[flechas_no_save];
 
     // indice da flecha
     projetil_atual = xala.quantidadeFlechas -1;
     
 
     // Inicializando as flechas
-    for(int i = 0; i < quantidade_maxima_flechas; i++){
+    for(int i = 0; i < flechas_no_save; i++){
         flechas[i].ativa = false;
         flechas[i].textura = flechasTexture;
     }
@@ -383,11 +383,11 @@ void logica_boss_fight(Personagem* xala, Personagem* boss, Projetil flecha[], Re
                     currentFrame = 0;
                     
                     if(xala->posicao.x > boss->posicao.x) {
-                        setTextureCropped(&boss->sprite, "resources/images/golem-walk.png", (Rectangle){0,192,448,64});
+                        setTextureCropped(&boss->sprite.textura, "resources/images/golem-walk.png", (Rectangle){0,192,448,64});
                     }
 
                     if(xala->posicao.x < boss->posicao.x) {
-                        setTextureCropped(&boss->sprite, "resources/images/golem-walk.png", (Rectangle){0,64,448,64});
+                        setTextureCropped(&boss->sprite.textura, "resources/images/golem-walk.png", (Rectangle){0,64,448,64});
                     }
                 }
 
@@ -402,11 +402,11 @@ void logica_boss_fight(Personagem* xala, Personagem* boss, Projetil flecha[], Re
         } else {
             // ----------------- ATAQUE BOSS ANIMAÇÃO -------------------- //
             if(xala->posicao.x > boss->posicao.x) {
-                setTextureCropped(&boss->sprite, "resources/images/golem-atk.png", (Rectangle){0,320,448,64});
+                setTextureCropped(&boss->sprite.textura, "resources/images/golem-atk.png", (Rectangle){0,320,448,64});
             }   
 
             if(xala->posicao.x < boss->posicao.x) {
-                setTextureCropped(&boss->sprite, "resources/images/golem-atk.png", (Rectangle){0,128,448,64});
+                setTextureCropped(&boss->sprite.textura, "resources/images/golem-atk.png", (Rectangle){0,128,448,64});
             }
             // ---------------------------------------------------//
 
@@ -482,12 +482,12 @@ void logica_boss_fight(Personagem* xala, Personagem* boss, Projetil flecha[], Re
 
 void movimentacaoBoss(Vector2 alvo) {
     if(alvo.x > boss.posicao.x) {
-        setTextureCropped(&boss.sprite, "resources/images/golem-walk.png", (Rectangle){0,192,448,64});
+        setTextureCropped(&boss.sprite.textura, "resources/images/golem-walk.png", (Rectangle){0,192,448,64});
         boss.posicao.x++;
     }
 
     if(alvo.x < boss.posicao.x) {
-        setTextureCropped(&boss.sprite, "resources/images/golem-walk.png", (Rectangle){0,64,448,64});
+        setTextureCropped(&boss.sprite.textura, "resources/images/golem-walk.png", (Rectangle){0,64,448,64});
         boss.posicao.x--;
     }
 

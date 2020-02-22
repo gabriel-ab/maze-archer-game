@@ -3,29 +3,36 @@ void fase_custom(){
     Mapa fase = LoadMapa(diretorio);
     for(int i = 0; i < fase.n_inimigos; i++)
     {
-        fase.inimigo[i].sprite = spriteConstructor("resources/images/inimigo.png",32,32,10);
+        fase.inimigo[i].sprite = spriteConstructor(inimigoTexture,32,32,10);
+    }
+    for (int i = 0; i < fase.n_vidas; i++){
+        fase.vida[i].sprite = spriteConstructor(vidaTexture, 32, 32, 1);
+        fase.vida[i].ativo = true;
+    }
+    for (int i = 0; i < fase.n_flechas; i++){
+        fase.flecha[i].sprite = spriteConstructor(arrowTexture, 32, 32, 1);
+        fase.flecha[i].ativo = true;
     }
     Personagem xala = personagemConstructor();
-    xala.sprite = spriteConstructor("resources/images/personagem.png",48,48,15);
+    xala.sprite = spriteConstructor(xalaTexture,48,48,15);
     xala.posicao = fase.inicio;
     
     //Flechas do jogo // Será global
-    Projetil flecha[quantidade_maxima_flechas];
+    Projetil flecha[MAX_FLECHAS];
+    xala.quantidadeFlechas = flechas_no_save;
     projetil_atual = xala.quantidadeFlechas -1;
 
+
+    //TEXTURAS DA FASE
     pisoTexture = LoadTexture("resources/images/marmore.png");
     paredeTexture = LoadTexture("resources/images/pedra_brilhante.png");
-    setTextureCropped(&flechasTexture, "resources/images/flechas.png", (Rectangle){0,0,64,64});
     
-    for (int i = 0; i < quantidade_maxima_flechas; i++) {
+    for (int i = 0; i < MAX_FLECHAS; i++){
         flecha[i].textura = flechasTexture;
+        flecha[i].ativa = false;
     }
     setTargetCamera(&xala);
     
-    //Limpando atributos
-    for(int i = 0; i < quantidade_maxima_flechas; i++){
-        flecha[i].ativa = false;
-    }
 
     int currentFrame = 0;
     int frameCount = 0;
@@ -50,7 +57,31 @@ void fase_custom(){
                     drawPiso(fase.piso, fase.n_pisos);
                     drawParedes(fase.parede, fase.n_paredes);
                     DrawTextureRec(portalTexture, frameRecPortal, (Vector2){-400, 1500}, WHITE);
-                    
+                    for (int i = 0; i < fase.n_vidas; i++)
+                    {
+                        if(fase.vida[i].ativo)
+                        {
+                            drawSprite(fase.vida[i].sprite, fase.vida[i].posicao, (Vector2){0,0}, 0, 0.7, WHITE);
+                            if (CheckCollisionCircles(xala.posicao, 16, fase.vida[i].posicao, 10))
+                            {
+                                xala.vida++;
+                                fase.vida[i].ativo = false;
+                            }
+                        }
+                    }
+                    for (int i = 0; i < fase.n_flechas; i++)
+                    {
+                        if(fase.flecha[i].ativo)
+                        {
+                            drawSprite(fase.flecha[i].sprite, fase.flecha[i].posicao, (Vector2){0,0}, 0, 0.7, WHITE);
+                            if (CheckCollisionCircles(xala.posicao, 16, fase.flecha[i].posicao, 10))
+                            {
+                                xala.quantidadeFlechas++;
+                                projetil_atual++;
+                                fase.flecha[i].ativo = false;
+                            }
+                        }
+                    }
                     drawInimigos(fase.inimigo, fase.n_inimigos);
 
                     DrawCircle(0,0,2,WHITE);
@@ -90,7 +121,7 @@ void fase_custom(){
 
             // -----------Atualização da Camera----------
             atualizarCamera(&cam, xala.posicao);
-            // cam.zoom += (float)GetMouseWheelMove()/10.0f;
+            cam.zoom += (float)GetMouseWheelMove()/10.0f;
             verificarTamanhoTela();
             
             // ------------Logica do Projetil-------------- 

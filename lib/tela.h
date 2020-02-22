@@ -36,25 +36,6 @@ void verificarTamanhoTela();
 Texture background;
 Texture screenshot;
 
-//-------------- HUD ---------------//
-
-void drawHUD(int quantidadeVida, int quantidadeArrow);
-
-//-------------- TEXTURE ---------------//
-
-Texture2D vidaTexture;     //HUD 
-Texture2D arrowTexture;    //HUD
-
-Texture2D flechasTexture;  
-Texture2D paredeTexture;
-Texture2D pisoTexture;
-Texture2D armadilhaTexture;
-Texture2D xalaTexture;
-Texture2D portalTexture;
-
-void setTexture(Texture* texture, char* spritePath, int altura, int largura);
-void setTextureCropped(Texture* texture, char* spritePath, Rectangle crop);
-
 // ------------ SHADERS ----------- //
 
 Shader shader;

@@ -42,9 +42,12 @@ int main(){
     setTrapFx("resources/fx/trap.wav", "resources/fx/burn.wav" );
     initMusic();
     
-
+    //TEXTURE
+    setTextureCropped(&flechasTexture, "resources/images/flechas.png", (Rectangle){0,0,64,64});
+    xalaTexture = LoadTexture("resources/images/personagem.png");
+    inimigoTexture = LoadTexture("resources/images/inimigo.png");
     //HUD
-    setTexture(&vidaTexture, "resources/images/hud_vida.png", 50, 50);
+    vidaTexture = LoadTexture("resources/images/hud_vida.png");
     setTexture(&arrowTexture, "resources/images/hud_flecha.png", 50, 50);
     
     SetTargetFPS(60);

@@ -37,7 +37,24 @@ typedef struct Sprite{
     int frameAtual;
 }Sprite;
 
-Sprite spriteConstructor(const char *endereco, int largura_frame, int altura_frame, int fps);
+//-------------- TEXTURE ---------------//
+
+Texture vidaTexture;     //HUD 
+Texture arrowTexture;    //HUD
+
+Texture flechasTexture;  
+Texture paredeTexture;
+Texture pisoTexture;
+Texture armadilhaTexture;
+Texture xalaTexture;
+Texture inimigoTexture;
+Texture portalTexture;
+
+
+Sprite spriteConstructor(Texture textura, int largura_frame, int altura_frame, int fps);
 void animaSpriteLinha(Sprite *sprite);
 void animaSprite(Sprite *sprite, Segmento segmento[]);
+void setTexture(Texture* texture, char* spritePath, int altura, int largura);
+void setTextureCropped(Texture* texture, char* spritePath, Rectangle crop);
+
 #endif 

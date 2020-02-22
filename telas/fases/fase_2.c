@@ -96,7 +96,7 @@ void fase_2()
     xala.posicao = (Vector2){0, 0};
     xala.altura = 48;
     xala.largura = 48;
-    xala.sprite = spriteConstructor("resources/images/personagem.png",48,48,15);
+    xala.sprite = spriteConstructor(xalaTexture,48,48,15);
     
     // ----------------------------- //
     
@@ -109,7 +109,7 @@ void fase_2()
     for(int i = 0; i < QTD_INIMIGO_2; i++)
     {
         inimigos[i] = inimigoContructor();
-        inimigos[i].sprite = spriteConstructor("resources/images/inimigo.png",32,32,10);
+        inimigos[i].sprite = spriteConstructor(inimigoTexture,32,32,10);
     }
     set_posicao_inimigos_2(inimigos);
 
@@ -118,16 +118,16 @@ void fase_2()
 
 
     // ------------ FLECHA ------------ //
-    Projetil flechas[quantidade_maxima_flechas];
+    Projetil flechas[flechas_no_save];
 
     // indice da flecha
     projetil_atual = xala.quantidadeFlechas -1;
     
 
     // Inicializando as flechas
-    for(int i = 0; i < quantidade_maxima_flechas; i++){
-        flechas[i].ativa = false;
+    for(int i = 0; i < MAX_FLECHAS; i++){
         flechas[i].textura = flechasTexture;
+        flechas[i].ativa = false;
     }
     // -------------------------------- //
 
@@ -260,8 +260,8 @@ void fase_2()
             }
 
             if(CheckCollisionPointRec(xala.posicao, vidaUpgrade) && !isUpgradeGetted && contadorPortal == 2) {
-                vida_maxima_xala++;
-                xala.vida = vida_maxima_xala;
+                vida_no_save++;
+                xala.vida = vida_no_save;
                 isUpgradeGetted = true;
             }
 
@@ -363,7 +363,7 @@ void fase_2()
         if(isRestarting) 
         {
             if(isUpgradeGetted) {
-                vida_maxima_xala--;
+                vida_no_save--;
             }
             isRestarting = false;
             break;

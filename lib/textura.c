@@ -2,9 +2,9 @@
 #include "tela.h"
 #include "textura.h"
 
-Sprite spriteConstructor(const char *endereco, int largura_frame, int altura_frame, int fps){
-    Sprite sprite;
-    sprite.textura = LoadTexture(endereco);
+Sprite spriteConstructor(Texture textura, int largura_frame, int altura_frame, int fps){
+    Sprite sprite = { 0 };
+    sprite.textura = textura;
     sprite.fps = fps;
 
     sprite.colunas = sprite.textura.width/altura_frame;
@@ -51,4 +51,20 @@ void animaSprite(Sprite *sprite, Segmento segmento[]){
     if(sprite->frameAtual >= segmento[sprite->n_segmento].fim){
         sprite->frameAtual = segmento[sprite->n_segmento].inicio;
     }
+}
+
+//-------------- TEXTURE ---------------//
+
+void setTexture(Texture* texture, char* spritePath, int largura, int altura) {
+    Image imagem =  LoadImage(spritePath);
+    ImageResize(&imagem, largura , altura);
+    *texture = LoadTextureFromImage(imagem);
+    UnloadImage(imagem);
+}
+
+void setTextureCropped(Texture* texture, char* spritePath, Rectangle crop) {
+    Image imagem = LoadImage(spritePath);
+    ImageCrop(&imagem, crop);
+    *texture = LoadTextureFromImage(imagem);
+    UnloadImage(imagem);
 }

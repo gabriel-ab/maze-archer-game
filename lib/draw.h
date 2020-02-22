@@ -18,6 +18,9 @@ void drawArmadilhasRec(Rectangle ARMADILHAS[], int tamanho, Rectangle frameRec);
 void drawSprite(Sprite sprite, Vector2 posicao, Vector2 origem, float rotacao, float escala, Color cor);
 void drawMenuBackground(Color cor);
 
+//-------------- HUD ---------------//
+void drawHUD(int quantidadeVida, int quantidadeArrow);
+
 //Segmentos do spritesheet de animação de xala
 Segmento segmentos_xala[] = {
     0, 0, 3, //linha, inicio e final
