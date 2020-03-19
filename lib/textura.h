@@ -26,11 +26,11 @@ typedef struct Segmento{
 typedef struct Sprite{
     //ALTERAVEIS
     Texture2D textura;
+    Rectangle recorte;
     int n_segmento; // qual segmento será usado (qual animação)
     float fps;
 
     //NÃO ALTERE
-    Rectangle recorte;
     int colunas;
     int linhas;
     double timer;
@@ -49,6 +49,7 @@ Texture armadilhaTexture;
 Texture xalaTexture;
 Texture inimigoTexture;
 Texture portalTexture;
+Texture bombaTexture;
 
 
 Sprite spriteConstructor(Texture textura, int largura_frame, int altura_frame, int fps);

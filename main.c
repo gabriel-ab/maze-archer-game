@@ -11,6 +11,7 @@
 #include "lib/data.c"
 #include "lib/textura.c"
 #include "lib/draw.c"
+#include "lib/itens.c"
 
 #include "telas/fases/fase_custom.c"
 #include "telas/menu/selecao_mapa.c"
@@ -49,6 +50,7 @@ int main(){
     //HUD
     vidaTexture = LoadTexture("resources/images/hud_vida.png");
     setTexture(&arrowTexture, "resources/images/hud_flecha.png", 50, 50);
+    bombaTexture = LoadTexture("resources/images/bomba.png");
     
     SetTargetFPS(60);
     SetExitKey(0);

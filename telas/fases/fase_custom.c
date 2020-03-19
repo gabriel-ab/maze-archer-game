@@ -13,15 +13,21 @@ void fase_custom(){
         fase.flecha[i].sprite = spriteConstructor(arrowTexture, 32, 32, 1);
         fase.flecha[i].ativo = true;
     }
+    for (int i = 0; i < fase.n_bombas; i++)
+    {
+        fase.bomba[i].sprite = spriteConstructor(bombaTexture, 160, 160, 12);
+        fase.bomba[i].damageFrame = 6;
+        fase.bomba[i].status = TRAP_READY;
+    }
+
     Personagem xala = personagemConstructor();
     xala.sprite = spriteConstructor(xalaTexture,48,48,15);
     xala.posicao = fase.inicio;
     
-    //Flechas do jogo // Será global
+    //Flechas do jogo
     Projetil flecha[MAX_FLECHAS];
     xala.quantidadeFlechas = flechas_no_save;
     projetil_atual = xala.quantidadeFlechas -1;
-
 
     //TEXTURAS DA FASE
     pisoTexture = LoadTexture("resources/images/marmore.png");
@@ -31,8 +37,8 @@ void fase_custom(){
         flecha[i].textura = flechasTexture;
         flecha[i].ativa = false;
     }
+
     setTargetCamera(&xala);
-    
 
     int currentFrame = 0;
     int frameCount = 0;
@@ -41,14 +47,13 @@ void fase_custom(){
     Rectangle frameRecPortal = (Rectangle) {0 ,0 , portalTexture.width/4, portalTexture.height};
     telaAtual = 5;
     
-    
     while(telaAtual == 5 && !WindowShouldClose()){
         TEMPO = GetTime();
 
         if(isPaused) {
             telaPausa();
         } else {
-
+            //==========================DRAWING============================//
             BeginDrawing();
                 ClearBackground((Color){20,20,20,255});
 
@@ -82,6 +87,10 @@ void fase_custom(){
                             }
                         }
                     }
+                    for (int i = 0 ; i < fase.n_bombas; i++)
+                    {
+                        drawSprite(fase.bomba[i].sprite, fase.bomba[i].posicao, (Vector2){0,0},0,1,WHITE);
+                    }
                     drawInimigos(fase.inimigo, fase.n_inimigos);
 
                     DrawCircle(0,0,2,WHITE);
@@ -93,6 +102,8 @@ void fase_custom(){
                 DrawCircleV(GetMousePosition(),5,PURPLE);
                 drawHUD(xala.vida, projetil_atual +1);
             EndDrawing();
+
+            //==========================LOGIC============================//
 
             if(IsKeyPressed(KEY_ESCAPE)) isPaused = true;
 
@@ -158,7 +169,7 @@ void fase_custom(){
                 }
             }
             
-            if(flecha[projetil_atual].velocidade.x == 0 && flecha[projetil_atual].velocidade.y == 0 && flecha[projetil_atual].ativa)
+            if(flecha[projetil_atual].ativa && flecha[projetil_atual].velocidade.x == 0 && flecha[projetil_atual].velocidade.y == 0)
             {
                 flecha[projetil_atual].ativa = false;
             }
@@ -181,7 +192,7 @@ void fase_custom(){
             for (int i = 0; i < fase.n_inimigos; i++) animaSpriteLinha(&fase.inimigo[i].sprite);
 
             //----------Atualização dos inimigos-----------
-            for( int i = 0; i < fase.n_inimigos; i++)
+            for (int i = 0; i < fase.n_inimigos; i++)
             {
                 if(fase.inimigo[i].vida > 0) {
                     logicaInimigo(&fase.inimigo[i], &xala);
@@ -190,6 +201,30 @@ void fase_custom(){
                 }
             }
 
+            //----------------Trap Logic-------------------
+            for (int i = 0; i < fase.n_bombas; i++)
+            {
+                if 
+                ( 
+                    CheckCollisionCircles(flecha[projetil_atual +1].posicao,10, fase.bomba[i].posicao, 10) && 
+                    flecha[projetil_atual +1].ativa && 
+                    fase.bomba[i].status == TRAP_READY
+                ) {
+                    fase.bomba[i].status = TRAP_ON;
+                    flecha[projetil_atual +1].velocidade = (Vector2){0,0};
+                }
+
+                if (fase.bomba[i].sprite.frameAtual == fase.bomba[i].damageFrame) //frame de Dano será pulado, 
+                {
+                    explosionCollision(fase.bomba[i], &xala);
+                    for (int j = 0; j < fase.n_inimigos; j++)
+                    {
+                        explosionCollision(fase.bomba[i], &fase.inimigo[j]);
+                    }
+                    fase.bomba[i].sprite.frameAtual++;
+                }
+                animarBomba(&fase.bomba[i]);
+            }
             //--------------INVUNERABILIDADE---------------
             if(xala.invulneravel)
             {

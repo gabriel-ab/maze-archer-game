@@ -1,11 +1,7 @@
 #ifndef INCLUDED_SAVE_H
 #define INCLUDED_SAVE_H
+#include "itens.h"
 
-typedef struct Item{
-    Sprite sprite;
-    Vector2 posicao;
-    bool ativo;
-}Item;
 typedef struct Mapa
 {
     Rectangle parede[MAX_RETANGULOS];
@@ -22,6 +18,12 @@ typedef struct Mapa
     
     Item flecha[MAX_ITENS];
     int n_flechas;
+
+    Trap bomba[MAX_RETANGULOS];
+    int n_bombas;
+
+    Trap armadilha[MAX_RETANGULOS];
+    int n_armadilhas;
 
     Vector2 inicio;
     Vector2 fim;

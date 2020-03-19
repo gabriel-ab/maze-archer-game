@@ -41,11 +41,12 @@ void drawButton(Rectangle botao, const char *texto, bool selecionado){
 
 void selecao_de_mapa(){
     int n_fases = 0, seletor = 2;
-    char temp[256] = {'\0'};
-    strcat(temp,GetWorkingDirectory());
-    strcat(temp,"\\resources\\fases\\");
 
-    char **arquivos = GetDirectoryFiles(temp, &n_fases); //array de strings
+    #ifdef _WIN32
+        char **arquivos = GetDirectoryFiles("resources\\fases\\", &n_fases); //array de strings
+    #elif __linux__
+        char **arquivos = GetDirectoryFiles("resources/fases/", &n_fases); //array de strings
+    #endif
     bool confirma = false;
 
     Camera2D rolador = { 0 };
@@ -57,15 +58,27 @@ void selecao_de_mapa(){
     {
         if (mousePos.x != GetMousePosition().x) rolagem_automatica = false;
 
-        if (rolagem_automatica){
-            rolador.offset.y = +rolador.offset.y*0.8 -seletor*12 +tela.height*0.05;
-        }
-        else if (CheckCollisionPointCircle(mousePos,(Vector2){100,-50},200)){
-            rolador.offset.y += 5;
-        }
-        else if (CheckCollisionPointCircle(mousePos,(Vector2){100,tela.height+50},200)){
-            rolador.offset.y -= 5;
-        }
+        #ifdef _WIN32
+            if (rolagem_automatica){
+                rolador.offset.y = rolador.offset.y*0.8 -seletor*12 +tela.height*0.05;
+            }
+            else if (CheckCollisionPointCircle(mousePos,(Vector2){100,-50},200)){
+                rolador.offset.y += 5;
+            }
+            else if (CheckCollisionPointCircle(mousePos,(Vector2){100,tela.height+50},200)){
+                rolador.offset.y -= 5;
+            }
+        #elif __linux__
+            if (rolagem_automatica){
+                rolador.target.y = rolador.target.y*0.8 +seletor*12 -tela.height*0.05;
+            }
+            else if (CheckCollisionPointCircle(mousePos,(Vector2){100,-50},200)){
+                rolador.target.y -= 5;
+            }
+            else if (CheckCollisionPointCircle(mousePos,(Vector2){100,tela.height+50},200)){
+                rolador.target.y += 5;
+            }
+        #endif
         else{
             static int fps = 0;
             fps++;
@@ -86,7 +99,7 @@ void selecao_de_mapa(){
                 for (int i = 2; i < n_fases; i++)
                 {
                     drawButton((Rectangle){tela.width/6, 240+ (i-2)*60, 240, 30}, arquivos[i], seletor == i);
-                    if (CheckCollisionPointRec((Vector2){mousePos.x, mousePos.y -rolador.offset.y} ,(Rectangle){tela.width/6, 240+ (i-2)*60, 240, 30}))
+                    if (CheckCollisionPointRec((Vector2){mousePos.x, mousePos.y +rolador.target.y} ,(Rectangle){tela.width/6, 240+ (i-2)*60, 240, 30}))
                     {
                         seletor = i;
                         if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) confirma = true;
@@ -100,13 +113,12 @@ void selecao_de_mapa(){
 
         if(IsKeyPressed(KEY_UP) && seletor > 2)    seletor--;
         if(IsKeyPressed(KEY_DOWN) && seletor +1 < n_fases)  seletor++;
-        int mouseWheel = GetMouseWheelMove();
-        if(mouseWheel < 8 || mouseWheel > -8)
-        {
-            seletor -= mouseWheel;
-            if (seletor > n_fases) seletor = n_fases -1;
-            else if(seletor < 2) seletor = 2;
-        }
+
+        #ifdef _WIN32
+            rolador.offset.y += GetMouseWheelMove() * 5;
+        #elif __linux__
+            rolador.target.y -= GetMouseWheelMove() * 5;
+        #endif
 
         if(IsKeyPressed(KEY_ESCAPE)){
             telaAtual = TELA_MENU;
@@ -116,9 +128,8 @@ void selecao_de_mapa(){
     }
     if(confirma){
         //Carrega a fase do endereço selecionado
-        strcat(temp,arquivos[seletor]);
         strcpy(diretorio, "resources/fases/");
-        strcat(diretorio, GetFileName(temp));
+        strcat(diretorio, arquivos[seletor]);
         telaAtual = TELA_FASE_CUSTOM;
     }
     

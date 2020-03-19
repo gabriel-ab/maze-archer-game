@@ -45,12 +45,9 @@ void fase_1()
 
 
     // Inicializando personagem // Será global
-    Personagem xala;
-    xala = personagemConstructor();
-    xala.posicao = fase.inicio;
-    xala.altura = 48;
-    xala.largura = 32;
+    Personagem xala = personagemConstructor();
     xala.sprite = spriteConstructor(xalaTexture,48,48,15);
+    xala.posicao = fase.inicio;
 
     //Flechas do jogo // Será global
     Projetil flecha[flechas_no_save];
