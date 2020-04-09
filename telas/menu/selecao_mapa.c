@@ -40,13 +40,18 @@ void drawButton(Rectangle botao, const char *texto, bool selecionado){
 }
 
 void selecao_de_mapa(){
-    int n_fases = 0, seletor = 2;
+    int n_fases = 0;
 
     #ifdef _WIN32
+        const first_item = 2; // remove . e .. da lista de arquivos
         char **arquivos = GetDirectoryFiles("resources\\fases\\", &n_fases); //array de strings
     #elif __linux__
+        const first_item = 0;
         char **arquivos = GetDirectoryFiles("resources/fases/", &n_fases); //array de strings
+        n_fases -= 2; // remove . e ..
     #endif
+
+    int seletor = first_item;
     bool confirma = false;
 
     Camera2D rolador = { 0 };
@@ -96,7 +101,7 @@ void selecao_de_mapa(){
             DrawRectangleGradientV(0,0,tela.width, tela.height, (Color){150,150,150,100}, (Color){0,0,0,100});
 
                 BeginMode2D(rolador);
-                for (int i = 2; i < n_fases; i++)
+                for (int i = first_item; i < n_fases; i++)
                 {
                     drawButton((Rectangle){tela.width/6, 240+ (i-2)*60, 240, 30}, arquivos[i], seletor == i);
                     if (CheckCollisionPointRec((Vector2){mousePos.x, mousePos.y +rolador.target.y} ,(Rectangle){tela.width/6, 240+ (i-2)*60, 240, 30}))
@@ -111,7 +116,7 @@ void selecao_de_mapa(){
         verificarTamanhoTela();
         playMusic(1);
 
-        if(IsKeyPressed(KEY_UP) && seletor > 2)    seletor--;
+        if(IsKeyPressed(KEY_UP) && seletor > first_item)    seletor--;
         if(IsKeyPressed(KEY_DOWN) && seletor +1 < n_fases)  seletor++;
 
         #ifdef _WIN32
