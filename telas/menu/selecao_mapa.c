@@ -1,11 +1,8 @@
-    #include "../../lib/som.h"
+#include "../../lib/som.h"
 #include "../../lib/tela.h"
 #include "../../lib/define.h"
 #include "../../lib/data.h"
 #include <string.h>
-
-
-#define N_BOXES_ON_SCREEN (int)(tela.width / (BOX_SIZE.x))
 
 // OBS: O botão é centralizado por padrão.
 // Os pontos (x,y) definem o centro do botão
@@ -137,5 +134,4 @@ void selecao_de_mapa(){
         strcat(diretorio, arquivos[seletor]);
         telaAtual = TELA_FASE_CUSTOM;
     }
-    
 }

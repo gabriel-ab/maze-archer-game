@@ -7,8 +7,8 @@ Sprite spriteConstructor(Texture textura, int largura_frame, int altura_frame, i
     sprite.textura = textura;
     sprite.fps = fps;
 
-    sprite.colunas = sprite.textura.width/altura_frame;
-    sprite.linhas = sprite.textura.height/largura_frame;
+    sprite.colunas = sprite.textura.width/largura_frame;
+    sprite.linhas = sprite.textura.height/altura_frame;
     sprite.frameAtual = 0;
     sprite.recorte = (Rectangle){ 0,  0,  largura_frame,  altura_frame};
 

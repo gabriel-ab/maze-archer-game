@@ -121,7 +121,6 @@ void drawArmadilhasRec(Rectangle ARMADILHAS[], int tamanho, Rectangle frameRec) 
 }
 
 void drawSprite(Sprite sprite, Vector2 posicao, Vector2 origem, float rotacao, float escala, Color cor){
-    // DrawTexturePro(sprite.textura, sprite.recorte, (Rectangle){posicao.x, posicao.y, sprite.recorte.width, sprite.recorte.width},origem,rotacao,cor);
     DrawTexturePro(
         sprite.textura, 
         sprite.recorte,
@@ -129,7 +128,7 @@ void drawSprite(Sprite sprite, Vector2 posicao, Vector2 origem, float rotacao, f
             posicao.x -(sprite.recorte.width * escala) /2, 
             posicao.y -(sprite.recorte.height * escala) /2, 
             escala*sprite.recorte.width, 
-            escala*sprite.recorte.width
+            escala*sprite.recorte.height
         },
         origem,
         rotacao,
@@ -161,6 +160,10 @@ void drawHUD(int quantidadeVida, int quantidadeArrow){
 
     for (int i = 0; i < quantidadeArrow; i++)
     {
-        DrawTexture(arrowTexture, 10+35*i, 50, WHITE);
+        DrawTextureEx(arrowTexture, (Vector2){10+35*i, 50}, 0, 1.6, WHITE);
     }
+}
+
+void drawPortal(Portal port, float size, Color color) {
+    drawSprite(port.sprite, port.posicao, (Vector2){0,0}, 0, size, color);
 }

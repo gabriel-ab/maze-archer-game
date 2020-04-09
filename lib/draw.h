@@ -17,6 +17,7 @@ void drawArmadilhas(Rectangle ARMADILHAS[], int tamanho);
 void drawArmadilhasRec(Rectangle ARMADILHAS[], int tamanho, Rectangle frameRec);
 void drawSprite(Sprite sprite, Vector2 posicao, Vector2 origem, float rotacao, float escala, Color cor);
 void drawMenuBackground(Color cor);
+void drawPortal(Portal port, float size, Color color);
 
 //-------------- HUD ---------------//
 void drawHUD(int quantidadeVida, int quantidadeArrow);

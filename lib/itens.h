@@ -31,4 +31,10 @@ typedef struct Trap{ //Trap
     int damageFrame;
     int status;    
 }Trap;
+
+typedef struct Portal{
+    Sprite sprite;
+    Vector2 posicao;
+    int destino;
+}Portal;
 #endif

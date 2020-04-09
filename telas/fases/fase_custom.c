@@ -1,5 +1,6 @@
 void fase_custom(){
 
+    //-------------LOADING---------------//
     Mapa fase = LoadMapa(diretorio);
     for(int i = 0; i < fase.n_inimigos; i++)
     {
@@ -32,6 +33,7 @@ void fase_custom(){
     //TEXTURAS DA FASE
     pisoTexture = LoadTexture("resources/images/marmore.png");
     paredeTexture = LoadTexture("resources/images/pedra_brilhante.png");
+    portalTexture = LoadTexture("resources/images/portal.png");
     
     for (int i = 0; i < MAX_FLECHAS; i++){
         flecha[i].textura = flechasTexture;
@@ -39,12 +41,13 @@ void fase_custom(){
     }
 
     setTargetCamera(&xala);
+    Portal saida;
+    saida.sprite = spriteConstructor(portalTexture,36,52,10);
 
-    int currentFrame = 0;
-    int frameCount = 0;
-    portalTexture =  LoadTexture("resources/images/portal.png");
-    Rectangle portalCollision = (Rectangle) {fase.fim.x, fase.fim.y, 32, 64 };
-    Rectangle frameRecPortal = (Rectangle) {0 ,0 , portalTexture.width/4, portalTexture.height};
+    saida.posicao = (Vector2){0,0}; //temp
+    //saida.posicao = fase.fim;
+
+    saida.destino = TELA_MENU; 
     telaAtual = 5;
     
     while(telaAtual == 5 && !WindowShouldClose()){
@@ -61,7 +64,8 @@ void fase_custom(){
 
                     drawPiso(fase.piso, fase.n_pisos);
                     drawParedes(fase.parede, fase.n_paredes);
-                    DrawTextureRec(portalTexture, frameRecPortal, (Vector2){-400, 1500}, WHITE);
+                    drawPortal(saida, 1.0f, WHITE);
+
                     for (int i = 0; i < fase.n_vidas; i++)
                     {
                         if(fase.vida[i].ativo)
@@ -93,7 +97,6 @@ void fase_custom(){
                     }
                     drawInimigos(fase.inimigo, fase.n_inimigos);
 
-                    DrawCircle(0,0,2,WHITE);
                     drawXala(&xala);
                     drawFlecha(flecha, xala);
                     
@@ -112,23 +115,13 @@ void fase_custom(){
                 telaAtual = TELA_FRACASSO;
             }
 
-            if(CheckCollisionPointRec(xala.posicao, portalCollision)) {
+            // -------- ANIMAÇÂO DO PORTAL ------------
+            animaSpriteLinha(&saida.sprite);
+            if (CheckCollisionCircles(xala.posicao, 10, saida.posicao, 10)){
+                telaAtual = saida.destino;
                 save();
             }
-
-            // -------- Logica do ANIMAÇÃO SPRITE PORTAL ---------- //
-            frameCount++;
-            if (frameCount >= (20))
-            {
-                frameCount = 0;
-                currentFrame++;
-
-                if (currentFrame > 4) currentFrame = 0;
-                
-                frameRecPortal.x = (float)currentFrame * (float)portalTexture.width/4;
-            }
             playMusic(2);
-
 
             // -----------Atualização da Camera----------
             atualizarCamera(&cam, xala.posicao);
@@ -189,12 +182,12 @@ void fase_custom(){
             if(IsKeyDown(KEY_W) || IsKeyDown(KEY_S)){
                 animaSprite(&xala.sprite, segmentos_xala);
             }
-            for (int i = 0; i < fase.n_inimigos; i++) animaSpriteLinha(&fase.inimigo[i].sprite);
 
             //----------Atualização dos inimigos-----------
             for (int i = 0; i < fase.n_inimigos; i++)
             {
                 if(fase.inimigo[i].vida > 0) {
+                    animaSpriteLinha(&fase.inimigo[i].sprite);
                     logicaInimigo(&fase.inimigo[i], &xala);
                     colisaoPersonagem(&fase.inimigo[i], fase.parede , fase.n_paredes);
                     atualizarPersonagem(&fase.inimigo[i]);
@@ -204,8 +197,7 @@ void fase_custom(){
             //----------------Trap Logic-------------------
             for (int i = 0; i < fase.n_bombas; i++)
             {
-                if 
-                ( 
+                if( 
                     CheckCollisionCircles(flecha[projetil_atual +1].posicao,10, fase.bomba[i].posicao, 10) && 
                     flecha[projetil_atual +1].ativa && 
                     fase.bomba[i].status == TRAP_READY
