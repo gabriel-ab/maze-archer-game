@@ -152,7 +152,7 @@ void fase_3()
     setTextureCropped(&paredeTexture, "resources/images/floortileset.png", (Rectangle){32,128,32,32 });
     setTextureCropped(&armadilhaTexture, "resources/images/full.png", (Rectangle){1920,160,128,32 });
     setTexture(&portalTexture, "resources/images/portal.png",260, 160);
-    setTextureCropped(&flechasTexture, "resources/images/Flechas.png", (Rectangle){0,0,64,64});
+    setTextureCropped(&flechaTexture, "resources/images/Flechas.png", (Rectangle){0,0,64,64});
     //--------------------------------------------------//
 
 
@@ -206,7 +206,7 @@ void fase_3()
 
     // Inicializando as flechas
     for(int i = 0; i < MAX_FLECHAS; i++){
-        flechas[i].textura = flechasTexture;
+        flechas[i].textura = flechaTexture;
         flechas[i].ativa = false;
     }
     // -------------------------------- //

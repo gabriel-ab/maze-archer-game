@@ -42,7 +42,7 @@ typedef struct Sprite{
 Texture vidaTexture;     //HUD 
 Texture arrowTexture;    //HUD
 
-Texture flechasTexture;  
+Texture flechaTexture;  
 Texture paredeTexture;
 Texture pisoTexture;
 Texture armadilhaTexture;

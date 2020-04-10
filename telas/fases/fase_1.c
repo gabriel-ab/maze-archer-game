@@ -55,7 +55,7 @@ void fase_1()
     
     //Limpando atributos
     for( int i = 0; i < MAX_FLECHAS; i++) {
-        flecha[i].textura = flechasTexture;
+        flecha[i].textura = flechaTexture;
         flecha[i].ativa = false;
     }
     Image temp = LoadImage("resources/images/marmore.png");
@@ -63,7 +63,7 @@ void fase_1()
     pisoTexture = LoadTextureFromImage(temp);
     UnloadImage(temp);
     paredeTexture = LoadTexture("resources/images/pedra_brilhante.png");
-    setTextureCropped(&flechasTexture, "resources/images/flechas.png", (Rectangle){0,0,64,64});
+    setTextureCropped(&flechaTexture, "resources/images/flechas.png", (Rectangle){0,0,64,64});
 
     // Inicializando inimigos na fase Será global para ser carregado no menu
 

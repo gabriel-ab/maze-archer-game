@@ -80,7 +80,7 @@ void fase_2()
     setTextureCropped(&pisoTexture, "resources/images/full.png", (Rectangle){32*17,32*4,32,32 });
     setTextureCropped(&paredeTexture, "resources/images/full.png", (Rectangle){32*23,32*14,32,32 });
     setTexture(&portalTexture, "resources/images/portal.png",260, 160);
-    setTextureCropped(&flechasTexture, "resources/images/Flechas.png", (Rectangle){0,0,64,64});
+    setTextureCropped(&flechaTexture, "resources/images/Flechas.png", (Rectangle){0,0,64,64});
     setTextureCropped(&marca_1, "resources/images/full.png", (Rectangle){32*9, 32*10, 32,32});
     setTextureCropped(&marca_2, "resources/images/full.png", (Rectangle){32*24, 32*10,32,32});
     setTextureCropped(&marca_3, "resources/images/full.png", (Rectangle){32*56, 32*9,32,32});
@@ -126,7 +126,7 @@ void fase_2()
 
     // Inicializando as flechas
     for(int i = 0; i < MAX_FLECHAS; i++){
-        flechas[i].textura = flechasTexture;
+        flechas[i].textura = flechaTexture;
         flechas[i].ativa = false;
     }
     // -------------------------------- //

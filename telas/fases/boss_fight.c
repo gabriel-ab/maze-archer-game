@@ -95,7 +95,7 @@ void boss_fight()
     // ----------------- TEXTURE CENÁRIO --------------- //
     setTexture(&portalTexture, "resources/images/portal.png",260, 160);
     setTextureCropped(&boss.sprite, "resources/images/golem-walk.png", (Rectangle){0,128,448,64});
-    setTextureCropped(&flechasTexture, "resources/images/Flechas.png", (Rectangle){0,0,64,64});
+    setTextureCropped(&flechaTexture, "resources/images/Flechas.png", (Rectangle){0,0,64,64});
     pisoTexture = LoadTexture("resources/images/cave_floor.png");
     paredeTexture = LoadTexture("resources/images/tijolos.png");
     pedraTexture = LoadTexture("resources/images/pedra.png");
@@ -113,7 +113,7 @@ void boss_fight()
     // Inicializando as flechas
     for(int i = 0; i < flechas_no_save; i++){
         flechas[i].ativa = false;
-        flechas[i].textura = flechasTexture;
+        flechas[i].sprite = spriteConstructor(flechaTexture, 40, 7, 1);
     }
     // -------------------------------- //
 
@@ -232,11 +232,6 @@ void logica_boss_fight(Personagem* xala, Personagem* boss, Projetil flecha[], Re
         telaAtual = TELA_FRACASSO;
     }
 
-    if(CheckCollisionPointRec(xala->posicao, portalCollision)) {
-        telaAtual = TELA_MENU;
-        save();
-    }
-    
 
     // ----------- ATUALIZAÇÃO DE XALA -------------//
     movimentar(xala);

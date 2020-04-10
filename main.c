@@ -17,10 +17,10 @@
 #include "telas/menu/selecao_mapa.c"
 #include "telas/menu/menu.c"
 #include "telas/menu/configuracao.c"
-#include "telas/fases/fase_1.c"
+/* #include "telas/fases/fase_1.c"
 #include "telas/fases/fase_2.c"
 #include "telas/fases/fase_3.c"
-#include "telas/fases/boss_fight.c"
+#include "telas/fases/boss_fight.c" */
 #include "telas/telaFracasso.c"
 #include "telas/telaPausa.c"
 
@@ -44,7 +44,7 @@ int main(){
     initMusic();
     
     //TEXTURE
-    flechasTexture = LoadTexture("resources/images/flechas.png");
+    flechaTexture = LoadTexture("resources/images/flecha.png");
     xalaTexture = LoadTexture("resources/images/personagem.png");
     inimigoTexture = LoadTexture("resources/images/inimigo.png");
     //HUD
@@ -66,11 +66,11 @@ int main(){
             case TELA_CONFIG:       telaConfiguracao(); break;
             case TELA_FRACASSO:     telaFracasso(); break;
             case TELA_SEL_MAPA:     selecao_de_mapa(); break;
-            case TELA_FASE_1:       fase_1(); break;
+            /* case TELA_FASE_1:       fase_1(); break;
             case TELA_FASE_2:       fase_2(); break;
-            case TELA_FASE_3:       fase_3(); break;
+            case TELA_FASE_3:       fase_3(); break; */
             case TELA_FASE_CUSTOM:  fase_custom(); break;
-            case BOSS_FIGHT:        boss_fight(); break;
+            /* case BOSS_FIGHT:        boss_fight(); break; */
         }
     }
     

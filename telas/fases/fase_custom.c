@@ -33,10 +33,9 @@ void fase_custom(){
     //TEXTURAS DA FASE
     pisoTexture = LoadTexture("resources/images/marmore.png");
     paredeTexture = LoadTexture("resources/images/pedra_brilhante.png");
-    portalTexture = LoadTexture("resources/images/portal.png");
     
     for (int i = 0; i < MAX_FLECHAS; i++){
-        flecha[i].textura = flechasTexture;
+        flecha[i].sprite = spriteConstructor(flechaTexture, 40, 7, 1);
         flecha[i].ativa = false;
     }
 

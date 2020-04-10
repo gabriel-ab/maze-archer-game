@@ -6,10 +6,14 @@
 void mira(Personagem fulano, Projetil *bala, Camera2D cam)
 {
     bala->posicao = fulano.posicao;
+    #ifdef _WIN32
+        int posMouseX = (GetMouseX() -cam.offset.x);
+        int posMouseY = (GetMouseY() -cam.offset.y);
+    #elif __linux__
+        int posMouseX = (GetMouseX() +cam.target.x -cam.offset.x);
+        int posMouseY = (GetMouseY() +cam.target.y -cam.offset.y);
+    #endif
 
-    int posMouseX = (GetMouseX() -cam.offset.x);
-    int posMouseY = (GetMouseY() -cam.offset.y);
-    
     int deltaY = posMouseY -fulano.posicao.y;
     int deltaX = posMouseX -fulano.posicao.x;
 
@@ -46,7 +50,7 @@ int colisaoProjetil_mapa(Projetil *bala, Rectangle *MAPA, int tamMapa)
 {
     for( int i = 0; i < tamMapa; i++)
     {
-       if( CheckCollisionCircleRec(bala->posicao,10,MAPA[i]))
+       if( CheckCollisionCircleRec(bala->posicao,2,MAPA[i]))
        {
            bala->velocidade = (Vector2){0,0};
            bala->ativa = false;

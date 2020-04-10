@@ -96,12 +96,21 @@ void selecao_de_mapa(){
             ClearBackground(BLACK);
             drawMenuBackground(WHITE);
             DrawRectangleGradientV(0,0,tela.width, tela.height, (Color){150,150,150,100}, (Color){0,0,0,100});
-
                 BeginMode2D(rolador);
                 for (int i = first_item; i < n_fases; i++)
                 {
                     drawButton((Rectangle){tela.width/6, 240+ (i-2)*60, 240, 30}, arquivos[i], seletor == i);
-                    if (CheckCollisionPointRec((Vector2){mousePos.x, mousePos.y +rolador.target.y} ,(Rectangle){tela.width/6, 240+ (i-2)*60, 240, 30}))
+                    if (CheckCollisionPointRec(
+                        (Vector2){
+                            mousePos.x, 
+                            mousePos.y +rolador.target.y
+                        },
+                        (Rectangle){
+                            tela.width/6 -120, 
+                            240+ (i-2)*60 -15, 
+                            240, 
+                            30
+                        }))
                     {
                         seletor = i;
                         if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) confirma = true;

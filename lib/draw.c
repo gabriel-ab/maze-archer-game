@@ -25,14 +25,16 @@ void drawFlecha(Projetil flecha[], Personagem fulano) {
     {
         if(i >= projetil_atual){
             if(i != projetil_atual || mirando ){
-            DrawTexturePro(flecha[i].textura,
-                (Rectangle){0,28,64,8},
-                (Rectangle){
-                    flecha[i].posicao.x,
-                    flecha[i].posicao.y,
-                    64, 6},
-                (Vector2){48,2},
-                flecha[i].angulo,WHITE);
+                DrawTexturePro(flecha[i].sprite.textura,
+                    flecha[i].sprite.recorte,
+                    (Rectangle){
+                        flecha[i].posicao.x,
+                        flecha[i].posicao.y,
+                        flecha[i].sprite.recorte.width,
+                        flecha[i].sprite.recorte.height},
+                    (Vector2){38, 3.5},
+                    flecha[i].angulo,
+                    WHITE);
             }
         }
     }

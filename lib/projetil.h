@@ -12,9 +12,9 @@
         RESGATAVEL,
         INATIVA
     }Projetil_status;
-    typedef struct projetil
-    {
-        Texture2D textura;
+
+    typedef struct projetil{
+        Sprite sprite;
         Vector2 posicao;
         Vector2 velocidade;
         float angulo;
