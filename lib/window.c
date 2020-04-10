@@ -1,4 +1,4 @@
-#include "tela.h"
+#include "window.h"
 
 void telaCheia(void){
     if(!Is_Fullscreen){

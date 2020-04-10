@@ -1,8 +1,10 @@
 #include <raylib.h>
 #include <stdio.h>
 
-#include "lib/functions.h"
-#include "lib/tela.h"
+#include "lib/object.h"
+#include "lib/screens.h"
+#include "lib/draw.h"
+#include "lib/window.h"
 #include "lib/data.h"
 
 int main()

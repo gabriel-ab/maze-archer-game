@@ -1,6 +1,6 @@
-#ifndef TELA_H
+#ifndef WINDOW_H
+#define WINDOW_H
 #include <raylib.h>
-#define TELA_H
 
 //********CONFIGURAÇÔES DE TELA*********
 #define larguraTela 800

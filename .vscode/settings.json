@@ -9,6 +9,7 @@
 		"**/*.exe": true,
 	},
 	"files.associations": {
-		"tela.h": "c"
+		"window.h": "c",
+		"screens.h": "c"
 	}
 }
