@@ -1,7 +1,12 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 #include <raylib.h>
-#include "tela.h"
+#include "data.h"
+
+// ESPACAMENTOS DE TEXTO
+#define ESPACAMENTO_P1 20
+#define ESPACAMENTO_P2 30
+#define ESPACAMENTO_P3 40
 
 #define paredeH3 (Rectangle) { 0, 0, 32, 128 }
 #define paredeV3 (Rectangle) { 0, 0, 128, 32 }
@@ -36,6 +41,7 @@ void desenhaTelaAjuda(void);
 void telaOpcoes(int *tipo, Mapa *fase);
 void telaBotaoDireito(int *opcao);
 int telaSair(Mapa fase);
+Objeto selecionarObjeto(Mapa fase, Camera2D camera);
 void CheckFileOnScreen(Mapa *fase);
 
 #endif

@@ -1,23 +1,16 @@
 #include <raylib.h>
 #include <stdio.h>
 
-// ESPACAMENTOS DE TEXTO
-#define ESPACAMENTO_P1 20
-#define ESPACAMENTO_P2 30
-#define ESPACAMENTO_P3 40
-
-// CONFIGURAÇÕES DO PROGRAMA
-#define MAX_RETANGULOS 100
-#define MAX_ITENS 50
-#define MAX_INIMIGOS 100
-
-#include "lib/mapa.h"
+#include "lib/functions.h"
 #include "lib/tela.h"
-#include "lib/data.c"
-#include "lib/functions.c"
+#include "lib/data.h"
 
 int main()
 {
+    tela = (Rectangle){larguraTela/3, alturaTela/3, larguraTela, alturaTela};
+    telaAnterior = (Rectangle){larguraTela/3, alturaTela/3, larguraTela, alturaTela};
+    Is_Fullscreen = 0;
+    posCam = (Vector2){0,0};
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 
     InitWindow(tela.width, tela.height, "Criador de fases");
