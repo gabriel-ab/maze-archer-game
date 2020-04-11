@@ -30,6 +30,7 @@ int main()
         for (int i = 0; i < MAX_ITENS; i++){
             fase.flecha[i] = (Vector2){0,0};
             fase.vida[i] = (Vector2){0,0};
+            fase.portal[i] = (Vector2){0,0};
         }
         for (int i = 0; i < MAX_INIMIGOS; i++) fase.inimigo[i] = (Vector2){0,0};
 
@@ -38,6 +39,7 @@ int main()
         fase.vida_atual = 0;
         fase.inimigo_atual = 0;
         fase.flecha_atual = 0; 
+        fase.portal_atual = 0; 
         fase.inicio = (Vector2){0,0};
         fase.fim = (Vector2){0,0};
     //======================================================
@@ -59,7 +61,7 @@ int main()
     Objeto selecionado = {-1,0};
     // TO DO se o selecionado for deletado toda a sequencia move seu indice em -1
 
-    SetTargetFPS(120);
+    SetTargetFPS(60);
 
     SetExitKey(0);
 
@@ -147,16 +149,6 @@ int main()
             case PISO:
                 fase.piso[fase.piso_atual++] = retangulo;
                 break;
-            case INIMIGO:
-                fase.inimigo[fase.inimigo_atual++] = mousePos;
-                break;
-            case VIDA:
-                fase.vida[fase.vida_atual++] = mousePos;
-                break;
-            case FLECHA:
-                fase.flecha[fase.flecha_atual++] = mousePos;
-                break;
-
             }
         }
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
@@ -176,6 +168,9 @@ int main()
                     break;
                 case FLECHA:
                     fase.flecha[fase.flecha_atual++] = mousePos;
+                    break;
+                case PORTAL:
+                    fase.portal[fase.portal_atual++] = mousePos;
                     break;
                 }
             }
@@ -208,33 +203,33 @@ int main()
             switch (tipo)
             {
             case PAREDE:
-                if (fase.parede_atual > 0)
-                {
+                if (fase.parede_atual > 0){
                     fase.parede[--fase.parede_atual] = (Rectangle){0, 0, 0, 0};
                 }
                 break;
             case PISO:
-                if (fase.piso_atual > 0)
-                {
+                if (fase.piso_atual > 0){
                     fase.piso[--fase.piso_atual] = (Rectangle){0, 0, 0, 0};
                 }
                 break;
             case INIMIGO:
-                if (fase.inimigo_atual > 0)
-                {
+                if (fase.inimigo_atual > 0){
                     fase.inimigo[--fase.inimigo_atual] = (Vector2){0, 0};
                 }
                 break;
             case VIDA:
-                if (fase.vida_atual > 0)
-                {
+                if (fase.vida_atual > 0){
                     fase.vida[--fase.vida_atual] = (Vector2){0, 0};
                 }
                 break;
             case FLECHA:
-                if (fase.flecha_atual > 0)
-                {
+                if (fase.flecha_atual > 0){
                     fase.flecha[--fase.flecha_atual] = (Vector2){0, 0};
+                }
+                break;
+            case PORTAL:
+                if (fase.portal_atual > 0){
+                    fase.portal[--fase.portal_atual] = (Vector2){0, 0};
                 }
                 break;
             }
@@ -260,32 +255,23 @@ int main()
 
                 desenhaGrid();
 
-                for (int i = 0; i < fase.piso_atual; i++)
-                {
-                    DrawRectangleRec(fase.piso[i], (Color){0,30,0,255});
-                    DrawRectangleLinesEx(fase.piso[i], 2, (Color){80, 200, 80, 255});
+                for (int i = 0; i < fase.piso_atual; i++){
+                    drawFloor(fase.piso[i]);
                 }
-                for (int i = 0; i < fase.parede_atual; i++)
-                {
-                    DrawRectangleRec(fase.parede[i], (Color){0,0,30,255});
-                    DrawRectangleLinesEx(fase.parede[i], 2, (Color){80, 80, 200, 255});
+                for (int i = 0; i < fase.parede_atual; i++){
+                    drawWall(fase.parede[i]);
                 }
-                for (int i = 0; i < fase.inimigo_atual; i++)
-                {
-                    DrawCircleV(fase.inimigo[i], 8, PURPLE);
-                    DrawCircleV(fase.inimigo[i], 4, BLACK);
+                for (int i = 0; i < fase.inimigo_atual; i++){
+                    drawEnemie(fase.inimigo[i]);
                 }
-                for (int i = 0; i < fase.vida_atual; i++)
-                {
-                    DrawLineEx((Vector2){fase.vida[i].x, fase.vida[i].y -16}, (Vector2){fase.vida[i].x, fase.vida[i].y +16}, 8, RED);
-                    DrawLineEx((Vector2){fase.vida[i].x -16, fase.vida[i].y}, (Vector2){fase.vida[i].x +16, fase.vida[i].y}, 8, RED);
+                for (int i = 0; i < fase.vida_atual; i++){
+                    drawLife(fase.vida[i]);
                 }
-                for (int i = 0; i < fase.flecha_atual; i++)
-                {
-                    DrawCircleSector((Vector2){fase.flecha[i].x,fase.flecha[i].y -24}, 8, 120, 240,3,GREEN);
-                    DrawRectangle(fase.flecha[i].x -2, fase.flecha[i].y -32,4,32,BROWN);
-                    DrawCircleV(fase.flecha[i], 8, DARKGREEN);
-                    DrawCircleV(fase.flecha[i], 4, GREEN);
+                for (int i = 0; i < fase.flecha_atual; i++){
+                    drawArrow(fase.flecha[i]);
+                }
+                for (int i = 0; i < fase.portal_atual; i++){
+                    drawPortal(fase.portal[i]);
                 }
                 
                 switch (selecionado.tipo)
@@ -314,33 +300,26 @@ int main()
 
                 DrawCircle(0, 0, 2, GREEN);
 
-                DrawRectangleRec((Rectangle){fase.inicio.x - 8, fase.inicio.y - 8, 16, 16}, DARKBLUE);
-                DrawCircleV(fase.inicio, 5, BLUE);
-                DrawText("INICIO", fase.inicio.x - 16, fase.inicio.y + 10, 12, WHITE);
-
-                DrawRectangleRec((Rectangle){fase.fim.x - 8, fase.fim.y - 8, 16, 16}, DARKBLUE);
-                DrawCircleV(fase.fim, 5, BLUE);
-                DrawText("FINAL", fase.fim.x - 15, fase.fim.y + 10, 12, WHITE);
+                drawInfoPoint("INICIO", fase.inicio);
+                drawInfoPoint("FINAL", fase.fim);
 
             EndMode2D();
 
-            DrawText(FormatText("Numero de paredes: %i", fase.parede_atual),    10, 10 +0*ESPACAMENTO_P1, 20, tipo == PAREDE ? GREEN :DARKGREEN);
-            DrawText(FormatText("Numero de pisos: %i",  fase.piso_atual),       10, 10 +1*ESPACAMENTO_P1, 20, tipo == PISO ? GREEN :DARKGREEN);
-            DrawText(FormatText("Numero de inimigos: %i", fase.inimigo_atual),  10, 10 +2*ESPACAMENTO_P1, 20, tipo == INIMIGO ? GREEN :DARKGREEN);
-            DrawText(FormatText("Numero de vidas: %i", fase.vida_atual),        10, 10 +3*ESPACAMENTO_P1, 20, tipo == VIDA ? GREEN :DARKGREEN);
-            DrawText(FormatText("Numero de flechas: %i", fase.flecha_atual),    10, 10 +4*ESPACAMENTO_P1, 20, tipo == FLECHA ? GREEN :DARKGREEN);
+            DrawText(FormatText("Paredes: %i", fase.parede_atual),    10, 10 +0*ESPACAMENTO_P1, 20, tipo == PAREDE ? GREEN :DARKGREEN);
+            DrawText(FormatText("Pisos: %i",  fase.piso_atual),       10, 10 +1*ESPACAMENTO_P1, 20, tipo == PISO ? GREEN :DARKGREEN);
+            DrawText(FormatText("Inimigos: %i", fase.inimigo_atual),  10, 10 +2*ESPACAMENTO_P1, 20, tipo == INIMIGO ? GREEN :DARKGREEN);
+            DrawText(FormatText("Vidas: %i", fase.vida_atual),        10, 10 +3*ESPACAMENTO_P1, 20, tipo == VIDA ? GREEN :DARKGREEN);
+            DrawText(FormatText("Flechas: %i", fase.flecha_atual),    10, 10 +4*ESPACAMENTO_P1, 20, tipo == FLECHA ? GREEN :DARKGREEN);
+            DrawText(FormatText("Portais: %i", fase.portal_atual),    10, 10 +5*ESPACAMENTO_P1, 20, tipo == PORTAL ? GREEN :DARKGREEN);
 
-            DrawText((FormatText("Zoom: %.2f", camera.zoom)), 10, 10 +5*ESPACAMENTO_P1, 20, LIGHTGRAY);
-            DrawText((FormatText("Selecionado: %i %i", selecionado.tipo, selecionado.indice)), 10, 10 +6*ESPACAMENTO_P1, 20, LIGHTGRAY);
+            DrawText((FormatText("Zoom: %.2f", camera.zoom)), 10, 10 +7*ESPACAMENTO_P1, 20, LIGHTGRAY);
+            DrawText((FormatText("Selecionado: %i %i", selecionado.tipo, selecionado.indice)), 10, 10 +8*ESPACAMENTO_P1, 20, LIGHTGRAY);
 
             if (IsKeyDown(KEY_F1))
-            {
                 desenhaTelaAjuda();
-            }
-            if (IsKeyUp(KEY_F1))
-            {
+            else
                 DrawText("Presione F1 para Ajuda", tela.width - 240, 10, 20, LIGHTGRAY);
-            }
+
             DrawFPS(10,tela.height - 40);
 
         EndDrawing();

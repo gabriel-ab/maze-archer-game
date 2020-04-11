@@ -23,19 +23,20 @@
 #define piso16_6 (Rectangle) { 0, 0, 16 * 32, 6 * 32 }
 #define piso6_16 (Rectangle) { 0, 0, 6 * 32, 16 * 32 }
 
+typedef enum Opcoes{
+    OPCAO_INICIO = 0,
+    OPCAO_FIM,
+}Opcoes;
+
 typedef enum TiposObjetos{
     NENHUM = -1,
     PAREDE,
     PISO,
     INIMIGO,
     VIDA,
-    FLECHA
+    FLECHA,
+    PORTAL
 } TiposObjetos;
-
-typedef enum Opcoes{
-    OPCAO_INICIO = 0,
-    OPCAO_FIM,
-} Opcoes;
 
 typedef struct Mapa
 {
@@ -54,14 +55,14 @@ typedef struct Mapa
     Vector2 flecha[MAX_ITENS];
     int flecha_atual;
 
+    Vector2 portal[MAX_ITENS];
+    int portal_atual;
+
     Vector2 inicio;
     Vector2 fim;
 }Mapa;
 
-typedef struct Objeto{
-    int tipo;
-    int indice;
-}Objeto;
+
 
 void carregar(const char *endereco, Mapa *fase);
 void salvar(Mapa fase);

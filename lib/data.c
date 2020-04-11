@@ -48,43 +48,47 @@ void carregar(const char *endereco, Mapa *fase){
     for( int i = 0; i < fase->flecha_atual; i++){
         fscanf(arquivo,"%f %f\n", &fase->flecha[i].x, &fase->flecha[i].y);
     }
+    fscanf(arquivo,"portais %i\n", &fase->portal_atual);
+    for( int i = 0; i < fase->portal_atual; i++){
+        fscanf(arquivo,"%f %f\n", &fase->portal[i].x, &fase->portal[i].y);
+    }
     fclose(arquivo);
 }
 void salvar(Mapa fase){
+
     Texture fundo = LoadTextureFromImage(GetScreenData());
     FILE *arquivo;
     char nome_arquivo[64];
-    int letra = 0;
+    int letra_atual = 0;
     for (int i = 0; i < 64; i++) nome_arquivo[i] = 0;
-    bool confirma = false;
     bool salvar = false;
     Rectangle retangulo;
     int fps = 0;
-    while(!confirma){
-        
-        if(GetKeyPressed() != -1){
-            nome_arquivo[letra++] = GetKeyPressed();
-        }
-        if(IsKeyDown(KEY_BACKSPACE) && letra > 0 && ++fps > 10){
-            nome_arquivo[--letra] = 0;
-            fps = 0;
-        }
-
-        retangulo = (Rectangle){tela.width/2 -MeasureText(nome_arquivo,20)/2, tela.height/3 + 30, MeasureText(nome_arquivo,20) +10, 30};
+    char letra = ' ';
+    while(!salvar){
         BeginDrawing();
             ClearBackground(BLACK);
-            for(int i = -5; i <= 0; i++)  DrawTexture(fundo,i,0,(Color){255,255,255,50});
-            for(int i = 5; i >= 0; i--)  DrawTexture(fundo,i,0,(Color){255,255,255,50});
+            for(int i = -10; i <= 10; i += 2)  DrawTexture(fundo, i, 0, Fade(WHITE, 0.5));
+            for(int i = 10; i >= -10; i -= 2)  DrawTexture(fundo, 0, i, Fade(WHITE, 0.5));
             DrawText("Nome do Arquivo", tela.width/2 - MeasureText("Nome do Arquivo",20)/2, tela.height/3,20,WHITE);
             DrawRectangleLinesEx(retangulo,1,WHITE);
             DrawText(nome_arquivo,retangulo.x +5, retangulo.y +2,20,YELLOW);
         EndDrawing();
 
-        if(IsKeyPressed(KEY_ESCAPE)) confirma = true;
+        if(letra = GetKeyPressed()){
+            nome_arquivo[letra_atual++] = letra;
+        }
+
+        if(++fps > 4 && letra_atual > 0 && IsKeyDown(KEY_BACKSPACE)){
+            nome_arquivo[--letra_atual] = 0;
+            fps = 0;
+        }
+        retangulo = (Rectangle){tela.width/2 -MeasureText(nome_arquivo,20)/2, tela.height/3 + 30, MeasureText(nome_arquivo,20) +10, 30};
+
+        if(IsKeyPressed(KEY_ESCAPE)) break;
         
         if(IsKeyPressed(KEY_ENTER)){
             salvar = true;
-            confirma = true;
         } 
     }
 
@@ -122,9 +126,15 @@ void salvar(Mapa fase){
         {
             fprintf(arquivo, "%.f %.f\n", fase.flecha[i].x, fase.flecha[i].y);
         }
+        fprintf(arquivo, "portais %i\n",fase.portal_atual);
+        for (int i = 0; i < fase.portal_atual; i++)
+        {
+            fprintf(arquivo, "%.f %.f\n", fase.portal[i].x, fase.portal[i].y);
+        }
         fclose(arquivo);
     }
 }
+// Antigo, não mais usado
 void exportar(Mapa fase){
     FILE *arquivo;
 

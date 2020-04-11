@@ -26,6 +26,10 @@ void telaOpcoes(int *tipo, Mapa *fase)
         tela.width / 2 - MeasureText("FLECHA", 20) / 2,
         tela.height / 2 + 5*ESPACAMENTO_P2,
         MeasureText("FLECHA", 20),
+        20,
+        tela.width / 2 - MeasureText("PORTAL", 20) / 2,
+        tela.height / 2 + 6*ESPACAMENTO_P2,
+        MeasureText("PORTAL", 20),
         20
     };
 
@@ -38,17 +42,28 @@ void telaOpcoes(int *tipo, Mapa *fase)
         BeginDrawing();
             ClearBackground(BLACK);
             DrawTexture(fundo, 0,0, (Color){255,255,255,100});
-            DrawText("SELECIONE O TIPO DE OBJETO:", tela.width / 2 - MeasureText("SELECIONE O TIPO DE RETANGULO:", 30) / 2, tela.height / 2.8, 30, GREEN);
-            DrawText("PAREDE", botao[0].x, botao[0].y, 20, DARKGREEN);
-            DrawText("PISO", botao[1].x, botao[1].y, 20, DARKGREEN);
-            DrawText("INIMIGO", botao[2].x, botao[2].y, 20, DARKGREEN);
-            DrawText("VIDA", botao[3].x, botao[3].y, 20, DARKGREEN);
-            DrawText("FLECHA", botao[4].x, botao[4].y, 20, DARKGREEN);
+            DrawText("____OBJETOS____", tela.width / 2 - MeasureText("____OBJETOS____", 30) / 2, tela.height / 2.8, 30, GREEN);
+            DrawText("PAREDE",  botao[0].x, botao[0].y, 20, opcao == 0 ? GREEN: DARKGREEN);
+            DrawText("PISO",    botao[1].x, botao[1].y, 20, opcao == 1 ? GREEN: DARKGREEN);
+            DrawText("INIMIGO", botao[2].x, botao[2].y, 20, opcao == 2 ? GREEN: DARKGREEN);
+            DrawText("VIDA",    botao[3].x, botao[3].y, 20, opcao == 3 ? GREEN: DARKGREEN);
+            DrawText("FLECHA",  botao[4].x, botao[4].y, 20, opcao == 4 ? GREEN: DARKGREEN);
+            DrawText("PORTAL",  botao[5].x, botao[5].y, 20, opcao == 5 ? GREEN: DARKGREEN);
             DrawRectangleLines(tela.width / 2 -100, tela.height/2 +25 +opcao*ESPACAMENTO_P2, 200, 30, WHITE);
         EndDrawing();
 
-        if (IsKeyPressed(KEY_UP) && opcao > 0) opcao--;
-        if (IsKeyPressed(KEY_DOWN) && opcao < sizeof(botao)/sizeof(Rectangle) -1) opcao++;
+        if (IsKeyPressed(KEY_UP)) {
+            if(opcao > 0)
+                opcao--;
+            else
+                opcao = sizeof(botao)/sizeof(Rectangle) -1;
+        }
+        if (IsKeyPressed(KEY_DOWN)) {
+            if(opcao < sizeof(botao)/sizeof(Rectangle) -1)
+                opcao++;
+            else
+                opcao = 0;
+        }
         if (IsKeyPressed(KEY_ENTER)) confirma = 1;
         if (IsKeyPressed(KEY_ESCAPE)) break;
 
@@ -68,47 +83,44 @@ void telaOpcoes(int *tipo, Mapa *fase)
 
         if(confirma){
             switch(opcao){
-                case 0: *tipo = PAREDE; break;
-                case 1: *tipo = PISO; break;
-                case 2: *tipo = INIMIGO; break;
-                case 3: *tipo = VIDA; break;
-                case 4: *tipo = FLECHA; break;
+                case PAREDE:  *tipo = PAREDE; break;
+                case PISO:    *tipo = PISO; break;
+                case INIMIGO: *tipo = INIMIGO; break;
+                case VIDA:    *tipo = VIDA; break;
+                case FLECHA:  *tipo = FLECHA; break;
+                case PORTAL:  *tipo = PORTAL; break;
             }
         }
     }
 }
 
-
-
 int telaSair(Mapa fase)
 {
     Texture2D fundo = LoadTextureFromImage(GetScreenData());
-
-    #ifndef TEXT_BOTOES
-        #define TEXT_BOTOES
-        #define TEXT_B1 "SALVAR MAPA"
-        #define TEXT_B2 "EXPORTAR CÓDIGO"
-        #define TEXT_B3 "SAIR"
-        #define TEXT_B4 "VOLTAR"
-        #define DIST_BOTOES 30 //distancia entre cada botão
-    #endif
+    
+    const char *text_B1 = "SALVAR MAPA";
+    const char *text_B2 = "EXPORTAR CÓDIGO";
+    const char *text_B3 = "SAIR";
+    const char *text_B4 = "VOLTAR";
+    const int DIST_BOTOES = 30; //distancia entre cada botão
+    
 
     Rectangle botao[] = {
-        tela.width / 2 - MeasureText(TEXT_B1, 20) / 2,
+        tela.width / 2 - MeasureText(text_B1, 20) / 2,
         tela.height / 2 + DIST_BOTOES,
-        MeasureText(TEXT_B1, 20),
+        MeasureText(text_B1, 20),
         20,
-        tela.width / 2 - MeasureText(TEXT_B2, 20) / 2,
+        tela.width / 2 - MeasureText(text_B2, 20) / 2,
         tela.height / 2 + 2*DIST_BOTOES,
-        MeasureText(TEXT_B2, 20),
+        MeasureText(text_B2, 20),
         20,
-        tela.width / 2 - MeasureText(TEXT_B3, 20) / 2,
+        tela.width / 2 - MeasureText(text_B3, 20) / 2,
         tela.height / 2 + 3*DIST_BOTOES,
-        MeasureText(TEXT_B3, 20),
+        MeasureText(text_B3, 20),
         20,
-        tela.width / 2 - MeasureText(TEXT_B4, 20) / 2,
+        tela.width / 2 - MeasureText(text_B4, 20) / 2,
         tela.height / 2 + 4*DIST_BOTOES,
-        MeasureText(TEXT_B4, 20),
+        MeasureText(text_B4, 20),
         20
     };
 
@@ -121,15 +133,25 @@ int telaSair(Mapa fase)
             DrawTexture(fundo, 0, 0, (Color){255, 255, 255, 100});
 
             DrawText("DESEJA SAIR?", tela.width / 2 - MeasureText("DESEJA SAIR?", 30) / 2, tela.height / 2.8, 30, RED);
-            DrawText(TEXT_B1, tela.width / 2 - MeasureText(TEXT_B1, 20) / 2, tela.height / 2 + 1*DIST_BOTOES, 20, (Color){255,80,80,255});
-            DrawText(TEXT_B2, tela.width / 2 - MeasureText(TEXT_B2, 20) / 2, tela.height / 2 + 2*DIST_BOTOES, 20, (Color){255,80,80,255});
-            DrawText(TEXT_B3, tela.width / 2 - MeasureText(TEXT_B3, 20) / 2, tela.height / 2 + 3*DIST_BOTOES, 20, (Color){255,80,80,255});
-            DrawText(TEXT_B4, tela.width / 2 - MeasureText(TEXT_B4, 20) / 2, tela.height / 2 + 4*DIST_BOTOES, 20, (Color){255,80,80,255});
+            DrawText(text_B1, tela.width / 2 - MeasureText(text_B1, 20) / 2, tela.height / 2 + 1*DIST_BOTOES, 20, (Color){255,80,80,255});
+            DrawText(text_B2, tela.width / 2 - MeasureText(text_B2, 20) / 2, tela.height / 2 + 2*DIST_BOTOES, 20, (Color){255,80,80,255});
+            DrawText(text_B3, tela.width / 2 - MeasureText(text_B3, 20) / 2, tela.height / 2 + 3*DIST_BOTOES, 20, (Color){255,80,80,255});
+            DrawText(text_B4, tela.width / 2 - MeasureText(text_B4, 20) / 2, tela.height / 2 + 4*DIST_BOTOES, 20, (Color){255,80,80,255});
             DrawRectangleLines(tela.width / 2 -120, tela.height/2 +(opcao +1)*DIST_BOTOES -5, 240, 30, WHITE);
         EndDrawing();
 
-        if (IsKeyPressed(KEY_UP) && opcao > 0) opcao--;
-        if (IsKeyPressed(KEY_DOWN) && opcao < 3) opcao++;
+        if (IsKeyPressed(KEY_UP)) {
+            if(opcao > 0)
+                opcao--;
+            else
+                opcao = sizeof(botao)/sizeof(Rectangle) -1;
+        }
+        if (IsKeyPressed(KEY_DOWN)) {
+            if(opcao < sizeof(botao)/sizeof(Rectangle) -1)
+                opcao++;
+            else
+                opcao = 0;
+        }
         if (IsKeyPressed(KEY_ENTER)) confirma = 1;
 
         for(int i = 0; i < 4; i++){

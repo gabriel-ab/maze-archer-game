@@ -49,3 +49,45 @@ void desenhaTelaAjuda(void)
     DrawText(AJUDA_11, tela.width / 2 - MeasureText(AJUDA_11, 20) / 2, tela.height -20, 20, (Color){200, 200, 200, 255});
 }
 
+void drawFloor(Rectangle floor){
+    DrawRectangleRec(floor, (Color){0,30,0,255});
+    DrawRectangleLinesEx(floor, 2, (Color){80, 200, 80, 255});
+}
+void drawWall(Rectangle wall){
+    DrawRectangleRec(wall, (Color){0,0,30,255});
+    DrawRectangleLinesEx(wall, 2, (Color){80, 80, 200, 255});
+}
+void drawEnemie(Vector2 enemie){
+    DrawCircleV(enemie, 8, PURPLE);
+    DrawCircleV(enemie, 4, BLACK);
+}
+void drawArrow(Vector2 arrow){
+    DrawCircleSector((Vector2){arrow.x,arrow.y -24}, 8, 120, 240,3,GREEN);
+    DrawRectangle(arrow.x -2, arrow.y -32,4,32,BROWN);
+    DrawCircleV(arrow, 8, DARKGREEN);
+    DrawCircleV(arrow, 4, GREEN);
+}
+void drawLife(Vector2 life){
+    DrawLineEx((Vector2){life.x, life.y -16}, (Vector2){life.x, life.y +16}, 8, RED);
+    DrawLineEx((Vector2){life.x -16, life.y}, (Vector2){life.x +16, life.y}, 8, RED);
+}
+void drawPortal(Vector2 portal){
+    DrawRectangleRounded(
+        (Rectangle){
+            portal.x -16,
+            portal.y -24,
+            32,
+            48
+        },
+        1.0,
+        20,
+        Fade(BLUE,0.5)
+    );
+    DrawCircleGradient(portal.x ,portal.y, 14, BLANK, LIGHTGRAY);
+}
+
+void drawInfoPoint(char *text, Vector2 pos){
+    DrawRectangleRec((Rectangle){pos.x - 8, pos.y - 8, 16, 16}, DARKBLUE);
+    DrawCircleV(pos, 5, BLUE);
+    DrawText(text, pos.x - 16, pos.y + 10, 12, WHITE);
+}
