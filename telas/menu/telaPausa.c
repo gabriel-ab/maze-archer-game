@@ -1,6 +1,6 @@
-#include "../lib/tela.h"
-#include "../lib/botoes.h"
-#include "../lib/som.h"
+#include "../../inc/tela.h"
+#include "../../inc/botoes.h"
+#include "../../inc/som.h"
 
 void telaPausa();
 void drawtelaPausa(Rectangle botoes[], int seletor);
@@ -17,27 +17,31 @@ void telaPausa() {
     UnloadImage(image);
     setShader("resources/shaders/blur.fs");
 
+    Rectangle buttons[4];
+    for (int i = 0; i < 4; i++) {
+        buttons[i] = (Rectangle) {
+            tela.width/2 - 100, tela.height/8*i + tela.height/2, 200, 50};
+    }
+    
     static int seletor = 0;
     
     while(isPaused) {
-        if (IsKeyPressed(KEY_UP) && seletor > 0)   seletor--;
-        if (IsKeyPressed(KEY_DOWN) && seletor < 3) seletor++;
+        menuControl(0,3, &seletor);
         
-        drawtelaPausa(getBotoesPausa(), seletor);
-        logicatelaPausa(getBotoesPausa(), &seletor);
+        drawtelaPausa(buttons, seletor);
+        logicatelaPausa(buttons, &seletor);
 
-        while (telaAtual == TELA_CONFIG)
-        {
-            if(IsKeyPressed(KEY_ESCAPE)) {
-                telaAtual = telaAnterior;
-                isPaused = false;
-            }
-            telaConfiguracao();
-        }
+        if (telaAtual == TELA_CONFIG) telaConfiguracao();
     }
 }
 
 void drawtelaPausa(Rectangle botoes[], int seletor) {
+    static const char *textButtons[] = {
+        "CONTINUE",
+        "RESTART",
+        "SETTINGS",
+        "QUIT"
+    };
     BeginDrawing();
         ClearBackground(BLACK);
 
@@ -50,13 +54,9 @@ void drawtelaPausa(Rectangle botoes[], int seletor) {
             );
         EndShaderMode();
 
-        for (int i = 0; i < 4; i++)
-        {
-            DrawRectangleRec(botoes[i], seletor == i ? (Color){128,0,0, 255} : (Color){164,0,0, 255});
-            DrawRectangleLines((int)botoes[i].x-5, (int) botoes[i].y-5, (int) botoes[i].width+10, (int) botoes[i].height+10, seletor == i ? (Color){164,0,0, 255} : (Color){128,0,0, 255});
-            DrawText(textButtonsPausa[i], (int)( botoes[i].x + botoes[i].width/2 - MeasureText(textButtonsPausa[i], 20)/2), (int) botoes[i].y + 16, 20, WHITE);
+        for (int i = 0; i < 4; i++){
+            drawButtonD(textButtons[i], botoes[i], seletor == i);
         }
-        
     EndDrawing();
 }
 

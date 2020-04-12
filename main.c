@@ -2,29 +2,33 @@
 #include <raylib.h>
 #include <stdio.h>
 
-#include "lib/define.h"
-#include "lib/som.c"
-#include "lib/tela.c"
-#include "lib/personagem.c"
-#include "lib/projetil.c"
-#include "lib/movimenta.c"
-#include "lib/data.c"
-#include "lib/textura.c"
-#include "lib/draw.c"
-#include "lib/itens.c"
-
-#include "telas/fases/fase_custom.c"
-#include "telas/menu/selecao_mapa.c"
-#include "telas/menu/menu.c"
-#include "telas/menu/configuracao.c"
-/* #include "telas/fases/fase_1.c"
-#include "telas/fases/fase_2.c"
-#include "telas/fases/fase_3.c"
-#include "telas/fases/boss_fight.c" */
-#include "telas/telaFracasso.c"
-#include "telas/telaPausa.c"
+#include "inc/define.h"
+#include "inc/som.h"
+#include "inc/tela.h"
+#include "inc/personagem.h"
+#include "inc/projetil.h"
+#include "inc/fisica.h"
+#include "inc/data.h"
+#include "inc/textura.h"
+#include "inc/draw.h"
+#include "inc/itens.h"
+#include "inc/botoes.h"
 
 int main(){
+    TEMPO = 0;
+    tela = (Rectangle){100, 100, LARGURA_TELA, ALTURA_TELA};
+    larguraAnterior = LARGURA_TELA;
+    alturaAnterior = ALTURA_TELA;  
+    telaAtual = 0;
+    telaAnterior = 0;
+    is_fullscreen = false;
+    jogo_rodando = true;
+    tempo_invunerabilidade = 2;
+    vida_no_save = 3;
+    flechas_no_save = 2;
+    projetil_atual = 0;
+    segmentos_xala[0] = (Segmento){0, 0, 3};
+    segmentos_xala[1] = (Segmento){1, 0, 3};
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(tela.width, tela.height, "Untitle Dungeon Game");

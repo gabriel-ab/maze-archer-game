@@ -1,43 +1,13 @@
-#include "botoes.h"
-#include "tela.h"
+#include "../inc/botoes.h"
 
-Rectangle* getBotoesMenu() {
-    for (int i = 0; i < 4; i++)
-    {
-        botoesMenu[i] = (Rectangle) {tela.width/2 - 100, tela.height/8*i + tela.height/2, 200, 50};
+// Controls the selection between min and max, both included
+void menuControl(int min, int max, int *selection){
+    if (IsKeyPressed(KEY_UP)){
+        if (*selection > min) *selection = *selection -1;
+        else *selection = max;
     }
-    return botoesMenu;
-}
-
-Rectangle* getBotoesConfiguracao() {
-    for (int i = 0; i < 3; i++)
-    {
-        botoesConfiguracao[i] = (Rectangle) {tela.width/2 - 100, tela.height/8*i + tela.height/2, 200, 50};
+    if (IsKeyPressed(KEY_DOWN)){
+        if (*selection < max) *selection = *selection +1;
+        else *selection = min;
     }
-    return botoesConfiguracao;
-}
-
-
-Rectangle* getBotoesPausa() {
-    for (int i = 0; i < 4; i++)
-    {
-        botoesPausa[i] = (Rectangle) {tela.width/2 - 100, tela.height/8*i + tela.height/2, 200, 50};
-    }
-    return botoesPausa;
-}
-
-Rectangle* getBotoesFracasso() {
-    for (int i = 0; i < 2; i++)
-    {
-        botoesFracasso[i] = (Rectangle) {tela.width/2 - 100, tela.height/8*i + tela.height/1.4, 200, 50};
-    }
-    return botoesFracasso;
-}
-
-
-void atualizarPosicaoBotoes() {
-    getBotoesMenu();
-    getBotoesConfiguracao();
-    getBotoesPausa();
-    getBotoesFracasso();
 }

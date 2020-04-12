@@ -1,40 +1,10 @@
-#include "../../lib/som.h"
-#include "../../lib/tela.h"
-#include "../../lib/define.h"
-#include "../../lib/data.h"
+#include "../../inc/som.h"
+#include "../../inc/tela.h"
+#include "../../inc/define.h"
+#include "../../inc/data.h"
 #include <string.h>
 
-// OBS: O botão é centralizado por padrão.
-// Os pontos (x,y) definem o centro do botão
-void drawButton(Rectangle botao, const char *texto, bool selecionado){
-    DrawRectangleRec(
-        (Rectangle){
-            botao.x -botao.width/2,
-            botao.y -botao.height/2,
-            botao.width ,
-            botao.height
-        },
-        selecionado ? (Color){50,0,0, 255} : (Color){100,0,0, 255}
-    ); //Desenha o box
-    DrawRectangleLinesEx(
-        (Rectangle){
-            botao.x -botao.width/2 -5,
-            botao.y -botao.height/2 -5,
-            botao.width +10,
-            botao.height +10
-        },
-        1,
-        selecionado ? LIGHTGRAY : (Color){128,0,0, 255});
-    
-    DrawText(
-        texto,
-        botao.x -MeasureText(texto, 20)/2,
-        botao.y -botao.height/4,
-        20,
-        YELLOW
-    );
-    
-}
+
 
 void selecao_de_mapa(){
     int n_fases = 0;
@@ -99,7 +69,11 @@ void selecao_de_mapa(){
                 BeginMode2D(rolador);
                 for (int i = first_item; i < n_fases; i++)
                 {
-                    drawButton((Rectangle){tela.width/6, 240+ (i-2)*60, 240, 30}, arquivos[i], seletor == i);
+                    drawButtonD(
+                        (Rectangle){tela.width/6, 240+ (i-2)*60, 240, 30},
+                        arquivos[i],
+                        seletor == i ? RED : (Color){50,0,0, 255});
+
                     if (CheckCollisionPointRec(
                         (Vector2){
                             mousePos.x, 

@@ -1,5 +1,5 @@
-#include "itens.h"
-#include "personagem.h"
+#include "../inc/itens.h"
+
 
 void explosionCollision(Trap bomba, Personagem *fulano){
     bool hitted = true;

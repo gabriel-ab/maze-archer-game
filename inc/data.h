@@ -1,6 +1,17 @@
 #ifndef INCLUDED_SAVE_H
 #define INCLUDED_SAVE_H
+#include "personagem.h"
 #include "itens.h"
+
+//Definições Gerais para regulagem do jogo
+#define MAX_RETANGULOS 200  
+#define MAX_INIMIGOS 100    // inimigos
+#define MAX_ITENS 50        // itens do cenario
+
+char diretorio[128]; //Endereço da pasta de fases
+
+int vida_no_save;
+int flechas_no_save;
 
 typedef struct Mapa
 {

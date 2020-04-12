@@ -1,7 +1,4 @@
-#include <math.h>
-#include "projetil.h"
-#include "define.h"
-#include "som.h"
+#include "../inc/projetil.h"
 
 void mira(Personagem fulano, Projetil *bala, Camera2D cam)
 {

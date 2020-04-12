@@ -22,8 +22,7 @@ typedef struct IA{
     int atual;
 }IA;
 
-typedef struct Personagem
-{
+typedef struct Personagem{
     Sprite sprite;
     Vector2 posicao;
     Vector2 velocidade;
@@ -42,6 +41,7 @@ typedef struct Personagem
 
 
 Personagem personagemConstructor();
+Personagem inimigoContructor();
 
 void inimigoSegue(Personagem *inimigo, Vector2 coisa);
 

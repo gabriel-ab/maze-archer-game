@@ -1,12 +1,15 @@
 #include <raylib.h>
 
-#include "../../lib/personagem.h"
-#include "../../lib/movimenta.h"
-#include "../../lib/tela.h"
-#include "../../lib/define.h"
-#include "../../lib/draw.h"
+#include "../../inc/personagem.h"
+#include "../../inc/fisica.h"
+#include "../../inc/tela.h"
+#include "../../inc/define.h"
+#include "../../inc/draw.h"
 
 #define MAX_PEDRAS 50
+
+int currentFrame = 0;
+int frameCount = 0;
 
 typedef struct Pedra {
     bool ativa;

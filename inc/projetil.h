@@ -3,8 +3,11 @@
 
     #include <raylib.h>
     #include "personagem.h"
-
+    
+    #define MAX_FLECHAS 10
     #define VELOCIDADE_Projetil 20;
+
+    int projetil_atual;
 
     typedef enum Projetil_status{
         MIRANDO = 0,

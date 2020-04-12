@@ -1,6 +1,4 @@
-#include <raylib.h>
-#include "tela.h"
-#include "textura.h"
+#include "../inc/textura.h"
 
 Sprite spriteConstructor(Texture textura, int largura_frame, int altura_frame, int fps){
     Sprite sprite = { 0 };

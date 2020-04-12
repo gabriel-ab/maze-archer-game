@@ -7,12 +7,11 @@
 #define LARGURA_TELA 1000
 #define ALTURA_TELA 600
 
-Rectangle tela = {100, 100, LARGURA_TELA, ALTURA_TELA};
-int larguraAnterior = LARGURA_TELA;
-int alturaAnterior = ALTURA_TELA;
-
-int telaAtual = 0;
-int telaAnterior = 0;
+Rectangle tela;
+int larguraAnterior;
+int alturaAnterior;  
+int telaAtual;
+int telaAnterior;
 
 typedef enum TELAS {
     TELA_SEL_MAPA = -3,
@@ -26,7 +25,7 @@ typedef enum TELAS {
     TELA_FASE_CUSTOM = 5,
 }TELAS;
 
-bool is_fullscreen = false; 
+bool is_fullscreen; 
 
 void telaCheia();
 void atualizarCamera(Camera2D *cam, Vector2 posicao);

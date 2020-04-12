@@ -5,6 +5,9 @@
 #include "personagem.h"
 #include "projetil.h"
 
+#define ACELERACAO 0.5
+#define TAXA_ATRITO 0.1
+
 int colisaoCima(Personagem *fulano, Rectangle *MAPA, int tamMapa);
 int colisaoBaixo(Personagem *fulano, Rectangle *MAPA, int tamMapa);
 int colisaoEsquerda(Personagem *fulano, Rectangle *MAPA, int tamMapa);

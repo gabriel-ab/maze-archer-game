@@ -1,6 +1,4 @@
-#include <raylib.h>
-#include "tela.h"
-#include "define.h"
+#include "../inc/tela.h"
 
 void telaCheia()
 {

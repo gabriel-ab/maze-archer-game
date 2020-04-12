@@ -1,6 +1,5 @@
-#include "draw.h"
-#include "tela.h"
-#include "textura.h"
+#include "../inc/draw.h"
+
 
 //Função responsável por desenhar a personagem principal
 void drawXala(Personagem* xala) {
@@ -168,4 +167,54 @@ void drawHUD(int quantidadeVida, int quantidadeArrow){
 
 void drawPortal(Portal port, float size, Color color) {
     drawSprite(port.sprite, port.posicao, (Vector2){0,0}, 0, size, color);
+}
+
+// Predefined button;
+void drawButtonD(const char *text, Rectangle button, bool selected){
+    
+    DrawRectangleRec(button, selected ? (Color){192, 24, 24, 255} : (Color){128,0,0, 255});
+
+    DrawRectangleLines(
+        (int) button.x-5,
+        (int) button.y-5,
+        (int) button.width+10,
+        (int) button.height+10,
+        selected ? (Color){64,0,0, 255} : (Color){192,0,0, 255});
+    DrawText(
+        text, 
+        (int) (button.x + button.width/2 - MeasureText(text, 20)/2), 
+        (int) button.y + button.height/2 - 10,
+        20, 
+        WHITE);
+}
+
+// OBS: O botão é centralizado por padrão.
+// Os pontos (x,y) definem o centro do botão
+void drawButtonEx(const char *texto, Rectangle botao, Color cor){
+    DrawRectangleRec(
+        (Rectangle){
+            botao.x -botao.width/2,
+            botao.y -botao.height/2,
+            botao.width ,
+            botao.height
+        },
+        cor
+    ); //Desenha o box
+    DrawRectangleLinesEx(
+        (Rectangle){
+            botao.x -botao.width/2 -5,
+            botao.y -botao.height/2 -5,
+            botao.width +10,
+            botao.height +10
+        },
+        1,
+        Fade(cor, 0.5));
+    
+    DrawText(
+        texto,
+        botao.x -MeasureText(texto, 20)/2,
+        botao.y -botao.height/4,
+        20,
+        YELLOW
+    );
 }

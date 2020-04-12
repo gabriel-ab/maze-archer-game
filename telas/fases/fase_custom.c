@@ -1,3 +1,8 @@
+#include "../../inc/data.h"
+#include "../../inc/projetil.h"
+#include "../../inc/tela.h"
+#include "../../inc/textura.h"
+
 void fase_custom(){
 
     //-------------LOADING---------------//

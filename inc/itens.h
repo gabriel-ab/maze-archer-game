@@ -2,7 +2,7 @@
 #define ITENS_H
 
 #include <raylib.h>
-#include "textura.h"
+#include "personagem.h"
 
 #define BOM_DAMAGE1 3   //closest
 #define BOMB_RANGE1 30

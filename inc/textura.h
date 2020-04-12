@@ -1,6 +1,7 @@
 #ifndef TEXTURA_INCLUDED
 #define TEXTURA_INCLUDED
 #include <raylib.h>
+#include "define.h"
 
 /************Funcionamento**************
     A textura contem o spritesheet
@@ -51,6 +52,8 @@ Texture inimigoTexture;
 Texture portalTexture;
 Texture bombaTexture;
 
+//Segmentos do spritesheet de animação de xala
+Segmento segmentos_xala[2];
 
 Sprite spriteConstructor(Texture textura, int largura_frame, int altura_frame, int fps);
 void animaSpriteLinha(Sprite *sprite);

@@ -1,8 +1,5 @@
-#include "personagem.h"
-#include "tela.h"
-#include "movimenta.h"
-#include "define.h"
-#include <math.h>
+#include "../inc/personagem.h"
+#include "../inc/data.h"
 
 Personagem personagemConstructor()
 {

@@ -1,10 +1,7 @@
-#include <stdlib.h>
+#include "../inc/data.h"
+#include "../inc/tela.h"
 #include <stdio.h>
-#include <string.h>
-#include "data.h"
-#include "define.h"
-#include "tela.h"
-
+#include <stdlib.h>
 
 void save() {
 	

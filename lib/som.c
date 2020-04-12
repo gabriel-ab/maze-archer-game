@@ -1,4 +1,4 @@
-#include "som.h"
+#include "../inc/som.h"
 //ADICIONA A MUSICA DO MENU PRINCIPAL
 void setMusic(char* musicPath) {
     music = LoadMusicStream(musicPath);

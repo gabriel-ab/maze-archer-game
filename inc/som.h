@@ -2,6 +2,7 @@
 #define SOM_H_INCLUDED
 
 #include <raylib.h>
+#include "projetil.h"
 
 Music music;
 Music caveBG;
