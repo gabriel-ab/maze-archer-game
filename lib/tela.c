@@ -30,30 +30,14 @@ void atualizarCamera(Camera2D *cam, Vector2 posicao)
     #endif
 }
 
-void verificarTamanhoTela(){
+int verificarTamanhoTela(){
     if(IsWindowResized()){
         tela.width = GetScreenWidth();
         tela.height = GetScreenHeight();
+        return 1;
     }
+    return 0;
 }
-
-
-
-
-
-// ------------ SHADERS ----------- //
-
-void setShader(char* shaderPath){
-    shader = LoadShader(0, shaderPath);
-}
-
-
-//-------------- FONT ---------------//
-
-void setFont(char* fontPath) {
-    font = LoadFont(fontPath);
-}
-
 
 // ------------- CÂMERA ----------- //
 

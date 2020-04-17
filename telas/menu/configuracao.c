@@ -24,13 +24,13 @@ void telaConfiguracao() {
                 
             ClearBackground(BLACK);
 
-            if(isPaused) {
+            if(telaAnterior == TELA_FASE_CUSTOM) {
                 BeginShaderMode(shader);
                 DrawTexture(
                     screenshot,
                     tela.width/2 -screenshot.width/2,
                     tela.height/2 -screenshot.height/2,
-                    Fade(BLACK,0.2)
+                    Fade(WHITE,0.2)
                 );
                 EndShaderMode();
             } else {
@@ -45,6 +45,14 @@ void telaConfiguracao() {
         EndDrawing();
 
         menuControl(0,2,&selected);
+
+        if (verificarTamanhoTela()) {
+            for (int i = 0; i < 3; i++) {
+                buttons[i] = (Rectangle) {
+                    tela.width/2 - 100, tela.height/8*i + tela.height/2, 200, 50
+                };
+            }
+        }
 
         if (IsKeyPressed(KEY_ESCAPE)) telaAtual = telaAnterior;
 

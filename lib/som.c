@@ -1,51 +1,29 @@
 #include "../inc/som.h"
-//ADICIONA A MUSICA DO MENU PRINCIPAL
-void setMusic(char* musicPath) {
-    music = LoadMusicStream(musicPath);
-}
-//MUSICAS DE FUNDO DOS MAPAS
-void setMusicBg(char* cave, char* winter, char* lava){
-    caveBG = LoadMusicStream(cave);
-    winterBG = LoadMusicStream(winter);
-    lavaBG = LoadMusicStream(lava);
-}
 
 //FUNÇÃO QUE INICIALIZA AS MUSICAS DO JOGO
-void initMusic(){
-    PlayMusicStream(caveBG);
-    PlayMusicStream(winterBG);
-    PlayMusicStream(lavaBG);
-    PlayMusicStream(music);
-}
+void loadGame_musics(){
+    menuMusic = LoadMusicStream("resources/soundtrack/epic.ogg");
+    caveMusic = LoadMusicStream("resources/soundtrack/cave_loop.ogg");
+    winterBG = LoadMusicStream("resources/soundtrack/winter_loop.ogg");
+    lavaBG = LoadMusicStream("resources/soundtrack/lava_loop.ogg");
 
-//FUNÇAO PRA ADICIONAR SFX DIVERSOS
-void setFx(char* somBotaoPath, char* gameOver, char* pickup) {
-    somBotao = LoadSound(somBotaoPath);
-    gameover = LoadSound(gameOver);
-    item = LoadSound(pickup);
-}
-
-// FUNÇAO PRA ADICIONAR O SOM DO ARCO E FLECHA
-void setTiroFx(char* flechaPath, char* arcoPath){
-    flecha = LoadSound(flechaPath);
-    arco = LoadSound(arcoPath);
-}
-
-//FUNÇAO PARA ADICIONAR SOM DE ARMADILHAS
-void setTrapFx(char* armadilha, char* fogo){
-    lanca = LoadSound(armadilha);
-    queima = LoadSound(fogo);
+    
+    // PlayMusicStream(winterBG);
+    // PlayMusicStream(lavaBG);
     
 }
 
-//FUNÇAO PARA ADICIONAR SOM DO HIT
-void setHitFx(char* hit){
-    acerto = LoadSound(hit);
-}
-
-//FUNÇAO PARA ADICIONAR O SOM DO PASSO
-void setFootStep(char* footstepFx){
-    passo = LoadSound(footstepFx);
+void loadGame_sounds(){
+    somBotao = LoadSound("resources/fx/setting click.wav");
+    SetSoundVolume(somBotao, 0.2);
+    gameover = LoadSound("resources/fx/you_died.wav");
+    item = LoadSound("resources/fx/pickup.wav");
+    flecha = LoadSound("resources/fx/arrow.wav");
+    arco = LoadSound("resources/fx/arco.wav");
+    lanca = LoadSound("resources/fx/trap.wav");
+    queima = LoadSound("resources/fx/burn.wav");
+    passo = LoadSound("resources/fx/footstep_dirty.wav");
+    acerto = LoadSound("resources/fx/hit.wav");
 }
 
 //EFEITOS SONOROS
@@ -103,13 +81,13 @@ void playFx(int fxNumber){
 void playMusic(int musicNumber){
     //MUSICA MENU
     if(musicNumber == 1){
-        PlayMusicStream(music);
-        UpdateMusicStream(music);
+        PlayMusicStream(menuMusic);
+        UpdateMusicStream(menuMusic);
     }
     //SOM DE FUNDO CAVERNA
     if(musicNumber == 2){
-        SetMusicVolume(caveBG, 0.4);
-        UpdateMusicStream(caveBG);
+        SetMusicVolume(caveMusic, 0.4);
+        UpdateMusicStream(caveMusic);
     }
     //SOM DE FUNDO NEVE
     if(musicNumber == 3){
@@ -140,7 +118,6 @@ void checkClickBow(){
         if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && projetil_atual > -1){
             StopSound(arco);
             playFx(3);
-            
         } 
 }
 
@@ -156,8 +133,8 @@ void unloadAllSound(){
     UnloadSound(queima);
     
     //DESCARREGAR MUSICAS
-    UnloadMusicStream(music);
-    UnloadMusicStream(caveBG);
+    UnloadMusicStream(menuMusic);
+    UnloadMusicStream(caveMusic);
     UnloadMusicStream(winterBG);
     UnloadMusicStream(lavaBG);
     

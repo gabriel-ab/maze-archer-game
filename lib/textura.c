@@ -1,5 +1,19 @@
 #include "../inc/textura.h"
 
+void loadGame_textures(){
+    // Menu Background
+    background = LoadTexture("resources/images/wallpaper.png");
+    // Objects
+    flechaTexture = LoadTexture("resources/images/flecha.png");
+    xalaTexture = LoadTexture("resources/images/personagem.png");
+    inimigoTexture = LoadTexture("resources/images/inimigo.png");
+    bombaTexture = LoadTexture("resources/images/bomba.png");
+    portalTexture = LoadTexture("resources/images/portal.png");
+    // HUD
+    vidaTexture = LoadTexture("resources/images/hud_vida.png");
+    arrowTexture = LoadTexture("resources/images/hud_flecha.png");
+}
+
 Sprite spriteConstructor(Texture textura, int largura_frame, int altura_frame, int fps){
     Sprite sprite = { 0 };
     sprite.textura = textura;

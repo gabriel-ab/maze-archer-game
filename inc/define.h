@@ -2,7 +2,6 @@
 #define DEFINE_H_INCLUDED
 
 bool jogo_rodando;
-bool isPaused;
 bool isRestarting;
 
 double TEMPO; //tempo geral

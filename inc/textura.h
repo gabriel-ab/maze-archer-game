@@ -52,9 +52,13 @@ Texture inimigoTexture;
 Texture portalTexture;
 Texture bombaTexture;
 
+Texture background;
+Texture screenshot;
+
 //Segmentos do spritesheet de animação de xala
 Segmento segmentos_xala[2];
 
+void loadGame_textures();
 Sprite spriteConstructor(Texture textura, int largura_frame, int altura_frame, int fps);
 void animaSpriteLinha(Sprite *sprite);
 void animaSprite(Sprite *sprite, Segmento segmento[]);

@@ -9,12 +9,12 @@
 void selecao_de_mapa(){
     int n_fases = 0;
 
+    char **arquivos = GetDirectoryFiles("resources/fases/", &n_fases); //array de strings
+
     #ifdef _WIN32
         const first_item = 2; // remove . e .. da lista de arquivos
-        char **arquivos = GetDirectoryFiles("resources\\fases\\", &n_fases); //array de strings
     #elif __linux__
         const first_item = 0;
-        char **arquivos = GetDirectoryFiles("resources/fases/", &n_fases); //array de strings
         n_fases -= 2; // remove . e ..
     #endif
 
@@ -70,8 +70,8 @@ void selecao_de_mapa(){
                 for (int i = first_item; i < n_fases; i++)
                 {
                     drawButtonD(
-                        (Rectangle){tela.width/6, 240+ (i-2)*60, 240, 30},
                         arquivos[i],
+                        (Rectangle){tela.width/6, 240+ (i-2)*60, 240, 30},
                         seletor == i ? RED : (Color){50,0,0, 255});
 
                     if (CheckCollisionPointRec(

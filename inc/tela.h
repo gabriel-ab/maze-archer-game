@@ -29,17 +29,13 @@ bool is_fullscreen;
 
 void telaCheia();
 void atualizarCamera(Camera2D *cam, Vector2 posicao);
-void verificarTamanhoTela();
+int verificarTamanhoTela();
 
 
-Texture background;
-Texture screenshot;
+
 
 // ------------ SHADERS ----------- //
-
 Shader shader;
-
-void setShader();
 
 //-------------- FONT ---------------//
 Font font;
