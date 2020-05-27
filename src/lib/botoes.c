@@ -1,4 +1,4 @@
-#include "../inc/botoes.h"
+#include "../include/botoes.h"
 
 // Controls the selection between min and max, both included
 void menuControl(int min, int max, int *selection){

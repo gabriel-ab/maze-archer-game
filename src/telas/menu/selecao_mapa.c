@@ -1,7 +1,7 @@
-#include "../../inc/som.h"
-#include "../../inc/tela.h"
-#include "../../inc/define.h"
-#include "../../inc/data.h"
+#include "../../include/som.h"
+#include "../../include/tela.h"
+#include "../../include/define.h"
+#include "../../include/data.h"
 #include <string.h>
 
 

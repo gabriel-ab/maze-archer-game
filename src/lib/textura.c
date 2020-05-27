@@ -1,4 +1,4 @@
-#include "../inc/textura.h"
+#include "../include/textura.h"
 
 void loadGame_textures(){
     // Menu Background

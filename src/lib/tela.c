@@ -1,4 +1,4 @@
-#include "../inc/tela.h"
+#include "../include/tela.h"
 
 void telaCheia()
 {

@@ -1,10 +1,10 @@
 #include <raylib.h>
 
-#include "../../inc/personagem.h"
-#include "../../inc/fisica.h"
-#include "../../inc/tela.h"
-#include "../../inc/define.h"
-#include "../../inc/draw.h"
+#include "../../include/personagem.h"
+#include "../../include/fisica.h"
+#include "../../include/tela.h"
+#include "../../include/define.h"
+#include "../../include/draw.h"
 
 #define MAX_PEDRAS 50
 

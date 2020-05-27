@@ -1,9 +1,9 @@
-#include "../../inc/data.h"
-#include "../../inc/projetil.h"
-#include "../../inc/tela.h"
-#include "../../inc/textura.h"
-#include "../../inc/draw.h"
-#include "../../inc/som.h"
+#include "../../include/data.h"
+#include "../../include/projetil.h"
+#include "../../include/tela.h"
+#include "../../include/textura.h"
+#include "../../include/draw.h"
+#include "../../include/som.h"
 
 void fase_custom(){
 

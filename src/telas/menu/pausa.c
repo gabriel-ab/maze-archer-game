@@ -1,6 +1,6 @@
-#include "../../inc/tela.h"
-#include "../../inc/botoes.h"
-#include "../../inc/som.h"
+#include "../../include/tela.h"
+#include "../../include/botoes.h"
+#include "../../include/som.h"
 
 void telaPausa() {
     screenshot = LoadTextureFromImage(GetScreenData());

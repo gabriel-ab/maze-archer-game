@@ -1,4 +1,4 @@
-#include "../inc/projetil.h"
+#include "../include/projetil.h"
 
 void mira(Personagem fulano, Projetil *bala, Camera2D cam)
 {

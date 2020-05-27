@@ -1,5 +1,5 @@
-#include "../inc/personagem.h"
-#include "../inc/data.h"
+#include "../include/personagem.h"
+#include "../include/data.h"
 
 Personagem personagemConstructor()
 {

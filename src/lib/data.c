@@ -1,5 +1,5 @@
-#include "../inc/data.h"
-#include "../inc/tela.h"
+#include "../include/data.h"
+#include "../include/tela.h"
 #include <stdio.h>
 #include <stdlib.h>
 

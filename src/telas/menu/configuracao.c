@@ -1,6 +1,6 @@
-#include "../../inc/botoes.h"
-#include "../../inc/som.h"
-#include "../../inc/tela.h"
+#include "../../include/botoes.h"
+#include "../../include/som.h"
+#include "../../include/tela.h"
 
 //TELA DE CONFIGURAÇÃO
 void telaConfiguracao() {

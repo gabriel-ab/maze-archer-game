@@ -1,4 +1,4 @@
-#include "../inc/itens.h"
+#include "../include/itens.h"
 
 
 void explosionCollision(Trap bomba, Personagem *fulano){

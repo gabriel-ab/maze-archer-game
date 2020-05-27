@@ -1,4 +1,4 @@
-#include "../inc/som.h"
+#include "../include/som.h"
 
 //FUNÇÃO QUE INICIALIZA AS MUSICAS DO JOGO
 void loadGame_musics(){

@@ -1,4 +1,4 @@
-#include "../inc/draw.h"
+#include "../include/draw.h"
 
 
 //Função responsável por desenhar a personagem principal

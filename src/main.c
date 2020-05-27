@@ -2,17 +2,17 @@
 #include <raylib.h>
 #include <stdio.h>
 
-#include "inc/define.h"
-#include "inc/som.h"
-#include "inc/tela.h"
-#include "inc/personagem.h"
-#include "inc/projetil.h"
-#include "inc/fisica.h"
-#include "inc/data.h"
-#include "inc/textura.h"
-#include "inc/draw.h"
-#include "inc/itens.h"
-#include "inc/botoes.h"
+#include "include/define.h"
+#include "include/som.h"
+#include "include/tela.h"
+#include "include/personagem.h"
+#include "include/projetil.h"
+#include "include/fisica.h"
+#include "include/data.h"
+#include "include/textura.h"
+#include "include/draw.h"
+#include "include/itens.h"
+#include "include/botoes.h"
 
 int main(){
     TEMPO = 0;

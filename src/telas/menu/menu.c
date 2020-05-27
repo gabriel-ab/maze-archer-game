@@ -1,8 +1,8 @@
-#include "../../inc/botoes.h"
-#include "../../inc/som.h"
-#include "../../inc/tela.h"
-#include "../../inc/define.h"
-#include "../../inc/data.h"
+#include "../../include/botoes.h"
+#include "../../include/som.h"
+#include "../../include/tela.h"
+#include "../../include/define.h"
+#include "../../include/data.h"
 
 //TELA DE MENU
 void telaMenu() {
