@@ -1,6 +1,7 @@
 #include "../include/data.h"
 #include "../include/tela.h"
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 
 void save() {

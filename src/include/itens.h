@@ -37,4 +37,7 @@ typedef struct Portal{
     Vector2 posicao;
     int destino;
 }Portal;
+
+void explosionCollision(Trap bomba, Personagem *fulano);
+void animarBomba(Trap *bomba);
 #endif

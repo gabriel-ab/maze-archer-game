@@ -7,7 +7,6 @@
 #define LARGURA_TELA 1000
 #define ALTURA_TELA 600
 
-Rectangle tela;
 int larguraAnterior;
 int alturaAnterior;  
 int telaAtual;
@@ -25,14 +24,17 @@ typedef enum TELAS {
     TELA_FASE_CUSTOM = 5,
 }TELAS;
 
-bool is_fullscreen; 
 
 void telaCheia();
 void atualizarCamera(Camera2D *cam, Vector2 posicao);
-int verificarTamanhoTela();
 void menuControl(int min, int *selector, int max);
 
-
+void telaConfiguracao();
+void telaFracasso();
+void telaMenu();
+void telaPausa();
+void selecao_de_mapa();
+void fase_custom();
 
 // ------------ SHADERS ----------- //
 Shader shader;

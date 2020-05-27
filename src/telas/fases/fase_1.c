@@ -153,7 +153,6 @@ void fase_1()
 
             // -----------Atualização da Camera------------- //
             atualizarCamera(&cam, xala.posicao);
-            verificarTamanhoTela();
 
 
             if(IsKeyPressed(KEY_F)) telaCheia();            //

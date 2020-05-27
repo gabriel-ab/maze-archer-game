@@ -1,4 +1,3 @@
-#include <string.h>
 #include <raylib.h>
 #include <stdio.h>
 
@@ -15,12 +14,10 @@
 
 int main(){
     TEMPO = 0;
-    tela = (Rectangle){100, 100, LARGURA_TELA, ALTURA_TELA};
-    larguraAnterior = LARGURA_TELA;
-    alturaAnterior = ALTURA_TELA;  
+    larguraAnterior = GetScreenWidth();
+    alturaAnterior = GetScreenHeight();
     telaAtual = 0;
     telaAnterior = 0;
-    is_fullscreen = false;
     jogo_rodando = true;
     tempo_invunerabilidade = 2;
     vida_no_save = 3;
@@ -30,7 +27,7 @@ int main(){
     segmentos_xala[1] = (Segmento){1, 0, 3};
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-    InitWindow(tela.width, tela.height, "Untitle Dungeon Game");
+    InitWindow(1000, 600, "Untitle Dungeon Game");
     InitAudioDevice();
     
     // LOADING FILES

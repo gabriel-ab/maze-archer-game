@@ -1,6 +1,12 @@
 #include "../../include/som.h"
 #include "../../include/tela.h"
+#include "../../include/draw.h"
 
+static void set_buttons_position(Rectangle buttons[]) {
+    for (int i = 0; i < 3; i++){
+        buttons[i] = (Rectangle) {GetScreenWidth()/2 - 100, GetScreenHeight()/8*i + GetScreenHeight()/2, 200, 50};
+    }
+}
 //TELA DE CONFIGURAÇÃO
 void telaConfiguracao() {
     static int selected = 0;
@@ -12,13 +18,9 @@ void telaConfiguracao() {
         "BACK",
     };
     Rectangle buttons[3];
-    for (int i = 0; i < 3; i++){
-        buttons[i] = (Rectangle) {tela.width/2 - 100, tela.height/8*i + tela.height/2, 200, 50};
-    }
+    set_buttons_position(buttons);
     
     while(telaAtual == TELA_CONFIG && !WindowShouldClose()) {
-        verificarTamanhoTela();
-
         BeginDrawing();
                 
             ClearBackground(BLACK);
@@ -27,8 +29,8 @@ void telaConfiguracao() {
                 BeginShaderMode(shader);
                 DrawTexture(
                     screenshot,
-                    tela.width/2 -screenshot.width/2,
-                    tela.height/2 -screenshot.height/2,
+                    GetScreenWidth()/2 -screenshot.width/2,
+                    GetScreenHeight()/2 -screenshot.height/2,
                     Fade(WHITE,0.2)
                 );
                 EndShaderMode();
@@ -45,12 +47,8 @@ void telaConfiguracao() {
 
         menuControl(0, &selected, 2);
 
-        if (verificarTamanhoTela()) {
-            for (int i = 0; i < 3; i++) {
-                buttons[i] = (Rectangle) {
-                    tela.width/2 - 100, tela.height/8*i + tela.height/2, 200, 50
-                };
-            }
+        if (IsWindowResized()) {
+            set_buttons_position(buttons);
         }
 
         if (IsKeyPressed(KEY_ESCAPE)) telaAtual = telaAnterior;
@@ -70,7 +68,7 @@ void telaConfiguracao() {
             case 0: 
                 playFx(1);
                 telaCheia();
-                if(is_fullscreen){
+                if(IsWindowFullscreen()){
                     textButtons[0] = "FULLSCREEN: ON";
                 }else{
                     textButtons[0] = "FULLSCREEN: OFF";

@@ -4,6 +4,8 @@
 #include "../../include/textura.h"
 #include "../../include/draw.h"
 #include "../../include/som.h"
+#include "../../include/fisica.h"
+#include "../../include/itens.h"
 
 void fase_custom(){
 
@@ -153,7 +155,6 @@ void fase_custom(){
         UpdateMusicStream(caveMusic);
         // -----------Atualização da Camera----------
         atualizarCamera(&cam, xala.posicao);
-        verificarTamanhoTela();
 
         // ------------------Física------------------
 

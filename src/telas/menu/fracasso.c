@@ -1,7 +1,14 @@
 #include <raylib.h>
 #include "../../include/tela.h"
 #include "../../include/som.h"
+#include "../../include/draw.h"
 
+
+static void set_buttons_position(Rectangle buttons[]){
+    for (int i = 0; i < 2; i++){
+        buttons[i] = (Rectangle) {GetScreenWidth()/2 - 100, GetScreenHeight()/8*i + GetScreenHeight()/1.4, 200, 50};
+    }
+}
 
 void telaFracasso() {
     int selected = 0;
@@ -12,20 +19,21 @@ void telaFracasso() {
     };
     
     Rectangle buttons[2];
-    for (int i = 0; i < 2; i++){
-        buttons[i] = (Rectangle) {tela.width/2 - 100, tela.height/8*i + tela.height/1.4, 200, 50};
-    }
+    set_buttons_position(buttons);
     ShowCursor();
 
     while(telaAtual == TELA_FRACASSO && !WindowShouldClose())
     {
         BeginDrawing();
             ClearBackground(BLACK);
-            DrawTextEx(font, "YOU DIED", (Vector2){tela.width/2 - 375, tela.height/2 - 50}, 150,0, RED);
+            DrawTextEx(font, "YOU DIED", (Vector2){GetScreenWidth()/2 - 375, GetScreenHeight()/2 - 50}, 150,0, RED);
             for (int i = 0; i < 2; i++){
                 drawButtonD(textButtons[i], buttons[i], selected == i);
             }
         EndDrawing();
+        if (IsWindowResized()) {
+            set_buttons_position(buttons);
+        }
         playFx(7);
 
         // Mouse Control

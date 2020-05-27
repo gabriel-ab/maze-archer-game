@@ -2,21 +2,17 @@
 
 void telaCheia()
 {
-    if(!is_fullscreen){
+    if (IsWindowFullscreen()) {
+        ToggleFullscreen();
+        SetWindowSize(larguraAnterior, alturaAnterior);
+        SetWindowPosition(larguraAnterior / 3, alturaAnterior / 3);
+    }
+    else {
         larguraAnterior = GetScreenWidth();
         alturaAnterior = GetScreenHeight();
         SetWindowSize(GetMonitorWidth(0), GetMonitorHeight(0));
+        ToggleFullscreen();
     }
-    ToggleFullscreen();
-
-    if(is_fullscreen){
-        SetWindowSize(larguraAnterior, alturaAnterior);
-        SetWindowPosition(tela.x, tela.y);
-    }
-    is_fullscreen = !is_fullscreen; 
-    
-    tela.width = GetScreenWidth();
-    tela.height = GetScreenHeight();
 }
 
 void atualizarCamera(Camera2D *cam, Vector2 posicao)
@@ -25,19 +21,12 @@ void atualizarCamera(Camera2D *cam, Vector2 posicao)
     cam->target.y = 0.9*cam->target.y + 0.1*posicao.y;
 
     #ifdef __WIN32
-        cam->offset.x = tela.width/2  -cam->target.x;
-        cam->offset.y = tela.height/2 -cam->target.y;
+        cam->offset.x = GetScreenWidth()/2  -cam->target.x;
+        cam->offset.y = GetScreenHeight()/2 -cam->target.y;
     #endif
 }
 
-int verificarTamanhoTela(){
-    if(IsWindowResized()){
-        tela.width = GetScreenWidth();
-        tela.height = GetScreenHeight();
-        return 1;
-    }
-    return 0;
-}
+
 
 // ------------- CÂMERA ----------- //
 
@@ -47,7 +36,7 @@ void setTargetCamera(Personagem *target)
     cam.rotation = 0;
     cam.target = target->posicao;
     cam.offset = (Vector2){0,0};
-    cam.offset = (Vector2){tela.width/2 , tela.height/2};
+    cam.offset = (Vector2){GetScreenWidth()/2 , GetScreenHeight()/2};
 }
 
 

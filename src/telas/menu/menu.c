@@ -2,6 +2,14 @@
 #include "../../include/tela.h"
 #include "../../include/define.h"
 #include "../../include/data.h"
+#include "../../include/draw.h"
+
+static void set_buttons_position(Rectangle buttons[]){
+    for (int i = 0; i < 4; i++) {
+        buttons[i] = (Rectangle) {GetScreenWidth()/2 - 100, GetScreenHeight()/8*i + GetScreenHeight()/2, 200, 50};
+    }
+    buttons[4] = (Rectangle){GetScreenWidth() -260, GetScreenHeight() -80,  260, 40};
+}
 
 //TELA DE MENU
 void telaMenu() {
@@ -21,11 +29,9 @@ void telaMenu() {
     };
 
     Rectangle buttons[5];
-    for (int i = 0; i < 4; i++) {
-        buttons[i] = (Rectangle) {tela.width/2 - 100, tela.height/8*i + tela.height/2, 200, 50};
-    }
-    buttons[4] = (Rectangle){tela.width -260, tela.height -80,  260, 40};
-    // if (CheckCollisionPointRec(GetMousePosition(), (Rectangle){tela.width -260, tela.height -80,  260, 40}) || *selected == 4)
+    set_buttons_position(buttons);
+
+    // if (CheckCollisionPointRec(GetMousePosition(), (Rectangle){GetScreenWidth() -260, GetScreenHeight() -80,  260, 40}) || *selected == 4)
     while(telaAtual == TELA_MENU && jogo_rodando && !WindowShouldClose()) {
         
         BeginDrawing();            
@@ -39,9 +45,11 @@ void telaMenu() {
                 drawButtonD(textButtons[i], buttons[i], selected == i);
             }
         EndDrawing();
-        
+
+        if (IsWindowResized())
+            set_buttons_position(buttons);
+
         UpdateMusicStream(menuMusic);
-        verificarTamanhoTela();
         framescounter++;
 
         // Mouse Control
@@ -72,6 +80,8 @@ void telaMenu() {
             case 2:
                 telaAnterior = telaAtual;
                 telaAtual = TELA_CONFIG;
+                telaConfiguracao();
+                set_buttons_position(buttons);
                 break;
             case 3:
                 jogo_rodando = false;

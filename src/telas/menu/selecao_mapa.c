@@ -26,22 +26,22 @@ void selecao_de_mapa(){
 
         #ifdef _WIN32
             if (rolagem_automatica){
-                rolador.offset.y = rolador.offset.y*0.8 -seletor*12 +tela.height*0.05;
+                rolador.offset.y = rolador.offset.y*0.8 -seletor*12 +GetScreenHeight()*0.05;
             }
             else if (CheckCollisionPointCircle(mousePos,(Vector2){100,-50},200)){
                 rolador.offset.y += 5;
             }
-            else if (CheckCollisionPointCircle(mousePos,(Vector2){100,tela.height+50},200)){
+            else if (CheckCollisionPointCircle(mousePos,(Vector2){100,GetScreenHeight()+50},200)){
                 rolador.offset.y -= 5;
             }
         #elif __linux__
             if (rolagem_automatica){
-                rolador.target.y = rolador.target.y*0.8 +seletor*12 -tela.height*0.05;
+                rolador.target.y = rolador.target.y*0.8 +seletor*12 -GetScreenHeight()*0.05;
             }
             else if (CheckCollisionPointCircle(mousePos,(Vector2){100,-50},200)){
                 rolador.target.y -= 5;
             }
-            else if (CheckCollisionPointCircle(mousePos,(Vector2){100,tela.height+50},200)){
+            else if (CheckCollisionPointCircle(mousePos,(Vector2){100,GetScreenHeight()+50},200)){
                 rolador.target.y += 5;
             }
         #endif
@@ -59,13 +59,13 @@ void selecao_de_mapa(){
         BeginDrawing();
             ClearBackground(BLACK);
             drawMenuBackground(WHITE);
-            DrawRectangleGradientV(0,0,tela.width, tela.height, (Color){150,150,150,100}, (Color){0,0,0,100});
+            DrawRectangleGradientV(0,0,GetScreenWidth(), GetScreenHeight(), (Color){150,150,150,100}, (Color){0,0,0,100});
                 BeginMode2D(rolador);
                 for (int i = 0; i < n_fases; i++)
                 {
                     drawButtonD(
                         arquivos[i],
-                        (Rectangle){tela.width/6, 240+ (i-2)*60, 240, 30},
+                        (Rectangle){GetScreenWidth()/6, 240+ (i-2)*60, 240, 30},
                         seletor == i);
 
                     if (CheckCollisionPointRec(
@@ -74,7 +74,7 @@ void selecao_de_mapa(){
                             mousePos.y +rolador.target.y
                         },
                         (Rectangle){
-                            tela.width/6 -120, 
+                            GetScreenWidth()/6 -120, 
                             240+ (i-2)*60 -15, 
                             240, 
                             30
@@ -85,11 +85,9 @@ void selecao_de_mapa(){
                     }
                 }
                 EndMode2D();
+                DrawFPS(10,10);
         EndDrawing();
-        
-        verificarTamanhoTela();
         playMusic(1);
-
         
         menuControl(0, &seletor, n_fases -1);
 
@@ -103,7 +101,21 @@ void selecao_de_mapa(){
             telaAtual = TELA_MENU;
             break;
         }
-        if(IsKeyPressed(KEY_ENTER)) confirma = true;
+        if(IsKeyPressed(KEY_ENTER)) {
+            confirma = true;
+
+            if (arquivos[seletor][0] == '.') {
+                confirma = false;
+                int t = 0;
+                while (t++ < 90) {
+                    BeginDrawing();
+                    DrawRectangle(0,0,GetScreenWidth(),GetScreenHeight(), Fade(BLACK,0.2));
+                    DrawText("Invalid File", GetScreenWidth() * 0.45, GetScreenHeight() * 0.48, 20, WHITE);
+                    EndDrawing();
+                    if (IsKeyPressed(KEY_ESCAPE)) break;
+                }
+            }
+        }
     }
     if(confirma){
         //Carrega a fase do endereço selecionado

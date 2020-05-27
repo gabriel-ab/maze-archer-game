@@ -5,6 +5,7 @@
 #define VELOCIDADE_INIMIGO 1.5
 
 #include <raylib.h>
+#include <math.h>
 #include "textura.h"
 
 typedef enum AtitudesInimigas{

@@ -1,4 +1,5 @@
 #include "../include/fisica.h"
+#include "../include/som.h"
 
 void movimentarV(Vector2 *coisa){
     if(IsKeyDown(KEY_W)) coisa->y -= 2;

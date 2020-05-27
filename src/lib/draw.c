@@ -144,8 +144,8 @@ void drawMenuBackground(Color cor)
             (Rectangle){
                 0,
                 0,
-                tela.width,
-                tela.height},
+                GetScreenWidth(),
+                GetScreenHeight()},
             (Vector2){0,0},
             0,
             WHITE

@@ -1,20 +1,23 @@
 #include "../include/projetil.h"
+#include "../include/som.h"
+#include <raymath.h> 
 
 void mira(Personagem fulano, Projetil *bala, Camera2D cam)
 {
     bala->posicao = fulano.posicao;
-    #ifdef _WIN32
-        int posMouseX = (GetMouseX() -cam.offset.x);
-        int posMouseY = (GetMouseY() -cam.offset.y);
-    #elif __linux__
-        int posMouseX = (GetMouseX() +cam.target.x -cam.offset.x);
-        int posMouseY = (GetMouseY() +cam.target.y -cam.offset.y);
-    #endif
+#ifdef _WIN32
+    Vector2 mousePos = {
+        (GetMouseX() - cam.offset.x),
+        (GetMouseY() - cam.offset.y)
+    }
+#elif __linux__
+    Vector2 mousePos = {
+        (GetMouseX() + cam.target.x - cam.offset.x),
+        (GetMouseY() + cam.target.y - cam.offset.y)
+    };
+#endif
 
-    int deltaY = posMouseY -fulano.posicao.y;
-    int deltaX = posMouseX -fulano.posicao.x;
-
-    bala->angulo = atan2(deltaY,deltaX)*RAD2DEG;    
+    bala->angulo = Vector2Angle(bala->posicao, mousePos); 
 }
 
 void atira(Personagem fulano, Projetil *bala)
@@ -28,6 +31,7 @@ void atira(Personagem fulano, Projetil *bala)
 //Taxa positiva somente
 void aplicarAtritoProjetil(Projetil *bala, float taxa)
 {
+
     if(bala->velocidade.y > 0.1 || bala->velocidade.y < -0.1){
         bala->velocidade.y -= sin(bala->angulo*DEG2RAD)*taxa;
     }
@@ -51,10 +55,10 @@ int colisaoProjetil_mapa(Projetil *bala, Rectangle *MAPA, int tamMapa)
        {
            bala->velocidade = (Vector2){0,0};
            bala->ativa = false;
-           return 1;
+           return true;
        }
     }
-    return 0;
+    return false;
 }
 
 //Retorna o numero do inimigo
@@ -70,7 +74,6 @@ int colisaoProjetil_inimigo(Projetil *bala, Personagem *inimigo, int n_inimigos)
             inimigo[i].velocidade.y = bala->velocidade.y / 5;
             inimigo[i].acao.contador = TEMPO;
             inimigo[i].acao.duracao = GetRandomValue(50,100) / 50; // Tempo entre 1 e 2 segundos de recuperação da flechada
-            //
             inimigo[i].vida--;
             bala->ativa = false;
             playFx(5);

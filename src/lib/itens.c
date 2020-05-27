@@ -3,21 +3,21 @@
 
 void explosionCollision(Trap bomba, Personagem *fulano){
     bool hitted = true;
-    int pull = 0;
+    int push = 0;
     if(CheckCollisionCircles(bomba.posicao, BOMB_RANGE1, fulano->posicao, 16))
     {
         fulano->vida -= BOM_DAMAGE1;
-        pull = 10;
+        push = 10;
     }
     else if(CheckCollisionCircles(bomba.posicao, BOMB_RANGE2, fulano->posicao, 16))
     {
         fulano->vida -= BOM_DAMAGE2;
-        pull = 8;
+        push = 8;
     }
     else if(CheckCollisionCircles(bomba.posicao, BOMB_RANGE3, fulano->posicao, 16))
     {
         fulano->vida -= BOM_DAMAGE3;
-        pull = 5;
+        push = 5;
     }
     else
     {
@@ -31,8 +31,8 @@ void explosionCollision(Trap bomba, Personagem *fulano){
         float angulo = atan2(deltaY, deltaX);
         fulano->acao.atual = INIMIGO_ATORDOADO;
         fulano->acao.duracao = 2;
-        fulano->velocidade.y -= sin(angulo) * pull;
-        fulano->velocidade.x -= cos(angulo) * pull;
+        fulano->velocidade.y -= sin(angulo) * push;
+        fulano->velocidade.x -= cos(angulo) * push;
     }
 }
 void animarBomba(Trap *bomba){
