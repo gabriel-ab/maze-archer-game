@@ -1,5 +1,4 @@
 #include "../../include/tela.h"
-#include "../../include/botoes.h"
 #include "../../include/som.h"
 
 void telaPausa() {
@@ -44,7 +43,7 @@ void telaPausa() {
                 };
             }
         }
-        menuControl(0,3, &seletor);
+        menuControl(0, &seletor, 3);
 
         for (int i = 0; i < 4; i++){
             if(CheckCollisionPointRec(GetMousePosition(), buttons[i])){

@@ -12,7 +12,6 @@
 #include "include/textura.h"
 #include "include/draw.h"
 #include "include/itens.h"
-#include "include/botoes.h"
 
 int main(){
     TEMPO = 0;

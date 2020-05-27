@@ -1,4 +1,3 @@
-#include "../../include/botoes.h"
 #include "../../include/som.h"
 #include "../../include/tela.h"
 #include "../../include/define.h"
@@ -55,7 +54,7 @@ void telaMenu() {
             }
         }
         // Keyboard Control
-        menuControl(0, 4, &selected);
+        menuControl(0, &selected, 4);
         if (IsKeyPressed(KEY_RIGHT)) selected = 4;
         if (IsKeyPressed(KEY_LEFT) && selected == 4) selected = 3;
         if (IsKeyDown(KEY_LEFT_ALT) && IsKeyDown(KEY_F4)) jogo_rodando = false;

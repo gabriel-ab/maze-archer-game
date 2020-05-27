@@ -1,6 +1,7 @@
 #include "../../include/som.h"
 #include "../../include/tela.h"
 #include "../../include/define.h"
+#include "../../include/draw.h"
 #include "../../include/data.h"
 #include <string.h>
 
@@ -11,14 +12,7 @@ void selecao_de_mapa(){
 
     char **arquivos = GetDirectoryFiles("resources/fases/", &n_fases); //array de strings
 
-    #ifdef _WIN32
-        const first_item = 2; // remove . e .. da lista de arquivos
-    #elif __linux__
-        const first_item = 0;
-        n_fases -= 2; // remove . e ..
-    #endif
-
-    int seletor = first_item;
+    int seletor = 0;
     bool confirma = false;
 
     Camera2D rolador = { 0 };
@@ -67,12 +61,12 @@ void selecao_de_mapa(){
             drawMenuBackground(WHITE);
             DrawRectangleGradientV(0,0,tela.width, tela.height, (Color){150,150,150,100}, (Color){0,0,0,100});
                 BeginMode2D(rolador);
-                for (int i = first_item; i < n_fases; i++)
+                for (int i = 0; i < n_fases; i++)
                 {
                     drawButtonD(
                         arquivos[i],
                         (Rectangle){tela.width/6, 240+ (i-2)*60, 240, 30},
-                        seletor == i ? RED : (Color){50,0,0, 255});
+                        seletor == i);
 
                     if (CheckCollisionPointRec(
                         (Vector2){
@@ -96,8 +90,8 @@ void selecao_de_mapa(){
         verificarTamanhoTela();
         playMusic(1);
 
-        if(IsKeyPressed(KEY_UP) && seletor > first_item)    seletor--;
-        if(IsKeyPressed(KEY_DOWN) && seletor +1 < n_fases)  seletor++;
+        
+        menuControl(0, &seletor, n_fases -1);
 
         #ifdef _WIN32
             rolador.offset.y += GetMouseWheelMove() * 5;

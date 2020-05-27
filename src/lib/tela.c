@@ -50,3 +50,15 @@ void setTargetCamera(Personagem *target)
     cam.offset = (Vector2){tela.width/2 , tela.height/2};
 }
 
+
+// Controls the selection between min and max, both included
+void menuControl(int min, int *selector, int max){
+    if (IsKeyPressed(KEY_UP)){
+        if (*selector > min) (*selector)--;
+        else *selector = max;
+    }
+    if (IsKeyPressed(KEY_DOWN)){
+        if (*selector < max) (*selector)++;
+        else *selector = min;
+    }
+}

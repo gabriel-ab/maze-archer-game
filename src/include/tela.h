@@ -30,7 +30,7 @@ bool is_fullscreen;
 void telaCheia();
 void atualizarCamera(Camera2D *cam, Vector2 posicao);
 int verificarTamanhoTela();
-
+void menuControl(int min, int *selector, int max);
 
 
 

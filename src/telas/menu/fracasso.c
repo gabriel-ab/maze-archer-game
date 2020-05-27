@@ -1,6 +1,5 @@
 #include <raylib.h>
 #include "../../include/tela.h"
-#include "../../include/botoes.h"
 #include "../../include/som.h"
 
 
@@ -52,7 +51,7 @@ void telaFracasso() {
             }
             event = 0;
         }
-        menuControl(0, 1, &selected);
+        menuControl(0, &selected, 1);
     }
     
     UnloadFont(font);

@@ -1,4 +1,3 @@
-#include "../../include/botoes.h"
 #include "../../include/som.h"
 #include "../../include/tela.h"
 
@@ -44,7 +43,7 @@ void telaConfiguracao() {
             }
         EndDrawing();
 
-        menuControl(0,2,&selected);
+        menuControl(0, &selected, 2);
 
         if (verificarTamanhoTela()) {
             for (int i = 0; i < 3; i++) {
