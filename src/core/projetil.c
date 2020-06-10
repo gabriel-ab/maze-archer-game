@@ -5,17 +5,10 @@
 void mira(Personagem fulano, Projetil *bala, Camera2D cam)
 {
     bala->posicao = fulano.posicao;
-#ifdef _WIN32
-    Vector2 mousePos = {
-        (GetMouseX() - cam.offset.x),
-        (GetMouseY() - cam.offset.y)
-    }
-#elif __linux__
     Vector2 mousePos = {
         (GetMouseX() + cam.target.x - cam.offset.x),
         (GetMouseY() + cam.target.y - cam.offset.y)
     };
-#endif
 
     bala->angulo = Vector2Angle(bala->posicao, mousePos); 
 }

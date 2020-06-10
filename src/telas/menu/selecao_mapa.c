@@ -24,31 +24,19 @@ void selecao_de_mapa(){
     {
         if (mousePos.x != GetMousePosition().x) rolagem_automatica = false;
 
-        #ifdef _WIN32
-            if (rolagem_automatica){
-                rolador.offset.y = rolador.offset.y*0.8 -seletor*12 +GetScreenHeight()*0.05;
-            }
-            else if (CheckCollisionPointCircle(mousePos,(Vector2){100,-50},200)){
-                rolador.offset.y += 5;
-            }
-            else if (CheckCollisionPointCircle(mousePos,(Vector2){100,GetScreenHeight()+50},200)){
-                rolador.offset.y -= 5;
-            }
-        #elif __linux__
-            if (rolagem_automatica){
-                rolador.target.y = rolador.target.y*0.8 +seletor*12 -GetScreenHeight()*0.05;
-            }
-            else if (CheckCollisionPointCircle(mousePos,(Vector2){100,-50},200)){
-                rolador.target.y -= 5;
-            }
-            else if (CheckCollisionPointCircle(mousePos,(Vector2){100,GetScreenHeight()+50},200)){
-                rolador.target.y += 5;
-            }
-        #endif
+        if (rolagem_automatica){
+            rolador.target.y = rolador.target.y*0.8 +seletor*12 -GetScreenHeight()*0.05;
+        }
+        else if (CheckCollisionPointCircle(mousePos,(Vector2){100,-50},200)){
+            rolador.target.y -= 5;
+        }
+        else if (CheckCollisionPointCircle(mousePos,(Vector2){100,GetScreenHeight()+50},200)){
+            rolador.target.y += 5;
+        }
         else{
             static int fps = 0;
             fps++;
-            if(fps > 300) //espera 5 segundos
+            if(fps > 180) //espera 3 segundos
             {
                 rolagem_automatica = true;
                 fps = 0;
@@ -91,11 +79,7 @@ void selecao_de_mapa(){
         
         menuControl(0, &seletor, n_fases -1);
 
-        #ifdef _WIN32
-            rolador.offset.y += GetMouseWheelMove() * 5;
-        #elif __linux__
-            rolador.target.y -= GetMouseWheelMove() * 5;
-        #endif
+        rolador.target.y -= GetMouseWheelMove() * 10;
 
         if(IsKeyPressed(KEY_ESCAPE)){
             telaAtual = TELA_MENU;

@@ -20,13 +20,7 @@ void atualizarCamera(Camera2D *cam, Vector2 posicao)
     cam->target.x = 0.9*cam->target.x + 0.1*posicao.x;
     cam->target.y = 0.9*cam->target.y + 0.1*posicao.y;
 
-    #ifdef __WIN32
-        cam->offset.x = GetScreenWidth()/2  -cam->target.x;
-        cam->offset.y = GetScreenHeight()/2 -cam->target.y;
-    #endif
 }
-
-
 
 // ------------- CÂMERA ----------- //
 
